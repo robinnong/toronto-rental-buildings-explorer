@@ -1,4 +1,4 @@
-Live project: [Link]()
+Live project: [Link](https://toronto-rental-buildings-explorer.netlify.app)
 
 ## Getting Started
 
