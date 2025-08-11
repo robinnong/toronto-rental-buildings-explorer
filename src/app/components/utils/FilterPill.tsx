@@ -48,9 +48,9 @@ export default function FilterPill({
         onClick={() => {
           setAppliedFilters((prev) => {
             if (prev == null) {
-              return [{ key: id, value: true }];
+              return [{ key: id as AppliedFilter["key"], value: true }];
             } else if (!prev.find((filter) => filter.key === id)) {
-              return [...prev, { key: id, value: true }];
+              return [...prev, { key: id as AppliedFilter["key"], value: true }];
             }
             return prev.filter((filter) => filter.key !== id);
           });
