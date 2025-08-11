@@ -29,8 +29,19 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Data Sources
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project pulls data from the City of Toronto's Open Data Portal - [Apartment Building Registration](https://open.toronto.ca/dataset/apartment-building-registration/).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Google Maps Embedded
+
+## Tools
+
+- Languages: TypeScript, JavaScript, CSS
+- Frameworks: React, [Tailwind CSS](https://tailwindcss.com), Next.js
+- Bundler: Turbopack
+- Cloud DB: [Firestore Database](https://firebase.google.com/docs/firestore)
+
+# Libraries
+
+[react-paginate](https://www.npmjs.com/package/react-paginate)

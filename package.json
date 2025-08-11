@@ -1,5 +1,5 @@
 {
-  "name": "nyc-museums-explorer",
+  "name": "toronto-rental-buildings-explorer",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,14 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/vite": "^4.1.11",
+    "@vis.gl/react-google-maps": "^1.5.4",
+    "firebase": "^12.1.0",
+    "firebase-admin": "^13.4.0",
+    "next": "15.4.3",
+    "postcss": "^8.5.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.4.3"
+    "react-paginate": "^8.3.0",
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "typescript": "^5"
   }
 }
