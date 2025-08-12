@@ -8,7 +8,7 @@ export default function Page() {
     <APIProvider apiKey={process.env.GOOGLE_API_KEY}>
       <div className="relative h-screen w-full">
         <header className="absolute top-0 left-0 p-4 text-white">
-          <h1 className="text-md text-center text-white font-extrabold font-serif">
+          <h1 className="text-md text-center text-white font-extrabold">
             🏠 Toronto Rental Building Explorer
           </h1>
         </header>
@@ -19,8 +19,8 @@ export default function Page() {
             alt="Toronto skyline"
           />
           <div className="absolute flex items-center justify-center top-0 bottom-0 right-0 left-0">
-            <div className="text-white p-6 flex flex-col justify-center items-center">
-              <h1 className="text-3xl font-bold font-serif mb-2">
+            <div className="text-white p-6 flex flex-col justify-center items-center max-sm:items-start">
+              <h1 className="text-3xl font-bold font-[DM_Display_Text] mb-2">
                 Toronto Rental Building Explorer
               </h1>
               <div className="text-lg">
