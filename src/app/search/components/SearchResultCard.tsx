@@ -31,6 +31,7 @@ export default function SearchResultCard({
     DESCRIPTION_OF_INDOOR_EXERCISE_ROOM,
     DESCRIPTION_OF_OUTDOOR_REC_FACILITIES,
     HEATING_TYPE,
+    LAUNDRY_ROOM,
     LOCKER_OR_STORAGE_ROOM,
     NO_OF_ELEVATORS,
     NON_SMOKING_BUILDING,
@@ -50,7 +51,7 @@ export default function SearchResultCard({
    * Formats the label as greyed out with a strikethrough if the value is falsey
    */
   const formatLabelStyle = (value: string): string =>
-    evaluateStringToBoolean(value) ? "" : "line-through text-gray-500";
+    evaluateStringToBoolean(value) ? "" : "line-through text-gray-400";
 
   /**
    * Displays 'N/A' if the value is falsey
@@ -60,19 +61,16 @@ export default function SearchResultCard({
 
   // Takes the address postal code and returns the corresponding city within the Toronto metropolitan area.
   // Example: north_york => North York
-  // Displays 'Unknown area code' if the postal code is not a valid Toronto area code.
+  // Displays 'N/A' if the postal code is missing or not a valid Toronto area code.
   const city = useMemo((): ReactNode => {
     const matchingCode = Object.entries(torontoPostalCodesByKey).find(
       ([_, postalCodes]) => postalCodes.includes(PCODE)
     );
-
-    return matchingCode ? (
-      matchingCode[0]
-        .replace("_", " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase())
-    ) : (
-      <span className="italic text-gray-400">Unknown area code</span>
-    );
+    return matchingCode
+      ? matchingCode[0]
+          .replace("_", " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      : emptyLabel;
   }, [PCODE]);
 
   return (
@@ -168,7 +166,7 @@ export default function SearchResultCard({
                 <i className="fa-solid fa-dumbbell mr-1" />
                 Gym
               </p>
-              <p>
+              <p className={formatLabelStyle(LAUNDRY_ROOM)}>
                 <i className="fa-solid fa-shirt mr-1" />
                 Laundry room
               </p>

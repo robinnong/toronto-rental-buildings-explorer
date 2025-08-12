@@ -23,7 +23,10 @@ export default function MapModal({
   postalCode,
   onClose,
 }: Props): ReactElement {
-  const mapQuery = encodeURIComponent(`${address}, Toronto, ON ${postalCode}`);
+  const mapQuery = encodeURIComponent(
+    `${address}, Toronto, ON ${postalCode ?? ""}`
+  );
+  console.log(mapQuery);
   const googleMapSrc = `${EMBEDDED_MAP_URL}?key=${process.env.GOOGLE_API_KEY}&q=${mapQuery}`;
 
   return (
