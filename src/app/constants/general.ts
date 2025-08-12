@@ -149,8 +149,8 @@ export const buildingFeatureFilters: FilterOption[] = [
     iconClass: "fa-car",
   },
   {
-    key: "shared-laundry",
-    label: "Shared laundry",
+    key: "laundry-room",
+    label: "Laundry room",
     iconClass: "fa-tshirt",
   },
   { key: "bike-parking", label: "Bike parking", iconClass: "fa-bicycle" },

@@ -23,7 +23,7 @@ export default function SearchBar({
 
   const handleSubmit = useCallback(() => {
     if (filteredSearchResults.length > 0) {
-      // Filter results by address or property management company name based on the search query
+      // Filter results by address or property management name based on the search query
       const res = filteredSearchResults.filter(
         (apt) =>
           apt.SITE_ADDRESS.toLowerCase().includes(searchString.toLowerCase()) ||
@@ -39,9 +39,9 @@ export default function SearchBar({
   }, [filteredSearchResults, searchString]);
 
   return (
-    <div className="flex items-center justify-center gap-4">
+    <div className="flex items-center justify-center gap-2 max-w-lg">
       <form
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 w-full"
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
@@ -50,9 +50,9 @@ export default function SearchBar({
         <label htmlFor="search" className="sr-only">
           Search
         </label>
-        <div className="relative">
+        <div className="relative w-full">
           <input
-            className="w-full rounded-full py-2 px-4 border border-solid border-gray-300 focus:border-cyan-700 pr-10"
+            className="w-full min-w-[200px] rounded-full py-2 px-4 border border-solid border-gray-300 focus:border-cyan-700 pr-8"
             type="text"
             id="search"
             placeholder="Search by address or property management name"
@@ -62,7 +62,7 @@ export default function SearchBar({
           />
           {searchString?.length > 0 && (
             <button
-              className="absolute top-0 right-4 bottom-0"
+              className="absolute top-0 right-3 bottom-0"
               type="button"
               disabled={isLoading}
               onClick={() => setSearchString("")}

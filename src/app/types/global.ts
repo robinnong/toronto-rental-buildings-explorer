@@ -10,7 +10,7 @@ export type FilterTypes =
   | "gym" // DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
   | "locker-storage" // LOCKER_OR_STORAGE_ROOM
   | "parking" // PARKING_TYPE
-  | "shared-laundry" // LAUNDRY_ROOM
+  | "laundry-room" // LAUNDRY_ROOM
   | "bike-parking" // BIKE_PARKING
   | "barrier-free-entrance"; // BARRIER_FREE_ACCESSIBILTY_ENTR
 
@@ -56,7 +56,7 @@ export type FetchDataResponse = {
   INTERCOM: string;
   IS_THERE_A_COOLING_ROOM: string;
   IS_THERE_EMERGENCY_POWER: string;
-  LAUNDRY_ROOM: string; // shared-laundry
+  LAUNDRY_ROOM: string; // laundry-room
   LAUNDRY_ROOM_HOURS_OF_OPERATION: string;
   LAUNDRY_ROOM_LOCATION: string;
   LOCKER_OR_STORAGE_ROOM: string;

@@ -1,6 +1,7 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
+import ReactPaginate from "react-paginate";
 import { SearchContext } from "@/app/hooks/useSearchFilterContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
@@ -56,6 +57,22 @@ export default function SearchResultsList({
           />
         ))}
       </ul>
+
+      {filteredSearchResults?.length === 0 && (
+        <div className="text-center py-4">
+          <p>No results found</p>
+        </div>
+      )}
+
+      {filteredSearchResults?.length > 0 && (
+        <ReactPaginate
+          pageCount={1}
+          onPageChange={() => {
+            // TODO
+          }}
+          pageRangeDisplayed={5}
+        />
+      )}
     </div>
   );
 }

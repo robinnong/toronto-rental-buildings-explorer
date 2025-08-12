@@ -50,7 +50,7 @@ export default function SearchPage(): ReactElement {
         </div>
       </main>
 
-      <footer className="bg-gray-50 p-4 text-center">
+      <footer className="bg-gray-50 h-[48px] flex items-center justify-center">
         <p>
           ©2025&nbsp;
           <a

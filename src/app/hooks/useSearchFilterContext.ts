@@ -99,7 +99,7 @@ export default function useSearchContext(): SearchContextModel {
         },
       ]);
     }
-    if (appliedFilters.find(({ key }) => key === "shared-laundry")) {
+    if (appliedFilters.find(({ key }) => key === "laundry-room")) {
       setWhereClauses((prev) => [
         ...prev,
         {
