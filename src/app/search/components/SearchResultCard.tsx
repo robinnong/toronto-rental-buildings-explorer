@@ -1,7 +1,6 @@
 "use client";
 
-import { ReactElement, ReactNode, useMemo } from "react";
-import Accordion from "@/app/components/utils/Accordion";
+import { ReactElement, ReactNode, useMemo, useState } from "react";
 import { torontoPostalCodesByKey } from "@/app/constants/general";
 import { evaluateStringToBoolean } from "@/app/lib/evaluateStringToBoolean";
 import { FetchDataResponse } from "@/app/types/global";
@@ -47,6 +46,8 @@ export default function SearchResultCard({
   const buildingAge = new Date().getFullYear() - parseInt(YEAR_BUILT, 10);
   const emptyLabel = <span className="italic text-gray-400">N/A</span>;
 
+  const [isOpen, setIsOpen] = useState(false);
+
   /**
    * Formats the label as greyed out with a strikethrough if the value is falsey
    */
@@ -90,8 +91,8 @@ export default function SearchResultCard({
         </button>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <div className="flex flex-col gap-1 mb-1">
+      <div className="flex items-end justify-between gap-2">
+        <div className="flex flex-col gap-1">
           <p>
             Property management:&nbsp;
             <span className="font-semibold">
@@ -123,87 +124,100 @@ export default function SearchResultCard({
           </p>
         </div>
 
-        <Accordion header="See more">
-          <div className="flex gap-10">
-            <div className="flex flex-col gap-1 w-1/3">
-              <h4 className="font-bold mb-1">Building Features</h4>
-              <p className={formatLabelStyle(AIR_CONDITIONING_TYPE)}>
-                <i className="fa-solid fa-snowflake mr-1" />
-                A/C
-              </p>
-              <p className={formatLabelStyle(BALCONIES)}>
-                <i className="fa-solid fa-door-open mr-1" />
-                Balconies
-              </p>
-              <p className={formatLabelStyle(BARRIER_FREE_ACCESSIBILTY_ENTR)}>
-                <i className="fa-solid fa-wheelchair mr-1" />
-                Barrier-free accessible entrance
-              </p>
-              <p className={formatLabelStyle(NO_OF_ELEVATORS)}>
-                <i className="fa-solid fa-elevator mr-1" />
-                Elevators
-              </p>
-              <p className={formatLabelStyle(HEATING_TYPE)}>
-                <i className="fa-solid fa-temperature-arrow-up mr-1" />
-                Heating type:&nbsp;{formatStringLabel(HEATING_TYPE)}
-              </p>
-              <p className={formatLabelStyle(NON_SMOKING_BUILDING)}>
-                <i className="fa-solid fa-smoking-ban mr-1" />
-                Non-smoking building
-              </p>
-              <p className={formatLabelStyle(PETS_ALLOWED)}>
-                <i className="fa-solid fa-paw mr-1" />
-                Pets allowed
-              </p>
-            </div>
-            <div className="flex flex-col gap-1 w-1/3">
-              <h4 className="font-bold mb-1">Amenities</h4>
-              <p
-                className={formatLabelStyle(
-                  DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
-                )}
-              >
-                <i className="fa-solid fa-dumbbell mr-1" />
-                Gym
-              </p>
-              <p className={formatLabelStyle(LAUNDRY_ROOM)}>
-                <i className="fa-solid fa-shirt mr-1" />
-                Laundry room
-              </p>
-              <p
-                className={formatLabelStyle(
-                  DESCRIPTION_OF_OUTDOOR_REC_FACILITIES
-                )}
-              >
-                <i className="fa-solid fa-tree mr-1" />
-                Outdoor amenities
-              </p>
-            </div>
-            <div className="flex flex-col gap-1 w-1/3">
-              <h4 className="font-bold mb-1">Parking & Storage</h4>
-              <p className={formatLabelStyle(BIKE_PARKING)}>
-                <i className="fa-solid fa-bicycle mr-1" />
-                Bike parking:&nbsp;
-                {formatStringLabel(BIKE_PARKING)}
-              </p>
-              <p className={formatLabelStyle(LOCKER_OR_STORAGE_ROOM)}>
-                <i className="fa-solid fa-key mr-1" />
-                Locker/Storage
-              </p>
-              <p className={formatLabelStyle(PARKING_TYPE)}>
-                <i className="fa-solid fa-parking mr-1" />
-                Parking type:&nbsp;
-                {formatStringLabel(PARKING_TYPE)}
-              </p>
-              <p className={formatLabelStyle(VISITOR_PARKING)}>
-                <i className="fa-solid fa-dollar" />
-                Visitor parking:&nbsp;
-                {formatStringLabel(VISITOR_PARKING)}
-              </p>
-            </div>
-          </div>
-        </Accordion>
+        <div className="flex flex-col gap-1 items-start">
+          <button
+            type="button"
+            className="text-cyan-700 flex items-center justify-between"
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <span>See more</span>
+            <i
+              className={`ml-1 fa-solid fa-chevron-${isOpen ? "up" : "down"}`}
+            />
+          </button>
+        </div>
       </div>
+
+      {/* Expanded building information */}
+      {isOpen && (
+        <div className="flex gap-10 mt-4 border-t border-gray-200 pt-4">
+          <div className="flex flex-col gap-1 w-1/3">
+            <h4 className="font-bold mb-1">Building Features</h4>
+            <p className={formatLabelStyle(AIR_CONDITIONING_TYPE)}>
+              <i className="fa-solid fa-snowflake mr-1" />
+              A/C
+            </p>
+            <p className={formatLabelStyle(BALCONIES)}>
+              <i className="fa-solid fa-door-open mr-1" />
+              Balconies
+            </p>
+            <p className={formatLabelStyle(BARRIER_FREE_ACCESSIBILTY_ENTR)}>
+              <i className="fa-solid fa-wheelchair mr-1" />
+              Barrier-free accessible entrance
+            </p>
+            <p className={formatLabelStyle(NO_OF_ELEVATORS)}>
+              <i className="fa-solid fa-elevator mr-1" />
+              Elevators
+            </p>
+            <p className={formatLabelStyle(HEATING_TYPE)}>
+              <i className="fa-solid fa-temperature-arrow-up mr-1" />
+              Heating type:&nbsp;{formatStringLabel(HEATING_TYPE)}
+            </p>
+            <p className={formatLabelStyle(NON_SMOKING_BUILDING)}>
+              <i className="fa-solid fa-smoking-ban mr-1" />
+              Non-smoking building
+            </p>
+            <p className={formatLabelStyle(PETS_ALLOWED)}>
+              <i className="fa-solid fa-paw mr-1" />
+              Pets allowed
+            </p>
+          </div>
+          <div className="flex flex-col gap-1 w-1/3">
+            <h4 className="font-bold mb-1">Amenities</h4>
+            <p
+              className={formatLabelStyle(DESCRIPTION_OF_INDOOR_EXERCISE_ROOM)}
+            >
+              <i className="fa-solid fa-dumbbell mr-1" />
+              Gym
+            </p>
+            <p className={formatLabelStyle(LAUNDRY_ROOM)}>
+              <i className="fa-solid fa-shirt mr-1" />
+              Laundry room
+            </p>
+            <p
+              className={formatLabelStyle(
+                DESCRIPTION_OF_OUTDOOR_REC_FACILITIES
+              )}
+            >
+              <i className="fa-solid fa-tree mr-1" />
+              Outdoor amenities
+            </p>
+          </div>
+          <div className="flex flex-col gap-1 w-1/3">
+            <h4 className="font-bold mb-1">Parking & Storage</h4>
+            <p className={formatLabelStyle(BIKE_PARKING)}>
+              <i className="fa-solid fa-bicycle mr-1" />
+              Bike parking:&nbsp;
+              {formatStringLabel(BIKE_PARKING)}
+            </p>
+            <p className={formatLabelStyle(LOCKER_OR_STORAGE_ROOM)}>
+              <i className="fa-solid fa-key mr-1" />
+              Locker/Storage
+            </p>
+            <p className={formatLabelStyle(PARKING_TYPE)}>
+              <i className="fa-solid fa-parking mr-1" />
+              Parking type:&nbsp;
+              {formatStringLabel(PARKING_TYPE)}
+            </p>
+            <p className={formatLabelStyle(VISITOR_PARKING)}>
+              <i className="fa-solid fa-dollar" />
+              Visitor parking:&nbsp;
+              {formatStringLabel(VISITOR_PARKING)}
+            </p>
+          </div>
+        </div>
+      )}
     </li>
   );
 }
