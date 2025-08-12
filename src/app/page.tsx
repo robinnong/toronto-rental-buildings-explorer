@@ -8,7 +8,7 @@ export default function Page() {
     <APIProvider apiKey={process.env.GOOGLE_API_KEY}>
       <div className="relative h-screen w-full">
         <header className="absolute top-0 left-0 p-4 text-white">
-          <h1 className="text-lg text-center text-white font-extrabold font-serif">
+          <h1 className="text-md text-center text-white font-extrabold font-serif">
             🏠 Toronto Rental Building Explorer
           </h1>
         </header>

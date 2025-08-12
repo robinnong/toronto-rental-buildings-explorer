@@ -20,9 +20,11 @@ export default function SearchPage(): ReactElement {
   return (
     <SearchContext.Provider value={searchContext}>
       <header className="flex items-center sticky z-10 top-0 flex bg-white border-b border-gray-100 shadow-sm p-3">
-        <h1 className="w-1/3 text-lg font-extrabold font-serif text-cyan-800">
-          <i className="fa-solid fa-building mr-1" />
-          Toronto Rental Building Explorer
+        <h1 className="w-1/3 text-md font-extrabold font-serif text-cyan-800">
+          <a href="/" className="flex items-center gap inline-block">
+            <i className="fa-solid fa-building mr-1" />
+            Toronto Rental Building Explorer
+          </a>
         </h1>
         <div className="w-1/3">
           <SearchBar setShowFiltersModal={setShowFiltersModal} />
