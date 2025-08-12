@@ -78,7 +78,9 @@ export default function SearchResultCard({
     <li className="p-4 rounded-sm border border-solid border-gray-200 bg-white">
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="font-semibold text-[16px] mb-1">{SITE_ADDRESS.trim()}</h3>
+          <h3 className="font-semibold text-[16px] mb-1">
+            {SITE_ADDRESS.trim()}
+          </h3>
           <p className="text-ms font-semibold text-gray-600">{city}</p>
         </div>
         <button

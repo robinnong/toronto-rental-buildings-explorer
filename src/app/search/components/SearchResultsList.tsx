@@ -13,7 +13,8 @@ type Props = {
 export default function SearchResultsList({
   setPreviewedBuildingMap,
 }: Props): ReactElement {
-  const { filteredSearchResults, page, setPage } = useContext(SearchContext);
+  const { filteredSearchResults, page, setPage, isLoading } =
+    useContext(SearchContext);
 
   return (
     <div className="flex flex-col gap-2 w-full mb-4">
@@ -58,7 +59,7 @@ export default function SearchResultsList({
         ))}
       </ul>
 
-      {filteredSearchResults?.length === 0 && (
+      {!isLoading && filteredSearchResults?.length === 0 && (
         <div className="text-center py-4">
           <p>No results found</p>
         </div>
@@ -66,7 +67,7 @@ export default function SearchResultsList({
 
       {filteredSearchResults?.length > 0 && (
         <ReactPaginate
-        className="flex justify-center gap-2 mt-4"
+          className="flex justify-center gap-2 mt-4"
           pageCount={1}
           onPageChange={() => {
             // TODO
