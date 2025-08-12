@@ -17,7 +17,7 @@ import {
 } from "firebase/firestore";
 import { evaluateStringToBoolean } from "@/app/lib/evaluateStringToBoolean";
 import { FetchDataResponse, AppliedFilter } from "@/app/types/global";
-import { db } from "../../firebase.config";
+import { db } from "../firebase.config";
 
 export type SearchContextModel = {
   appliedFilters: AppliedFilter[];

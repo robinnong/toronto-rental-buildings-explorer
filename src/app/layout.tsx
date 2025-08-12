@@ -8,6 +8,8 @@ export const metadata: Metadata = {
     "Explore a catalog of purpose-built rental buildings in Toronto.",
 };
 
+// A layout is UI that is shared between multiple pages. On navigation, layouts preserve state, remain interactive, and do not rerender.
+// See: https://nextjs.org/docs/app/getting-started/layouts-and-pages
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -22,7 +24,7 @@ export default function RootLayout({
       />
       <Script
         async
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`}
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}&libraries=places`}
       />
     </html>
   );

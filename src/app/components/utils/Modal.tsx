@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactElement, ReactNode } from "react";
-import useOnClickOutside from "../hooks/useOnClickOutside";
+import useOnClickOutside from "@/app/hooks/useOnClickOutside";
 
 type Props = { onClickOutside: () => void; children: ReactNode };
 

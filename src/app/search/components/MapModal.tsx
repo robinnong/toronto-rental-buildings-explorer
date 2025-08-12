@@ -1,8 +1,8 @@
 "use client";
 
 import { ReactElement } from "react";
-import Modal from "./utils/Modal";
-import { EMBEDDED_MAP_URL } from "../constants/general";
+import Modal from "@/app/components/utils/Modal";
+import { EMBEDDED_MAP_URL } from "@/app/constants/general";
 
 type Props = {
   address: string;
@@ -24,7 +24,7 @@ export default function MapModal({
   onClose,
 }: Props): ReactElement {
   const mapQuery = encodeURIComponent(`${address}, Toronto, ON ${postalCode}`);
-  const googleMapSrc = `${EMBEDDED_MAP_URL}?key=${process.env.GOOGLE_MAPS_API_KEY}&q=${mapQuery}`;
+  const googleMapSrc = `${EMBEDDED_MAP_URL}?key=${process.env.GOOGLE_API_KEY}&q=${mapQuery}`;
 
   return (
     <Modal onClickOutside={onClose}>

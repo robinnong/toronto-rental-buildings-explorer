@@ -1,11 +1,11 @@
 "use client";
 
 import { ReactElement, useContext } from "react";
-import Modal from "./utils/Modal";
-import { SearchContext } from "../hooks/useSearchFilterContext";
-import BuildingAgeRangeFilters from "../search/components/BuildingAgeRangeFilters";
-import BuildingFeatureFilters from "../search/components/BuildingFeatureFilters";
-import BuildingStoreysFilters from "../search/components/BuildingStoreysFilters";
+import { SearchContext } from "@/app/hooks/useSearchFilterContext";
+import Modal from "@/app/components/utils/Modal";
+import BuildingAgeRangeFilters from "./BuildingAgeRangeFilters";
+import BuildingFeatureFilters from "./BuildingFeatureFilters";
+import BuildingStoreysFilters from "./BuildingStoreysFilters";
 
 type Props = {
   onClose: () => void;

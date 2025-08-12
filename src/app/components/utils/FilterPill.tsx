@@ -42,7 +42,7 @@ export default function FilterPill({
         htmlFor={id}
         className={`cursor-pointer border rounded-lg p-2 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700 text-nowrap ${
           isActive
-            ? "bg-cyan-50 border border-solid border-cyan-200 text-cyan-600"
+            ? "bg-sky-50 border border-solid border-cyan-600 text-cyan-700"
             : "border-gray-200"
         }`}
         onClick={() => {
@@ -50,7 +50,10 @@ export default function FilterPill({
             if (prev == null) {
               return [{ key: id as AppliedFilter["key"], value: true }];
             } else if (!prev.find((filter) => filter.key === id)) {
-              return [...prev, { key: id as AppliedFilter["key"], value: true }];
+              return [
+                ...prev,
+                { key: id as AppliedFilter["key"], value: true },
+              ];
             }
             return prev.filter((filter) => filter.key !== id);
           });

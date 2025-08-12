@@ -1,7 +1,7 @@
 "use client";
 
+import DualRangeSlider from "@/app/components/utils/DualRangeSlider";
 import { ReactElement } from "react";
-import DualRangeSlider from "../utils/DualRangeSlider";
 
 type Props = {
   disabled: boolean;

@@ -2,8 +2,8 @@
 
 import { AppliedFilter } from "@/app/types/global";
 import { Dispatch, ReactElement, SetStateAction } from "react";
-import FilterPill from "../utils/FilterPill";
 import { buildingFeatureFilters } from "@/app/constants/general";
+import FilterPill from "@/app/components/utils/FilterPill";
 
 type Props = {
   disabled: boolean;

@@ -8,7 +8,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { SearchContext } from "./hooks/useSearchFilterContext";
+import { SearchContext } from "@/app/hooks/useSearchFilterContext";
 
 type Props = {
   setShowFiltersModal: Dispatch<SetStateAction<boolean>>;
@@ -82,7 +82,7 @@ export default function SearchBar({
 
       <button
         type="button"
-        className="border rounded-full border-gray-300 p-2 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700"
+        className="text-nowrap border rounded-full border-gray-300 py-2 px-3 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700"
         onClick={() => setShowFiltersModal((prev) => !prev)}
       >
         <i className="fa-solid fa-sliders mr-1" />

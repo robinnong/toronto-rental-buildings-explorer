@@ -1,3 +1,6 @@
+<!-- TODO: Add screenshots -->
+<!-- TODO: Add design process -->
+
 Live project: [Link](https://toronto-rental-buildings-explorer.netlify.app)
 
 ## Getting Started

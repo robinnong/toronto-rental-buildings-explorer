@@ -2,22 +2,27 @@
 
 import { ReactElement, useState } from "react";
 import { FetchDataResponse } from "../types/global";
-import MapModal from "./MapModal";
-import SearchBar from "./SearchBar";
-import FiltersModal from "./FiltersModal";
-import SearchResultsList from "./SearchResultsList";
+import useSearchContext, {
+  SearchContext,
+} from "../hooks/useSearchFilterContext";
+import FiltersModal from "./components/FiltersModal";
+import MapModal from "./components/MapModal";
+import SearchBar from "./components/SearchBar";
+import SearchResultsList from "./components/SearchResultsList";
 
-export default function Main(): ReactElement {
+export default function SearchPage(): ReactElement {
+  const searchContext = useSearchContext();
+
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
   const [previewedBuildingMap, setPreviewedBuildingMap] =
     useState<FetchDataResponse | null>(null);
 
   return (
-    <div>
+    <SearchContext.Provider value={searchContext}>
       <header className="flex items-center sticky z-10 top-0 flex bg-white border-b border-gray-100 shadow-sm p-3">
         <h1 className="w-1/3 text-lg font-extrabold font-serif text-cyan-800">
           <i className="fa-solid fa-building mr-1" />
-          Toronto Rental Building Index
+          Toronto Rental Building Explorer
         </h1>
         <div className="w-1/3">
           <SearchBar setShowFiltersModal={setShowFiltersModal} />
@@ -66,6 +71,6 @@ export default function Main(): ReactElement {
           .
         </p>
       </footer>
-    </div>
+    </SearchContext.Provider>
   );
 }

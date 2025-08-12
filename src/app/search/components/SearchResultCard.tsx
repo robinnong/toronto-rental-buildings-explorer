@@ -1,10 +1,10 @@
 "use client";
 
 import { ReactElement, ReactNode, useMemo } from "react";
-import { torontoPostalCodesByKey } from "../constants/general";
-import { evaluateStringToBoolean } from "../lib/evaluateStringToBoolean";
-import { FetchDataResponse } from "../types/global";
-import Accordion from "./utils/Accordion";
+import Accordion from "@/app/components/utils/Accordion";
+import { torontoPostalCodesByKey } from "@/app/constants/general";
+import { evaluateStringToBoolean } from "@/app/lib/evaluateStringToBoolean";
+import { FetchDataResponse } from "@/app/types/global";
 
 type Props = {
   building: FetchDataResponse;

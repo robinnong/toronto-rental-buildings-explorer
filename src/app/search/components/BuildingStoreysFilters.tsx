@@ -1,9 +1,9 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction } from "react";
-import FilterPill from "../utils/FilterPill";
 import { AppliedFilter } from "@/app/types/global";
 import { buildingStoreysFilters } from "@/app/constants/general";
+import FilterPill from "@/app/components/utils/FilterPill";
 
 type Props = {
   appliedFilters: AppliedFilter[];

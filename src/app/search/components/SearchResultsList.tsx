@@ -1,8 +1,8 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
-import { FetchDataResponse } from "../types/global";
-import { SearchContext } from "./hooks/useSearchFilterContext";
+import { SearchContext } from "@/app/hooks/useSearchFilterContext";
+import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
 
 type Props = {
