@@ -32,7 +32,7 @@ export default function SearchPage(): ReactElement {
       </header>
 
       <main className="flex flex-col w-full h-full mx-auto max-w-3xl">
-        <div className="pt-4 pb-8 px-6 w-full h-full">
+        <div className="pt-4 pb-8 px-4 w-full h-full">
           <SearchResultsList
             setPreviewedBuildingMap={setPreviewedBuildingMap}
           />
@@ -50,7 +50,7 @@ export default function SearchPage(): ReactElement {
         </div>
       </main>
 
-      <footer className="bg-gray-50 h-[48px] flex items-center justify-center">
+      <footer className="bg-cyan-700 text-white h-[48px] flex items-center justify-center">
         <p>
           ©2025&nbsp;
           <a

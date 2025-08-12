@@ -76,9 +76,9 @@ export default function SearchResultCard({
 
   return (
     <li className="p-4 rounded-sm border border-solid border-gray-200 bg-white">
-      <div className="flex justify-between items-start mb-2">
+      <div className="flex justify-between items-start">
         <div>
-          <h3 className="text-lg font-semibold">{SITE_ADDRESS.trim()}</h3>
+          <h3 className="font-semibold text-[16px] mb-1">{SITE_ADDRESS.trim()}</h3>
           <p className="text-ms font-semibold text-gray-600">{city}</p>
         </div>
         <button
@@ -91,32 +91,41 @@ export default function SearchResultCard({
         </button>
       </div>
 
-      <div className="flex items-end justify-between gap-2">
-        <div className="flex flex-col gap-1">
-          <p>
-            Property management:&nbsp;
-            <span className="font-semibold">
-              {PROP_MANAGEMENT_COMPANY_NAME ?? emptyLabel}
-            </span>
-          </p>
-          <p>
-            No. stories:&nbsp;
+      <p className="py-1">
+        Property management:&nbsp;
+        <span className="font-semibold">
+          {PROP_MANAGEMENT_COMPANY_NAME ?? emptyLabel}
+        </span>
+      </p>
+
+      <div className="flex items-end justify-between gap-2 w-full">
+        <div className="flex flex-col gap-1 shrink-1">
+          <p className="flex flex-wrap">
+            <span className="whitespace-nowrap">No. stories:</span>&nbsp;
             {CONFIRMED_STOREYS ? (
               <span className="font-semibold">{CONFIRMED_STOREYS}</span>
             ) : (
               emptyLabel
             )}
-            · No. units:&nbsp;
+            &nbsp;·&nbsp;<span className="whitespace-nowrap">No. units</span>
+            :&nbsp;
             {CONFIRMED_UNITS ? (
               <span className="font-semibold">{CONFIRMED_UNITS}</span>
             ) : (
               emptyLabel
             )}
-            · Year built:&nbsp;
+            &nbsp;·&nbsp;<span className="whitespace-nowrap">Year built</span>
+            :&nbsp;
             {YEAR_BUILT ? (
               <>
-                <span className="font-semibold">{YEAR_BUILT}</span>&nbsp;(
-                <span className="font-semibold">{buildingAge} years old</span>)
+                <span className="font-semibold whitespace-nowrap">
+                  {YEAR_BUILT}
+                </span>
+                &nbsp;(
+                <span className="font-semibold whitespace-nowrap">
+                  {buildingAge} years old
+                </span>
+                )
               </>
             ) : (
               emptyLabel
@@ -124,10 +133,10 @@ export default function SearchResultCard({
           </p>
         </div>
 
-        <div className="flex flex-col gap-1 items-start">
+        <div className="flex flex-col gap-1 items-start shrink-0">
           <button
             type="button"
-            className="text-cyan-700 flex items-center justify-between"
+            className="text-cyan-700 flex items-center justify-between text-nowrap"
             aria-expanded={isOpen}
             onClick={() => setIsOpen(!isOpen)}
           >
@@ -141,8 +150,8 @@ export default function SearchResultCard({
 
       {/* Expanded building information */}
       {isOpen && (
-        <div className="flex gap-10 mt-4 border-t border-gray-200 pt-4">
-          <div className="flex flex-col gap-1 w-1/3">
+        <div className="flex gap-4 sm:gap-10 max-sm:flex-col mt-4 border-t border-gray-200 pt-4">
+          <div className="flex flex-col gap-1 w-1/3 max-sm:w-full">
             <h4 className="font-bold mb-1">Building Features</h4>
             <p className={formatLabelStyle(AIR_CONDITIONING_TYPE)}>
               <i className="fa-solid fa-snowflake mr-1" />
@@ -173,7 +182,7 @@ export default function SearchResultCard({
               Pets allowed
             </p>
           </div>
-          <div className="flex flex-col gap-1 w-1/3">
+          <div className="flex flex-col gap-1 w-1/3 max-sm:w-full">
             <h4 className="font-bold mb-1">Amenities</h4>
             <p
               className={formatLabelStyle(DESCRIPTION_OF_INDOOR_EXERCISE_ROOM)}
@@ -194,7 +203,7 @@ export default function SearchResultCard({
               Outdoor amenities
             </p>
           </div>
-          <div className="flex flex-col gap-1 w-1/3">
+          <div className="flex flex-col gap-1 w-1/3 max-sm:w-full">
             <h4 className="font-bold mb-1">Parking & Storage</h4>
             <p className={formatLabelStyle(BIKE_PARKING)}>
               <i className="fa-solid fa-bicycle mr-1" />

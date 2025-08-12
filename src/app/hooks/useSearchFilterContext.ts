@@ -27,7 +27,6 @@ export type SearchContextModel = {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   isLoading: boolean;
-  isInitialized: boolean;
   fetchData: () => Promise<void>;
 };
 
@@ -36,7 +35,6 @@ export const SearchContext = createContext<SearchContextModel>(null);
 // TODO: Comment here
 export default function useSearchContext(): SearchContextModel {
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
   const [filteredSearchResults, setFilteredSearchResults] = useState<
     FetchDataResponse[]
   >([]);
@@ -114,6 +112,7 @@ export default function useSearchContext(): SearchContextModel {
   // TODO: Comment here
   const fetchData = useCallback(async () => {
     setIsLoading(true);
+
     try {
       const whereQueries = whereClauses.map((clause) =>
         where(clause.fieldPath, clause.opStr, clause.value)
@@ -143,7 +142,6 @@ export default function useSearchContext(): SearchContextModel {
       // TODO - Display error message to the user
       console.error("Error fetching data:", error);
     } finally {
-      setIsInitialized(true);
       setIsLoading(false);
     }
   }, [whereClauses]);
@@ -208,6 +206,10 @@ export default function useSearchContext(): SearchContextModel {
     [appliedFilters]
   );
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return {
     appliedFilters,
     setAppliedFilters,
@@ -216,7 +218,6 @@ export default function useSearchContext(): SearchContextModel {
     page,
     setPage,
     fetchData,
-    isInitialized,
     isLoading,
   };
 }

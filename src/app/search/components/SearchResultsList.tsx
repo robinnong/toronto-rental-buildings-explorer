@@ -16,7 +16,7 @@ export default function SearchResultsList({
   const { filteredSearchResults, page, setPage } = useContext(SearchContext);
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-2 w-full mb-4">
       {filteredSearchResults?.length > 0 && (
         <div className="flex justify-between">
           <span>
@@ -66,6 +66,7 @@ export default function SearchResultsList({
 
       {filteredSearchResults?.length > 0 && (
         <ReactPaginate
+        className="flex justify-center gap-2 mt-4"
           pageCount={1}
           onPageChange={() => {
             // TODO
