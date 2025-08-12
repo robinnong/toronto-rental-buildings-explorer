@@ -13,8 +13,14 @@ type Props = {
 export default function SearchResultsList({
   setPreviewedBuildingMap,
 }: Props): ReactElement {
-  const { filteredSearchResults, page, setPage, isLoading } =
-    useContext(SearchContext);
+  const {
+    filteredSearchResults,
+    page,
+    setPage,
+    isLoading,
+    setAppliedFilters,
+    fetchData,
+  } = useContext(SearchContext);
 
   return (
     <div className="flex flex-col gap-2 h-full w-full mb-4">
@@ -68,7 +74,10 @@ export default function SearchResultsList({
             type="button"
             className="text-cyan-700 mt-2"
             onClick={() => {
-              // TODO
+              () => {
+                setAppliedFilters([]);
+                fetchData();
+              };
             }}
           >
             Clear filters
