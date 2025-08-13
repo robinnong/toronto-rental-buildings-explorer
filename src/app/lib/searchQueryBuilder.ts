@@ -1,6 +1,11 @@
 import { FilterTypes } from "./../types/global";
 import { FirestoreWhereClause } from "../types/global";
 
+/**
+ * Builds a Firestore query where clause based on the filter key and a defined condition
+ * @param key The filter key
+ * @returns The Firestore where clause
+ */
 export default function searchQueryBuilder(
   key: FilterTypes
 ): FirestoreWhereClause {
@@ -43,6 +48,7 @@ export default function searchQueryBuilder(
       };
 
     case "mid-rise":
+      // Range query requires 2 separate where clauses
       // TODO
       // setWhereClauses((prev) => [
       //   ...prev,
