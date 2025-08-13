@@ -2,6 +2,18 @@ import { FilterOption } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
+// Firestore Database paths
+const fsDbCollection = "toronto-apartment-building-registration";
+const fsDbDoc = "datastore_search_0";
+const fsDbSubCollection = "records";
+
+export const firestoreDbPaths: [string, ...string[]] = [
+  fsDbCollection,
+  fsDbDoc,
+  fsDbSubCollection,
+];
+export const firestoreQueryLimit = 25;
+
 export const torontoPostalCodesByKey: Record<string, string[]> = {
   scarborough: [
     "M1B",

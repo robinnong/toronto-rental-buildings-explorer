@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
-import { SearchContext } from "@/app/hooks/useSearchFilterContext";
+import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
 

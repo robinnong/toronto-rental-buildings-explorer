@@ -5,7 +5,7 @@ import SearchResultsList from "./SearchResultsList";
 import { FetchDataResponse } from "@/app/types/global";
 import FiltersModal from "./FiltersModal";
 import MapModal from "./MapModal";
-import { SearchContext } from "@/app/hooks/useSearchFilterContext";
+import { SearchContext } from "@/app/hooks/useSearchContext";
 import LoadingSkeleton from "./LoadingSkeleton";
 
 type Props = {

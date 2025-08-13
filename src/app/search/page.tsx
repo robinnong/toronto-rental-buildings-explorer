@@ -1,9 +1,7 @@
 "use client";
 
 import { ReactElement, useState } from "react";
-import useSearchContext, {
-  SearchContext,
-} from "../hooks/useSearchFilterContext";
+import useSearchContext, { SearchContext } from "../hooks/useSearchContext";
 import SearchBar from "./components/SearchBar";
 import SearchBody from "./components/SearchBody";
 

@@ -8,7 +8,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { SearchContext } from "@/app/hooks/useSearchFilterContext";
+import { SearchContext } from "@/app/hooks/useSearchContext";
 
 type Props = {
   setShowFiltersModal: Dispatch<SetStateAction<boolean>>;
@@ -16,17 +16,19 @@ type Props = {
 export default function SearchBar({
   setShowFiltersModal,
 }: Props): ReactElement {
-  const { isLoading, filteredSearchResults, setFilteredSearchResults } =
+  const { isLoading, searchResults, setFilteredSearchResults } =
     useContext(SearchContext);
 
   const [searchString, setSearchString] = useState("");
 
   const handleSubmit = useCallback(() => {
-    if (filteredSearchResults.length > 0) {
+    if (searchString.length > 0) {
       // Filter results by address or property management name based on the search query
-      const res = filteredSearchResults.filter(
+      const res = searchResults.filter(
         (apt) =>
-          apt.SITE_ADDRESS?.toLowerCase().includes(searchString.toLowerCase()) ||
+          apt.SITE_ADDRESS?.toLowerCase().includes(
+            searchString.toLowerCase()
+          ) ||
           apt.PROP_MANAGEMENT_COMPANY_NAME?.toLowerCase().includes(
             searchString.toLowerCase()
           )
@@ -34,9 +36,9 @@ export default function SearchBar({
 
       setFilteredSearchResults(res);
     } else {
-      setFilteredSearchResults([]);
+      setFilteredSearchResults(searchResults);
     }
-  }, [filteredSearchResults, searchString]);
+  }, [searchResults, searchString]);
 
   return (
     <div className="flex items-center justify-center gap-2 max-w-lg">

@@ -1,3 +1,5 @@
+import { FieldPath, WhereFilterOp } from "firebase/firestore";
+
 export type FilterTypes =
   | "low-rise" // CONFIRMED_STOREYS
   | "mid-rise" // CONFIRMED_STOREYS
@@ -14,9 +16,10 @@ export type FilterTypes =
   | "bike-parking" // BIKE_PARKING
   | "barrier-free-entrance"; // BARRIER_FREE_ACCESSIBILTY_ENTR
 
-export type AppliedFilter = {
-  key: FilterTypes;
-  value: boolean;
+export type FirestoreWhereClause = {
+  fieldPath: string | FieldPath;
+  opStr: WhereFilterOp;
+  value: unknown;
 };
 
 export type FilterOption = {

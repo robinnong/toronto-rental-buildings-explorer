@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactElement, useContext } from "react";
-import { SearchContext } from "@/app/hooks/useSearchFilterContext";
+import { SearchContext } from "@/app/hooks/useSearchContext";
 import Modal from "@/app/components/utils/Modal";
 import BuildingAgeRangeFilters from "./BuildingAgeRangeFilters";
 import BuildingFeatureFilters from "./BuildingFeatureFilters";

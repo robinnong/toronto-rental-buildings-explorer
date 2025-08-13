@@ -1,13 +1,13 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction } from "react";
-import { AppliedFilter } from "@/app/types/global";
+import { FilterTypes } from "@/app/types/global";
 import { buildingStoreysFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
 
 type Props = {
-  appliedFilters: AppliedFilter[];
-  setAppliedFilters: Dispatch<SetStateAction<AppliedFilter[]>>;
+  appliedFilters: FilterTypes[];
+  setAppliedFilters: Dispatch<SetStateAction<FilterTypes[]>>;
   disabled: boolean;
 };
 
@@ -15,8 +15,8 @@ type Props = {
  * Options to filter buildings by number of storeys, rendered by <FiltersModal />
  * Options: "Low rise", "Mid rise", and "High rise".
  *
- * @param {AppliedFilter[]} appliedFilters - The currently applied filters
- * @param {Dispatch<SetStateAction<AppliedFilter[]>>} setAppliedFilters - Function to update the applied filters
+ * @param {FilterTypes[]} appliedFilters - The currently applied filters
+ * @param {Dispatch<SetStateAction<FilterTypes[]>>} setAppliedFilters - Function to update the applied filters
  * @param {boolean} disabled - Whether the filters are disabled
  */
 export default function BuildingStoreysFilters({
