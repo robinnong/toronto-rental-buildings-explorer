@@ -11,6 +11,7 @@ import {
   collection,
   getDocs,
   limit,
+  orderBy,
   query,
   where,
   FieldPath,
@@ -122,8 +123,8 @@ export default function useSearchContext(): SearchContextModel {
       // TODO: Add pagination and search by offset (see Firestore docs)
       const q =
         whereClauses?.length > 0
-          ? query(collectionRef, limit(25), ...whereQueries)
-          : query(collectionRef, limit(25)); // TODO: Fix this
+          ? query(collectionRef, orderBy("_id"), limit(25), ...whereQueries)
+          : query(collectionRef, orderBy("_id"), limit(25)); // TODO: Fix this
       const querySnapshot = await getDocs(q);
 
       const results: FetchDataResponse[] = [];

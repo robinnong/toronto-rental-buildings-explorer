@@ -1,7 +1,6 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
-import ReactPaginate from "react-paginate";
 import { SearchContext } from "@/app/hooks/useSearchFilterContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
@@ -27,22 +26,25 @@ export default function SearchResultsList({
       {filteredSearchResults?.length > 0 && (
         <div className="flex justify-between">
           <span>
-            Found <strong>{filteredSearchResults.length}</strong> building
-            result
+            Found <strong>{filteredSearchResults.length}</strong>&nbsp;result
             {filteredSearchResults?.length === 1 ? "" : "s"}
           </span>
 
           <div className="flex gap-4">
-            <button
-              type="button"
-              className="disabled:text-gray-500 hover:text-cyan-700"
-              disabled={page === 1}
-              onClick={() => setPage(page - 1)}
-            >
-              <i className="fa-solid fa-chevron-left fa-xs" />
-              Prev
-            </button>
-            |
+            {page > 1 && (
+              <>
+                <button
+                  type="button"
+                  className="disabled:text-gray-500 hover:text-cyan-700"
+                  disabled={page === 1}
+                  onClick={() => setPage(page - 1)}
+                >
+                  <i className="fa-solid fa-chevron-left fa-xs" />
+                  Prev
+                </button>
+                |{" "}
+              </>
+            )}
             <button
               type="button"
               className="disabled:text-gray-500 hover:text-cyan-700"
@@ -83,17 +85,6 @@ export default function SearchResultsList({
             Clear filters
           </button>
         </div>
-      )}
-
-      {filteredSearchResults?.length > 0 && (
-        <ReactPaginate
-          className="flex justify-center gap-2 mt-4"
-          pageCount={1}
-          onPageChange={() => {
-            // TODO
-          }}
-          pageRangeDisplayed={5}
-        />
       )}
     </div>
   );

@@ -89,7 +89,7 @@ export default function SearchResultCard({
           onClick={() => onShowMapModal()}
         >
           <i className="fa-solid fa-map mr-1" />
-          View in map
+          Show on map
         </button>
       </div>
 

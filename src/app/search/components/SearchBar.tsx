@@ -26,8 +26,8 @@ export default function SearchBar({
       // Filter results by address or property management name based on the search query
       const res = filteredSearchResults.filter(
         (apt) =>
-          apt.SITE_ADDRESS.toLowerCase().includes(searchString.toLowerCase()) ||
-          apt.PROP_MANAGEMENT_COMPANY_NAME.toLowerCase().includes(
+          apt.SITE_ADDRESS?.toLowerCase().includes(searchString.toLowerCase()) ||
+          apt.PROP_MANAGEMENT_COMPANY_NAME?.toLowerCase().includes(
             searchString.toLowerCase()
           )
       );

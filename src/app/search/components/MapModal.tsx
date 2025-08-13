@@ -31,26 +31,27 @@ export default function MapModal({
 
   return (
     <Modal onClickOutside={onClose}>
-      {/* Modal header */}
-      <div className="p-3 flex justify-between">
-        <h4 className="text-lg font-semibold">Map</h4>
+      <div className="w-sm">
+        {/* Modal header */}
+        <div className="p-3 flex justify-between">
+          <h4 className="text-md font-semibold">Map</h4>
 
-        <button type="button" onClick={onClose}>
-          <span className="sr-only">Close</span>
-          <i className="fa-solid fa-xmark fa-xl text-cyan-600" />
-        </button>
+          <button type="button" onClick={onClose}>
+            <span className="sr-only">Close</span>
+            <i className="fa-solid fa-xmark fa-xl text-cyan-600" />
+          </button>
+        </div>
+
+        {/* Embedded Google Map */}
+        <iframe
+          className="w-full h-100"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+          title="Google Maps Preview"
+          src={googleMapSrc}
+        />
       </div>
-
-      {/* Embedded Google Map */}
-      <iframe
-        className="w-150 h-100"
-        height="300"
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        allowFullScreen
-        title="Google Maps Preview"
-        src={googleMapSrc}
-      />
     </Modal>
   );
 }

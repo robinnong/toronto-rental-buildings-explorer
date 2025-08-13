@@ -30,16 +30,7 @@ export default function FilterPill({
 
   return (
     <>
-      <input
-        className="sr-only"
-        type="checkbox"
-        checked={!!isActive}
-        id={id}
-        name={id}
-        disabled={disabled}
-      />
-      <label
-        htmlFor={id}
+      <button
         className={`cursor-pointer border rounded-lg p-2 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700 text-nowrap ${
           isActive
             ? "bg-sky-50 border border-solid border-cyan-600 text-cyan-700"
@@ -58,10 +49,11 @@ export default function FilterPill({
             return prev.filter((filter) => filter.key !== id);
           });
         }}
+        disabled={disabled}
       >
         <i className={`fa-solid ${iconClass} mr-1`} />
         {label}
-      </label>
+      </button>
     </>
   );
 }
