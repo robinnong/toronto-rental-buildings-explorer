@@ -92,17 +92,20 @@ export default function SearchResultCard({
         </button>
       </div>
 
-      <p className="pt-1">
+      <p className="py-1">
+        Ward: {WARD ?? emptyLabel}&nbsp;-&nbsp;
+        {WARD != null && (
+          <span className="font-semibold">
+            {camelCaseToTitleCase(ward25NamesNumbers[parseInt(WARD, 10)])}
+          </span>
+        )}
+      </p>
+
+      <p className="pb-1">
         Property management:&nbsp;
         <span className="font-semibold">
           {PROP_MANAGEMENT_COMPANY_NAME ?? emptyLabel}
         </span>
-      </p>
-
-      <p className="py-1">
-        Ward: {WARD ?? emptyLabel}&nbsp;-&nbsp;
-        {WARD != null &&
-          camelCaseToTitleCase(ward25NamesNumbers[parseInt(WARD, 10)])}
       </p>
 
       <div className="flex items-end justify-between gap-2 w-full">
