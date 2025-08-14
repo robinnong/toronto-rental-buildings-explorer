@@ -13,6 +13,7 @@ import {
   limit,
   orderBy,
   query,
+  QueryFieldFilterConstraint,
   where,
 } from "firebase/firestore";
 import {
@@ -49,13 +50,13 @@ export default function useSearchContext(): SearchContextModel {
   const [page, setPage] = useState(1);
   const [appliedFilters, setAppliedFilters] = useState<FilterTypes[]>([]);
 
-  const whereClauses: FirestoreWhereClause[] = useMemo(() => {
-    const clauses: FirestoreWhereClause[] = [];
+  const whereClauses: QueryFieldFilterConstraint[] = useMemo(() => {
+    const clauses: QueryFieldFilterConstraint[] = [];
 
     appliedFilters.forEach((filter) => {
-      const query = searchQueryBuilder(filter);
-      if (query) {
-        clauses.push(...query);
+      const q = searchQueryBuilder(filter);
+      if (q) {
+        clauses.push(...q.map((c) => where(c.fieldPath, c.opStr, c.value)));
       }
     });
 
@@ -67,17 +68,12 @@ export default function useSearchContext(): SearchContextModel {
     setIsLoading(true);
 
     try {
-      const whereQueries =
-        whereClauses.map((clause) =>
-          where(clause.fieldPath, clause.opStr, clause.value)
-        ) ?? [];
-
       // TODO: Add pagination and search by offset (see Firestore docs)
       const q = query(
         collectionRef,
         orderBy("_id"),
         limit(firestoreQueryLimit),
-        ...whereQueries
+        ...whereClauses
       );
 
       const querySnapshot = await getDocs(q);
