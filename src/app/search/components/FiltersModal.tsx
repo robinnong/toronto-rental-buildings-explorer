@@ -17,7 +17,8 @@ type Props = {
  * @param {Function} onClose Callback function to close the modal.
  */
 export default function FiltersModal({ onClose }: Props): ReactElement {
-  const { isLoading, setAppliedFilters, fetchData } = useContext(SearchContext);
+  const { isLoading, setAppliedFiltersMap, fetchData } =
+    useContext(SearchContext);
 
   const handleSubmit = () => {
     fetchData();
@@ -55,7 +56,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           <button
             type="button"
             className="text-cyan-700"
-            onClick={() => setAppliedFilters([])}
+            onClick={() => setAppliedFiltersMap([])}
           >
             Clear all
           </button>

@@ -6,8 +6,7 @@ type Props = {
   title: string;
   sliderMin: number;
   sliderMax: number;
-  setMinValue: (value: number) => void;
-  setMaxValue: (value: number) => void;
+  onChange: (value: { min: number; max: number }) => void;
   disabled?: boolean;
 };
 
@@ -19,8 +18,7 @@ type Props = {
  * @param {string} title - The title of the slider
  * @param {number} sliderMin - The minimum value of the slider and inputs
  * @param {number} sliderMax - The maximum value of the slider and inputs
- * @param {function} setMinValue - Function to set the minimum value outside of the component context
- * @param {function} setMaxValue - Function to set the maximum value outside of the component context
+ * @param {function} onChange - Function to set the minimum and maximum values outside of the component context
  * @param {boolean} disabled - Disabled state
  * @returns The dual range slider component
  */
@@ -28,8 +26,7 @@ export default function DualRangeSlider({
   title,
   sliderMin = 0,
   sliderMax = 100,
-  setMinValue,
-  setMaxValue,
+  onChange,
   disabled,
 }: Props): ReactElement {
   const [rangeStartValue, setRangeStartValue] = useState<number>(sliderMin);
@@ -39,12 +36,8 @@ export default function DualRangeSlider({
   const sliderFillColour = "#0092b8";
 
   useEffect(() => {
-    setMinValue(rangeStartValue);
-  }, [rangeStartValue]);
-
-  useEffect(() => {
-    setMaxValue(rangeEndValue);
-  }, [rangeEndValue]);
+    onChange({ min: rangeStartValue, max: rangeEndValue });
+  }, [rangeStartValue, rangeEndValue]);
 
   // Dynamically calculate the slider background fill between the two handles
   // as the user drags the handles
@@ -133,6 +126,7 @@ export default function DualRangeSlider({
             value={rangeStartValue}
             disabled={disabled}
             onChange={(e) => {
+              // TODO: Handle non-numeric inputs
               // Ensure that rangeStartValue does not exceed rangeEndValue
               if (e.target.valueAsNumber > rangeEndValue) {
                 setRangeStartValue(rangeEndValue);
@@ -154,6 +148,7 @@ export default function DualRangeSlider({
             value={rangeEndValue}
             disabled={disabled}
             onChange={(e) => {
+              // TODO: Handle non-numeric inputs
               // Ensure that rangeEndValue is always greater than rangeStartValue
               if (rangeStartValue <= e.target.valueAsNumber) {
                 setRangeEndValue(e.target.valueAsNumber);

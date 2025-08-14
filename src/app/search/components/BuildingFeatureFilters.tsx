@@ -18,7 +18,7 @@ type Props = {
 export default function BuildingFeatureFilters({
   disabled,
 }: Props): ReactElement {
-  const { appliedFilters, setAppliedFilters } = useContext(SearchContext);
+  const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
 
   return (
     <div>
@@ -31,8 +31,8 @@ export default function BuildingFeatureFilters({
             label={label}
             iconClass={iconClass}
             disabled={disabled}
-            appliedFilters={appliedFilters}
-            setAppliedFilters={setAppliedFilters}
+            appliedFiltersMap={appliedFiltersMap}
+            setAppliedFiltersMap={setAppliedFiltersMap}
           />
         ))}
       </div>

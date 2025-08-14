@@ -4,7 +4,6 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import {
@@ -16,22 +15,24 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from "firebase/firestore";
-import { FetchDataResponse, FilterTypes } from "@/app/types/global";
+import {
+  FetchDataResponse,
+  FilterTypes,
+  FirestoreWhereClause,
+} from "@/app/types/global";
 import { db } from "../firebase.config";
 import { firestoreDbPaths, firestoreQueryLimit } from "../constants/general";
-import searchQueryBuilder from "../lib/searchQueryBuilder";
 
 export type SearchContextModel = {
-  appliedFilters: FilterTypes[];
-  setAppliedFilters: Dispatch<SetStateAction<FilterTypes[]>>;
+  appliedFiltersMap: Record<FilterTypes, FirestoreWhereClause[]>;
+  setAppliedFiltersMap: Dispatch<
+    SetStateAction<Record<FilterTypes, FirestoreWhereClause[]>>
+  >;
   searchResults: FetchDataResponse[];
   filteredSearchResults: FetchDataResponse[];
   setFilteredSearchResults: Dispatch<SetStateAction<FetchDataResponse[]>>;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
-  setAppliedYearBuiltFilter: Dispatch<
-    SetStateAction<{ start: number; end: number } | null>
-  >;
   isLoading: boolean;
   fetchData: () => Promise<void>;
 };
@@ -47,36 +48,27 @@ export default function useSearchContext(): SearchContextModel {
     FetchDataResponse[]
   >([]);
   const [page, setPage] = useState(1);
-  const [appliedFilters, setAppliedFilters] = useState<FilterTypes[]>([]);
-  const [appliedYearBuiltFilter, setAppliedYearBuiltFilter] = useState<{
-    min: number;
-    max: number;
-  } | null>(null);
+  const [appliedFiltersMap, setAppliedFiltersMap] = useState<
+    Record<FilterTypes, FirestoreWhereClause[]>
+  >({} as Record<FilterTypes, FirestoreWhereClause[]>);
 
-  const whereClauses: QueryFieldFilterConstraint[] = useMemo(() => {
+  const generateWhereClauses = useCallback((): QueryFieldFilterConstraint[] => {
     const clauses: QueryFieldFilterConstraint[] = [];
 
-    appliedFilters.forEach((filter) => {
-      const q = searchQueryBuilder(filter);
-      if (q) {
-        clauses.push(...q.map((c) => where(c.fieldPath, c.opStr, c.value)));
-      }
+    Object.values(appliedFiltersMap).forEach((q) => {
+      clauses.push(...q.map((c) => where(c.fieldPath, c.opStr, c.value)));
     });
 
-    if (appliedYearBuiltFilter) {
-      const { min, max } = appliedYearBuiltFilter;
-      clauses.push(where("YEAR_BUILT", ">=", min));
-      clauses.push(where("YEAR_BUILT", "<=", max));
-    }
-
     return clauses;
-  }, [appliedFilters, appliedYearBuiltFilter]);
+  }, [appliedFiltersMap]);
 
   // Queries the Firestore database for apartments based on the applied filters
   const fetchData = useCallback(async () => {
     setIsLoading(true);
 
     try {
+      const whereClauses = generateWhereClauses();
+
       // TODO: Add pagination and search by offset (see Firestore docs)
       const q = query(
         collectionRef,
@@ -99,7 +91,7 @@ export default function useSearchContext(): SearchContextModel {
     } finally {
       setIsLoading(false);
     }
-  }, [whereClauses]);
+  }, [appliedFiltersMap]);
 
   // Initial data fetch on load
   useEffect(() => {
@@ -112,15 +104,14 @@ export default function useSearchContext(): SearchContextModel {
   }, [searchResults]);
 
   return {
-    appliedFilters,
-    setAppliedFilters,
+    appliedFiltersMap,
+    setAppliedFiltersMap,
     searchResults,
     filteredSearchResults,
     setFilteredSearchResults,
     page,
     setPage,
     isLoading,
-    setAppliedYearBuiltFilter,
     fetchData,
   };
 }

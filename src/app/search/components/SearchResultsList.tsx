@@ -17,7 +17,7 @@ export default function SearchResultsList({
     page,
     setPage,
     isLoading,
-    setAppliedFilters,
+    setAppliedFiltersMap,
     fetchData,
   } = useContext(SearchContext);
 
@@ -76,7 +76,7 @@ export default function SearchResultsList({
             type="button"
             className="text-cyan-700 mt-2"
             onClick={async () => {
-              await setAppliedFilters([]);
+              await setAppliedFiltersMap([]);
               fetchData();
             }}
           >

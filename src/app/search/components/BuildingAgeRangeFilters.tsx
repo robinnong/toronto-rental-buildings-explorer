@@ -19,19 +19,24 @@ export default function BuildingAgeRangeFilters({
   const startYear = 1900;
   const currentYear = new Date().getFullYear();
 
-  const { setAppliedYearBuiltFilter } = useContext(SearchContext);
+  const { setAppliedFiltersMap } = useContext(SearchContext);
+
+  const handleChange = (range: { min: number; max: number }) => {
+    setAppliedFiltersMap((prev) => ({
+      ...prev,
+      "year-built": [
+        { fieldPath: "YEAR_BUILT", opStr: ">=", value: range.min },
+        { fieldPath: "YEAR_BUILT", opStr: "<=", value: range.max },
+      ],
+    }));
+  };
 
   return (
     <DualRangeSlider
       title="Year built between"
       sliderMin={startYear}
       sliderMax={currentYear}
-      setMinValue={(val) =>
-        setAppliedYearBuiltFilter((prev) => ({ ...prev, min: val }))
-      }
-      setMaxValue={(val) =>
-        setAppliedYearBuiltFilter((prev) => ({ ...prev, max: val }))
-      }
+      onChange={handleChange}
       disabled={disabled}
     />
   );

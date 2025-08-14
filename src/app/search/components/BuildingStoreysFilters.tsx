@@ -1,7 +1,6 @@
 "use client";
 
-import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
-import { FilterTypes } from "@/app/types/global";
+import { ReactElement, useContext } from "react";
 import { buildingStoreysFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
 import { SearchContext } from "@/app/hooks/useSearchContext";
@@ -19,7 +18,7 @@ type Props = {
 export default function BuildingStoreysFilters({
   disabled,
 }: Props): ReactElement {
-  const { appliedFilters, setAppliedFilters } = useContext(SearchContext);
+  const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
 
   return (
     <div>
@@ -32,8 +31,8 @@ export default function BuildingStoreysFilters({
             label={filter.label}
             iconClass={filter.iconClass}
             disabled={disabled}
-            appliedFilters={appliedFilters}
-            setAppliedFilters={setAppliedFilters}
+            appliedFiltersMap={appliedFiltersMap}
+            setAppliedFiltersMap={setAppliedFiltersMap}
           />
         ))}
       </div>

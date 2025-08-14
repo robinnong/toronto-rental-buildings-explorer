@@ -1,15 +1,18 @@
 "use client";
 
-import { FilterTypes } from "@/app/types/global";
 import { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
+import { FilterTypes, FirestoreWhereClause } from "@/app/types/global";
+import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
   id: FilterTypes;
   label: string;
   iconClass: string;
   disabled: boolean;
-  appliedFilters: FilterTypes[];
-  setAppliedFilters: Dispatch<SetStateAction<FilterTypes[]>>;
+  appliedFiltersMap: Record<FilterTypes, FirestoreWhereClause[]>;
+  setAppliedFiltersMap: Dispatch<
+    SetStateAction<Record<FilterTypes, FirestoreWhereClause[]>>
+  >;
 };
 
 /**
@@ -20,12 +23,12 @@ export default function FilterPill({
   label,
   iconClass,
   disabled,
-  appliedFilters,
-  setAppliedFilters,
+  appliedFiltersMap,
+  setAppliedFiltersMap,
 }: Props): ReactElement {
   const isActive: boolean = useMemo(
-    () => appliedFilters?.includes(id),
-    [appliedFilters]
+    () => appliedFiltersMap?.[id]?.length > 0,
+    [appliedFiltersMap]
   );
 
   return (
@@ -37,14 +40,10 @@ export default function FilterPill({
           : "border-gray-200"
       }`}
       onClick={() => {
-        setAppliedFilters((prev) => {
-          if (prev == null) {
-            return [id];
-          } else if (!prev.find((filter) => filter === id)) {
-            return [...prev, id];
-          }
-          return prev.filter((filter) => filter !== id);
-        });
+        setAppliedFiltersMap((prev) => ({
+          ...prev,
+          [id]: searchQueryBuilder(id),
+        }));
       }}
       disabled={disabled}
     >
