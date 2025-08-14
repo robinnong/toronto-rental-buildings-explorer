@@ -101,6 +101,7 @@ export default function useSearchContext(): SearchContextModel {
     fetchData();
   }, []);
 
+  // Reset the filtered search results after fetching new data
   useEffect(() => {
     setFilteredSearchResults(searchResults);
   }, [searchResults]);
