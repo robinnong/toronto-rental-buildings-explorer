@@ -75,11 +75,9 @@ export default function SearchResultsList({
           <button
             type="button"
             className="text-cyan-700 mt-2"
-            onClick={() => {
-              () => {
-                setAppliedFilters([]);
-                fetchData();
-              };
+            onClick={async () => {
+              await setAppliedFilters([]);
+              fetchData();
             }}
           >
             Clear filters

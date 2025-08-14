@@ -4,6 +4,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -47,56 +48,18 @@ export default function useSearchContext(): SearchContextModel {
   >([]);
   const [page, setPage] = useState(1);
   const [appliedFilters, setAppliedFilters] = useState<FilterTypes[]>([]);
-  const [whereClauses, setWhereClauses] = useState<FirestoreWhereClause[]>([]);
 
-  useEffect(() => {
-    const clauses = [];
+  const whereClauses: FirestoreWhereClause[] = useMemo(() => {
+    const clauses: FirestoreWhereClause[] = [];
 
-    if (appliedFilters.includes("aircon")) {
-      clauses.push(searchQueryBuilder("aircon"));
-    }
-    if (appliedFilters.includes("balconies")) {
-      clauses.push(searchQueryBuilder("balconies"));
-    }
-    if (appliedFilters.includes("barrier-free-entrance")) {
-      clauses.push(searchQueryBuilder("barrier-free-entrance"));
-    }
-    if (appliedFilters.includes("bike-parking")) {
-      clauses.push(searchQueryBuilder("bike-parking"));
-    }
-    if (appliedFilters.includes("elevator")) {
-      clauses.push(searchQueryBuilder("elevator"));
-    }
-    if (appliedFilters.includes("gym")) {
-      clauses.push(searchQueryBuilder("gym"));
-    }
-    if (appliedFilters.includes("high-rise")) {
-      clauses.push(searchQueryBuilder("high-rise"));
-    }
-    if (appliedFilters.includes("laundry-room")) {
-      clauses.push(searchQueryBuilder("laundry-room"));
-    }
-    if (appliedFilters.includes("locker-storage")) {
-      clauses.push(searchQueryBuilder("locker-storage"));
-    }
-    if (appliedFilters.includes("low-rise")) {
-      clauses.push(searchQueryBuilder("low-rise"));
-    }
-    if (appliedFilters.includes("mid-rise")) {
-      clauses.push(searchQueryBuilder("mid-rise"));
-    }
-    if (appliedFilters.includes("no-smoking")) {
-      clauses.push(searchQueryBuilder("no-smoking"));
-    }
-    if (appliedFilters.includes("parking")) {
-      clauses.push(searchQueryBuilder("parking"));
-    }
-    if (appliedFilters.includes("pets-allowed")) {
-      clauses.push(searchQueryBuilder("pets-allowed"));
-    }
+    appliedFilters.forEach((filter) => {
+      const query = searchQueryBuilder(filter);
+      if (query) {
+        clauses.push(...query);
+      }
+    });
 
-    // TODO: Instead of resetting the array each time, add and remove as needed
-    setWhereClauses(clauses);
+    return clauses;
   }, [appliedFilters]);
 
   // Queries the Firestore database for apartments based on the applied filters
@@ -126,8 +89,6 @@ export default function useSearchContext(): SearchContextModel {
         const res = await doc.data();
         setSearchResults((prev) => [...prev, res as FetchDataResponse]);
       });
-
-      setWhereClauses([]); // TODO: fix this
     } catch (error) {
       // TODO - Display error message to the user
       console.error("Error fetching data:", error);
