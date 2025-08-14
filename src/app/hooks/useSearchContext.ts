@@ -102,7 +102,6 @@ export default function useSearchContext(): SearchContextModel {
   }, []);
 
   useEffect(() => {
-    console.log(searchResults);
     setFilteredSearchResults(searchResults);
   }, [searchResults]);
 
