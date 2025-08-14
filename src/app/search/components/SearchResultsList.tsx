@@ -2,7 +2,12 @@
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { FetchDataResponse } from "@/app/types/global";
+import {
+  AppliedFilterMap,
+  FetchDataResponse,
+  FilterTypes,
+  FirestoreWhereClause,
+} from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
 
 type Props = {
@@ -76,7 +81,7 @@ export default function SearchResultsList({
             type="button"
             className="text-cyan-700 mt-2"
             onClick={async () => {
-              await setAppliedFiltersMap([]);
+              await setAppliedFiltersMap({} as AppliedFilterMap);
               fetchData();
             }}
           >

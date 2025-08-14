@@ -29,6 +29,10 @@ export type FilterOption = {
   iconClass: string;
 };
 
+export type AppliedFilterMap = {
+  [key in FilterTypes]?: FirestoreWhereClause[];
+};
+
 export type FetchDataResponse = {
   _id: number;
   AIR_CONDITIONING_TYPE: string; // air-con

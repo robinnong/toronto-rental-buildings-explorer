@@ -6,6 +6,7 @@ import Modal from "@/app/components/utils/Modal";
 import BuildingAgeRangeFilters from "./BuildingAgeRangeFilters";
 import BuildingFeatureFilters from "./BuildingFeatureFilters";
 import BuildingStoreysFilters from "./BuildingStoreysFilters";
+import { AppliedFilterMap } from "@/app/types/global";
 
 type Props = {
   onClose: () => void;
@@ -56,7 +57,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           <button
             type="button"
             className="text-cyan-700"
-            onClick={() => setAppliedFiltersMap([])}
+            onClick={() => setAppliedFiltersMap({} as AppliedFilterMap)}
           >
             Clear all
           </button>

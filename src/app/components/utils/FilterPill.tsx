@@ -1,7 +1,7 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
-import { FilterTypes, FirestoreWhereClause } from "@/app/types/global";
+import { AppliedFilterMap, FilterTypes } from "@/app/types/global";
 import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
@@ -9,10 +9,8 @@ type Props = {
   label: string;
   iconClass: string;
   disabled: boolean;
-  appliedFiltersMap: Record<FilterTypes, FirestoreWhereClause[]>;
-  setAppliedFiltersMap: Dispatch<
-    SetStateAction<Record<FilterTypes, FirestoreWhereClause[]>>
-  >;
+  appliedFiltersMap: AppliedFilterMap;
+  setAppliedFiltersMap: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
@@ -40,10 +38,19 @@ export default function FilterPill({
           : "border-gray-200"
       }`}
       onClick={() => {
-        setAppliedFiltersMap((prev) => ({
-          ...prev,
-          [id]: searchQueryBuilder(id),
-        }));
+        if (appliedFiltersMap[id]?.length > 0) {
+          // Remove the filter
+          setAppliedFiltersMap((prev) => {
+            const { [id]: removed, ...rest } = prev;
+            return rest;
+          });
+        } else {
+          // Apply the filter
+          setAppliedFiltersMap((prev) => ({
+            ...prev,
+            [id]: searchQueryBuilder(id),
+          }));
+        }
       }}
       disabled={disabled}
     >

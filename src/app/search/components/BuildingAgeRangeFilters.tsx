@@ -2,7 +2,14 @@
 
 import DualRangeSlider from "@/app/components/utils/DualRangeSlider";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { ReactElement, useContext } from "react";
+import {
+  ReactElement,
+  use,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 type Props = {
   disabled: boolean;
@@ -19,24 +26,49 @@ export default function BuildingAgeRangeFilters({
   const startYear = 1900;
   const currentYear = new Date().getFullYear();
 
-  const { setAppliedFiltersMap } = useContext(SearchContext);
+  const [rangeStartValue, setRangeStartValue] = useState<number>(startYear);
+  const [rangeEndValue, setRangeEndValue] = useState<number>(currentYear);
+
+  const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
 
   const handleChange = (range: { min: number; max: number }) => {
     setAppliedFiltersMap((prev) => ({
       ...prev,
-      "year-built": [
-        { fieldPath: "YEAR_BUILT", opStr: ">=", value: range.min },
-        { fieldPath: "YEAR_BUILT", opStr: "<=", value: range.max },
-      ],
+      "year-built":
+        range.min !== startYear || range.max !== currentYear
+          ? [
+              { fieldPath: "YEAR_BUILT", opStr: ">=", value: range.min },
+              { fieldPath: "YEAR_BUILT", opStr: "<=", value: range.max },
+            ]
+          : [],
     }));
   };
+
+  useEffect(() => {
+    if (appliedFiltersMap?.["year-built"].length === 0) {
+      setRangeStartValue(startYear);
+      setRangeEndValue(currentYear);
+    } else if (appliedFiltersMap?.["year-built"]?.length > 0) {
+      setRangeStartValue(
+        appliedFiltersMap?.["year-built"]?.[0]?.value as number
+      );
+      setRangeEndValue(appliedFiltersMap?.["year-built"]?.[1]?.value as number);
+    }
+  }, [appliedFiltersMap?.["year-built"]]);
+
+  useEffect(() => {
+    handleChange({ min: rangeStartValue, max: rangeEndValue });
+  }, [rangeStartValue, rangeEndValue]);
 
   return (
     <DualRangeSlider
       title="Year built between"
-      sliderMin={startYear}
-      sliderMax={currentYear}
-      onChange={handleChange}
+      defaultSliderMin={startYear}
+      defaultSliderMax={currentYear}
+      rangeStartValue={rangeStartValue}
+      setRangeStartValue={setRangeStartValue}
+      rangeEndValue={rangeEndValue}
+      setRangeEndValue={setRangeEndValue}
       disabled={disabled}
     />
   );

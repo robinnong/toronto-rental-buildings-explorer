@@ -15,19 +15,13 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from "firebase/firestore";
-import {
-  FetchDataResponse,
-  FilterTypes,
-  FirestoreWhereClause,
-} from "@/app/types/global";
+import { AppliedFilterMap, FetchDataResponse } from "@/app/types/global";
 import { db } from "../firebase.config";
 import { firestoreDbPaths, firestoreQueryLimit } from "../constants/general";
 
 export type SearchContextModel = {
-  appliedFiltersMap: Record<FilterTypes, FirestoreWhereClause[]>;
-  setAppliedFiltersMap: Dispatch<
-    SetStateAction<Record<FilterTypes, FirestoreWhereClause[]>>
-  >;
+  appliedFiltersMap: AppliedFilterMap;
+  setAppliedFiltersMap: Dispatch<SetStateAction<AppliedFilterMap>>;
   searchResults: FetchDataResponse[];
   filteredSearchResults: FetchDataResponse[];
   setFilteredSearchResults: Dispatch<SetStateAction<FetchDataResponse[]>>;
@@ -48,13 +42,13 @@ export default function useSearchContext(): SearchContextModel {
     FetchDataResponse[]
   >([]);
   const [page, setPage] = useState(1);
-  const [appliedFiltersMap, setAppliedFiltersMap] = useState<
-    Record<FilterTypes, FirestoreWhereClause[]>
-  >({} as Record<FilterTypes, FirestoreWhereClause[]>);
+  const [appliedFiltersMap, setAppliedFiltersMap] = useState<AppliedFilterMap>(
+    {} as AppliedFilterMap
+  );
 
   // Generates Firestore where clauses from the applied filters map
   const generateWhereClauses = (
-    appliedFiltersMap: Record<FilterTypes, FirestoreWhereClause[]>
+    appliedFiltersMap: AppliedFilterMap
   ): QueryFieldFilterConstraint[] => {
     const clauses: QueryFieldFilterConstraint[] = [];
 
@@ -70,8 +64,9 @@ export default function useSearchContext(): SearchContextModel {
     setIsLoading(true);
 
     try {
+      console.log(appliedFiltersMap);
       const whereClauses = generateWhereClauses(appliedFiltersMap);
-
+      console.log(whereClauses);
       // TODO: Add pagination and search by offset (see Firestore docs)
       const q = query(
         collectionRef,
@@ -85,8 +80,8 @@ export default function useSearchContext(): SearchContextModel {
         // doc.data() is never undefined for query doc snapshots
         return doc.data();
       });
-
       const res = (await Promise.all(data)) as FetchDataResponse[];
+
       setSearchResults(res);
     } catch (error) {
       // TODO - Display error message to the user

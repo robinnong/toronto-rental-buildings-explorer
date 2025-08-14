@@ -1,12 +1,21 @@
 "use client";
 
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useMemo,
+} from "react";
 
 type Props = {
   title: string;
-  sliderMin: number;
-  sliderMax: number;
-  onChange: (value: { min: number; max: number }) => void;
+  defaultSliderMin: number;
+  defaultSliderMax: number;
+  rangeStartValue: number;
+  setRangeStartValue: Dispatch<SetStateAction<number>>;
+  rangeEndValue: number;
+  setRangeEndValue: Dispatch<SetStateAction<number>>;
   disabled?: boolean;
 };
 
@@ -16,35 +25,34 @@ type Props = {
  *
  * Props for DualRangeSlider
  * @param {string} title - The title of the slider
- * @param {number} sliderMin - The minimum value of the slider and inputs
- * @param {number} sliderMax - The maximum value of the slider and inputs
- * @param {function} onChange - Function to set the minimum and maximum values outside of the component context
+ * @param {number} defaultSliderMin - The minimum allowable value of the slider and inputs
+ * @param {number} defaultSliderMax - The maximum allowable value of the slider and inputs
+ * @param {number} rangeStartValue - Range start (controlled value)
+ * @param {Dispatch<SetStateAction<number>>} setRangeStartValue - Function to set the range start value
+ * @param {number} rangeEndValue - Range end (controlled value)
+ * @param {Dispatch<SetStateAction<number>>} setRangeEndValue - Function to set the range end value
  * @param {boolean} disabled - Disabled state
  * @returns The dual range slider component
  */
 export default function DualRangeSlider({
   title,
-  sliderMin = 0,
-  sliderMax = 100,
-  onChange,
+  defaultSliderMin = 0,
+  defaultSliderMax = 100,
+  rangeStartValue,
+  setRangeStartValue,
+  rangeEndValue,
+  setRangeEndValue,
   disabled,
 }: Props): ReactElement {
-  const [rangeStartValue, setRangeStartValue] = useState<number>(sliderMin);
-  const [rangeEndValue, setRangeEndValue] = useState<number>(sliderMax);
-
   const sliderBaseColour = "#d1d1d1";
   const sliderFillColour = "#0092b8";
-
-  useEffect(() => {
-    onChange({ min: rangeStartValue, max: rangeEndValue });
-  }, [rangeStartValue, rangeEndValue]);
 
   // Dynamically calculate the slider background fill between the two handles
   // as the user drags the handles
   const sliderStyle = useMemo(() => {
-    const rangeDistance = sliderMax - sliderMin;
-    const fromPosition = rangeStartValue - sliderMin;
-    const toPosition = rangeEndValue - sliderMin;
+    const rangeDistance = defaultSliderMax - defaultSliderMin;
+    const fromPosition = rangeStartValue - defaultSliderMin;
+    const toPosition = rangeEndValue - defaultSliderMin;
 
     const leftHandlePosition = ((fromPosition / rangeDistance) * 100).toFixed(
       0
@@ -75,8 +83,8 @@ export default function DualRangeSlider({
           type="range"
           id="minSlider"
           name="minSlider"
-          min={sliderMin}
-          max={sliderMax}
+          min={defaultSliderMin}
+          max={defaultSliderMax}
           value={rangeStartValue}
           step="1"
           className="absolute"
@@ -97,8 +105,8 @@ export default function DualRangeSlider({
           type="range"
           id="maxSlider"
           name="maxSlider"
-          min={sliderMin}
-          max={sliderMax}
+          min={defaultSliderMin}
+          max={defaultSliderMax}
           value={rangeEndValue}
           step="1"
           className="absolute"
@@ -121,7 +129,7 @@ export default function DualRangeSlider({
             id="minInput"
             name="minInput"
             className="border border-gray-300 p-1 text-center w-14 rounded-md focus:border-cyan-600 ml-1"
-            min={sliderMin}
+            min={defaultSliderMin}
             max={rangeEndValue}
             value={rangeStartValue}
             disabled={disabled}
@@ -144,7 +152,7 @@ export default function DualRangeSlider({
             name="maxInput"
             className="border border-gray-300 p-1 text-center w-14 rounded-md focus:border-cyan-600 ml-1"
             min={rangeStartValue}
-            max={sliderMax}
+            max={defaultSliderMax}
             value={rangeEndValue}
             disabled={disabled}
             onChange={(e) => {
