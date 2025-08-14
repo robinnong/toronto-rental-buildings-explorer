@@ -1,14 +1,12 @@
 "use client";
 
-import { FilterTypes } from "@/app/types/global";
-import { Dispatch, ReactElement, SetStateAction } from "react";
+import { ReactElement, useContext } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
+import { SearchContext } from "@/app/hooks/useSearchContext";
 
 type Props = {
   disabled: boolean;
-  appliedFilters: FilterTypes[];
-  setAppliedFilters: Dispatch<SetStateAction<FilterTypes[]>>;
 };
 
 /**
@@ -16,14 +14,12 @@ type Props = {
  * Provides filters such as "Pets allowed", "Non-smoking building", etc.
  *
  * @param {boolean} disabled - Whether the filters are disabled
- * @param {FilterTypes[]} appliedFilters - The currently applied filters
- * @param {Dispatch<SetStateAction<FilterTypes[]>>} setAppliedFilters - Function to update the applied filters
  */
 export default function BuildingFeatureFilters({
   disabled,
-  appliedFilters,
-  setAppliedFilters,
 }: Props): ReactElement {
+  const { appliedFilters, setAppliedFilters } = useContext(SearchContext);
+
   return (
     <div>
       <h4 className="font-bold">Building features</h4>

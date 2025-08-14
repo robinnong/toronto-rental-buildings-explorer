@@ -16,11 +16,7 @@ import {
   QueryFieldFilterConstraint,
   where,
 } from "firebase/firestore";
-import {
-  FetchDataResponse,
-  FirestoreWhereClause,
-  FilterTypes,
-} from "@/app/types/global";
+import { FetchDataResponse, FilterTypes } from "@/app/types/global";
 import { db } from "../firebase.config";
 import { firestoreDbPaths, firestoreQueryLimit } from "../constants/general";
 import searchQueryBuilder from "../lib/searchQueryBuilder";
@@ -33,6 +29,9 @@ export type SearchContextModel = {
   setFilteredSearchResults: Dispatch<SetStateAction<FetchDataResponse[]>>;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
+  setAppliedYearBuiltFilter: Dispatch<
+    SetStateAction<{ start: number; end: number } | null>
+  >;
   isLoading: boolean;
   fetchData: () => Promise<void>;
 };
@@ -49,6 +48,10 @@ export default function useSearchContext(): SearchContextModel {
   >([]);
   const [page, setPage] = useState(1);
   const [appliedFilters, setAppliedFilters] = useState<FilterTypes[]>([]);
+  const [appliedYearBuiltFilter, setAppliedYearBuiltFilter] = useState<{
+    start: number;
+    end: number;
+  } | null>(null);
 
   const whereClauses: QueryFieldFilterConstraint[] = useMemo(() => {
     const clauses: QueryFieldFilterConstraint[] = [];
@@ -60,8 +63,14 @@ export default function useSearchContext(): SearchContextModel {
       }
     });
 
+    if (appliedYearBuiltFilter) {
+      const { start, end } = appliedYearBuiltFilter;
+      clauses.push(where("YEAR_BUILT", ">=", start));
+      clauses.push(where("YEAR_BUILT", "<=", end));
+    }
+
     return clauses;
-  }, [appliedFilters]);
+  }, [appliedFilters, appliedYearBuiltFilter]);
 
   // Queries the Firestore database for apartments based on the applied filters
   const fetchData = useCallback(async () => {
@@ -110,7 +119,8 @@ export default function useSearchContext(): SearchContextModel {
     setFilteredSearchResults,
     page,
     setPage,
-    fetchData,
     isLoading,
+    setAppliedYearBuiltFilter,
+    fetchData,
   };
 }

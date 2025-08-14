@@ -1,7 +1,8 @@
 "use client";
 
 import DualRangeSlider from "@/app/components/utils/DualRangeSlider";
-import { ReactElement } from "react";
+import { SearchContext } from "@/app/hooks/useSearchContext";
+import { ReactElement, useContext } from "react";
 
 type Props = {
   disabled: boolean;
@@ -18,11 +19,19 @@ export default function BuildingAgeRangeFilters({
   const startYear = 1900;
   const currentYear = new Date().getFullYear();
 
+  const { setAppliedYearBuiltFilter } = useContext(SearchContext);
+
   return (
     <DualRangeSlider
       title="Year built between"
       sliderMin={startYear}
       sliderMax={currentYear}
+      setMinValue={(val) =>
+        setAppliedYearBuiltFilter((prev) => ({ ...prev, min: val }))
+      }
+      setMaxValue={(val) =>
+        setAppliedYearBuiltFilter((prev) => ({ ...prev, max: val }))
+      }
       disabled={disabled}
     />
   );

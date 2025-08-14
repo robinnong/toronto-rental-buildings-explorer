@@ -17,8 +17,7 @@ type Props = {
  * @param {Function} onClose Callback function to close the modal.
  */
 export default function FiltersModal({ onClose }: Props): ReactElement {
-  const { isLoading, appliedFilters, setAppliedFilters, fetchData } =
-    useContext(SearchContext);
+  const { isLoading, setAppliedFilters, fetchData } = useContext(SearchContext);
 
   const handleSubmit = () => {
     fetchData();
@@ -47,16 +46,8 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         {/* Modal body - filters */}
         <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
           <BuildingAgeRangeFilters disabled={isLoading} />
-          <BuildingStoreysFilters
-            disabled={isLoading}
-            appliedFilters={appliedFilters}
-            setAppliedFilters={setAppliedFilters}
-          />
-          <BuildingFeatureFilters
-            disabled={isLoading}
-            appliedFilters={appliedFilters}
-            setAppliedFilters={setAppliedFilters}
-          />
+          <BuildingStoreysFilters disabled={isLoading} />
+          <BuildingFeatureFilters disabled={isLoading} />
         </div>
 
         {/* Modal footer - actions */}

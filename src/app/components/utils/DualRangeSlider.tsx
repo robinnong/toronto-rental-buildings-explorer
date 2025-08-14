@@ -1,11 +1,13 @@
 "use client";
 
-import { ReactElement, useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useState } from "react";
 
 type Props = {
+  title: string;
   sliderMin: number;
   sliderMax: number;
-  title: string;
+  setMinValue: (value: number) => void;
+  setMaxValue: (value: number) => void;
   disabled?: boolean;
 };
 
@@ -14,16 +16,20 @@ type Props = {
  * between defined minimum and maximum values.
  *
  * Props for DualRangeSlider
+ * @param {string} title - The title of the slider
  * @param {number} sliderMin - The minimum value of the slider and inputs
  * @param {number} sliderMax - The maximum value of the slider and inputs
- * @param {string} title - The title of the slider
+ * @param {function} setMinValue - Function to set the minimum value outside of the component context
+ * @param {function} setMaxValue - Function to set the maximum value outside of the component context
  * @param {boolean} disabled - Disabled state
  * @returns The dual range slider component
  */
 export default function DualRangeSlider({
+  title,
   sliderMin = 0,
   sliderMax = 100,
-  title,
+  setMinValue,
+  setMaxValue,
   disabled,
 }: Props): ReactElement {
   const [rangeStartValue, setRangeStartValue] = useState<number>(sliderMin);
@@ -31,6 +37,14 @@ export default function DualRangeSlider({
 
   const sliderBaseColour = "#d1d1d1";
   const sliderFillColour = "#0092b8";
+
+  useEffect(() => {
+    setMinValue(rangeStartValue);
+  }, [rangeStartValue]);
+
+  useEffect(() => {
+    setMaxValue(rangeEndValue);
+  }, [rangeEndValue]);
 
   // Dynamically calculate the slider background fill between the two handles
   // as the user drags the handles

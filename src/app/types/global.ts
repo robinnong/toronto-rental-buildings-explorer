@@ -1,20 +1,21 @@
 import { FieldPath, WhereFilterOp } from "firebase/firestore";
 
 export type FilterTypes =
+  | "aircon" // AIR_CONDITIONING_TYPE
+  | "barrier-free-entrance" // BARRIER_FREE_ACCESSIBILTY_ENTR
+  | "balconies" // BALCONIES
+  | "bike-parking" // BIKE_PARKING
+  | "elevator" // NO_OF_ELEVATORS
+  | "gym" // DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
+  | "high-rise" // CONFIRMED_STOREYS
+  | "laundry-room" // LAUNDRY_ROOM
+  | "locker-storage" // LOCKER_OR_STORAGE_ROOM
   | "low-rise" // CONFIRMED_STOREYS
   | "mid-rise" // CONFIRMED_STOREYS
-  | "high-rise" // CONFIRMED_STOREYS
-  | "aircon" // AIR_CONDITIONING_TYPE
   | "no-smoking" // NON_SMOKING_BUILDING
-  | "elevator" // NO_OF_ELEVATORS
-  | "pets-allowed" // PETS_ALLOWED
-  | "balconies" // BALCONIES
-  | "gym" // DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
-  | "locker-storage" // LOCKER_OR_STORAGE_ROOM
   | "parking" // PARKING_TYPE
-  | "laundry-room" // LAUNDRY_ROOM
-  | "bike-parking" // BIKE_PARKING
-  | "barrier-free-entrance"; // BARRIER_FREE_ACCESSIBILTY_ENTR
+  | "pets-allowed" // PETS_ALLOWED
+  | "year-built"; // YEAR_BUILT
 
 export type FirestoreWhereClause = {
   fieldPath: string | FieldPath;
