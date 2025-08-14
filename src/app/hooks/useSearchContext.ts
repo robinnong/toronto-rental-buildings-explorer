@@ -52,7 +52,10 @@ export default function useSearchContext(): SearchContextModel {
     Record<FilterTypes, FirestoreWhereClause[]>
   >({} as Record<FilterTypes, FirestoreWhereClause[]>);
 
-  const generateWhereClauses = useCallback((): QueryFieldFilterConstraint[] => {
+  // Generates Firestore where clauses from the applied filters map
+  const generateWhereClauses = (
+    appliedFiltersMap: Record<FilterTypes, FirestoreWhereClause[]>
+  ): QueryFieldFilterConstraint[] => {
     const clauses: QueryFieldFilterConstraint[] = [];
 
     Object.values(appliedFiltersMap).forEach((q) => {
@@ -60,14 +63,14 @@ export default function useSearchContext(): SearchContextModel {
     });
 
     return clauses;
-  }, [appliedFiltersMap]);
+  };
 
   // Queries the Firestore database for apartments based on the applied filters
   const fetchData = useCallback(async () => {
     setIsLoading(true);
 
     try {
-      const whereClauses = generateWhereClauses();
+      const whereClauses = generateWhereClauses(appliedFiltersMap);
 
       // TODO: Add pagination and search by offset (see Firestore docs)
       const q = query(
