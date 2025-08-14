@@ -79,16 +79,15 @@ export default function useSearchContext(): SearchContextModel {
         limit(firestoreQueryLimit),
         ...whereQueries
       );
+
       const querySnapshot = await getDocs(q);
-
-      // TODO: Don't clear out - use Redux to store the search results and use CRUD operations to update state
-      setSearchResults([]);
-
-      querySnapshot.docs.forEach(async (doc) => {
+      const data = querySnapshot.docs.map(async (doc) => {
         // doc.data() is never undefined for query doc snapshots
-        const res = await doc.data();
-        setSearchResults((prev) => [...prev, res as FetchDataResponse]);
+        return doc.data();
       });
+
+      const res = (await Promise.all(data)) as FetchDataResponse[];
+      setSearchResults(res);
     } catch (error) {
       // TODO - Display error message to the user
       console.error("Error fetching data:", error);
