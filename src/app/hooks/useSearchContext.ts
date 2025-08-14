@@ -49,8 +49,8 @@ export default function useSearchContext(): SearchContextModel {
   const [page, setPage] = useState(1);
   const [appliedFilters, setAppliedFilters] = useState<FilterTypes[]>([]);
   const [appliedYearBuiltFilter, setAppliedYearBuiltFilter] = useState<{
-    start: number;
-    end: number;
+    min: number;
+    max: number;
   } | null>(null);
 
   const whereClauses: QueryFieldFilterConstraint[] = useMemo(() => {
@@ -64,9 +64,9 @@ export default function useSearchContext(): SearchContextModel {
     });
 
     if (appliedYearBuiltFilter) {
-      const { start, end } = appliedYearBuiltFilter;
-      clauses.push(where("YEAR_BUILT", ">=", start));
-      clauses.push(where("YEAR_BUILT", "<=", end));
+      const { min, max } = appliedYearBuiltFilter;
+      clauses.push(where("YEAR_BUILT", ">=", min));
+      clauses.push(where("YEAR_BUILT", "<=", max));
     }
 
     return clauses;
