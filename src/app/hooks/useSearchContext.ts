@@ -28,7 +28,7 @@ export type SearchContextModel = {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   isLoading: boolean;
-  fetchData: () => Promise<void>;
+  fetchData: (filters: AppliedFilterMap) => Promise<void>;
 };
 
 export const SearchContext = createContext<SearchContextModel>(null);
@@ -60,13 +60,12 @@ export default function useSearchContext(): SearchContextModel {
   };
 
   // Queries the Firestore database for apartments based on the applied filters
-  const fetchData = useCallback(async () => {
+  const fetchData = async (filters: AppliedFilterMap) => {
     setIsLoading(true);
 
     try {
-      console.log(appliedFiltersMap);
-      const whereClauses = generateWhereClauses(appliedFiltersMap);
-      console.log(whereClauses);
+      const whereClauses = generateWhereClauses(filters);
+
       // TODO: Add pagination and search by offset (see Firestore docs)
       const q = query(
         collectionRef,
@@ -89,11 +88,11 @@ export default function useSearchContext(): SearchContextModel {
     } finally {
       setIsLoading(false);
     }
-  }, [appliedFiltersMap]);
+  };
 
   // Initial data fetch on load
   useEffect(() => {
-    fetchData();
+    fetchData({});
   }, []);
 
   // Reset the filtered search results after fetching new data

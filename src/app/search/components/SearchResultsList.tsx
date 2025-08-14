@@ -17,14 +17,8 @@ type Props = {
 export default function SearchResultsList({
   setPreviewedBuildingMap,
 }: Props): ReactElement {
-  const {
-    filteredSearchResults,
-    page,
-    setPage,
-    isLoading,
-    setAppliedFiltersMap,
-    fetchData,
-  } = useContext(SearchContext);
+  const { filteredSearchResults, page, setPage, isLoading, fetchData } =
+    useContext(SearchContext);
 
   return (
     <div className="flex flex-col gap-2 h-full w-full mb-4">
@@ -80,10 +74,7 @@ export default function SearchResultsList({
           <button
             type="button"
             className="text-cyan-700 mt-2"
-            onClick={async () => {
-              await setAppliedFiltersMap({} as AppliedFilterMap);
-              fetchData();
-            }}
+            onClick={() => fetchData({})}
           >
             Clear filters
           </button>

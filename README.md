@@ -34,7 +34,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Data Sources
 
-This project pulls data from the City of Toronto's Open Data Portal - [Apartment Building Registration](https://open.toronto.ca/dataset/apartment-building-registration/).
+This project pulls data from the City of Toronto's Open Data Portal - [Apartment Building Registration](https://open.toronto.ca/dataset/apartment-building-registration/) and [Ward Profiles (25-Ward Model)](https://open.toronto.ca/dataset/ward-profiles-25-ward-model/).
 
 - Google Maps Embedded
 

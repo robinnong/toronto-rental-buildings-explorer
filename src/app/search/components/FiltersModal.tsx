@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactElement, useContext } from "react";
+import { ReactElement, useCallback, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import Modal from "@/app/components/utils/Modal";
 import BuildingAgeRangeFilters from "./BuildingAgeRangeFilters";
@@ -18,13 +18,13 @@ type Props = {
  * @param {Function} onClose Callback function to close the modal.
  */
 export default function FiltersModal({ onClose }: Props): ReactElement {
-  const { isLoading, setAppliedFiltersMap, fetchData } =
+  const { isLoading, appliedFiltersMap, setAppliedFiltersMap, fetchData } =
     useContext(SearchContext);
 
-  const handleSubmit = () => {
-    fetchData();
+  const handleSubmit = useCallback(() => {
+    fetchData(appliedFiltersMap);
     onClose();
-  };
+  }, [appliedFiltersMap]);
 
   return (
     <Modal onClickOutside={onClose}>
