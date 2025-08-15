@@ -26,7 +26,6 @@ export default function MapModal({
   const mapQuery = encodeURIComponent(
     `${address}, Toronto, ON ${postalCode ?? ""}`
   );
-  console.log(mapQuery);
   const googleMapSrc = `${EMBEDDED_MAP_URL}?key=${process.env.GOOGLE_API_KEY}&q=${mapQuery}`;
 
   return (

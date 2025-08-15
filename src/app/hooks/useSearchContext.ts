@@ -2,7 +2,6 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -14,6 +13,9 @@ import {
   query,
   QueryFieldFilterConstraint,
   where,
+  or,
+  and,
+  QueryCompositeFilterConstraint,
 } from "firebase/firestore";
 import { AppliedFilterMap, FetchDataResponse } from "@/app/types/global";
 import { db } from "../firebase.config";
@@ -46,14 +48,31 @@ export default function useSearchContext(): SearchContextModel {
     {} as AppliedFilterMap
   );
 
-  // Generates Firestore where clauses from the applied filters map
-  const generateWhereClauses = (
+  // Generates Firestore search WHERE clauses from the applied filters map
+  const generateWhereSearchClauses = (
     appliedFiltersMap: AppliedFilterMap
   ): QueryFieldFilterConstraint[] => {
     const clauses: QueryFieldFilterConstraint[] = [];
 
-    Object.values(appliedFiltersMap).forEach((q) => {
-      clauses.push(...q.map((c) => where(c.fieldPath, c.opStr, c.value)));
+    Object.entries(appliedFiltersMap).forEach(([k, v]) => {
+      if (k !== "low_rise" && k !== "mid_rise" && k !== "high_rise") {
+        clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
+      }
+    });
+
+    return clauses;
+  };
+
+  // Generates Firestore search WHERE clauses to be wrapped in or() from the applied filters map
+  const generateOrSearchClauses = (
+    appliedFiltersMap: AppliedFilterMap
+  ): QueryFieldFilterConstraint[] => {
+    const clauses: QueryFieldFilterConstraint[] = [];
+
+    Object.entries(appliedFiltersMap).forEach(([k, v]) => {
+      if (k === "low_rise" || k === "mid_rise" || k === "high_rise") {
+        clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
+      }
     });
 
     return clauses;
@@ -64,15 +83,33 @@ export default function useSearchContext(): SearchContextModel {
     setIsLoading(true);
 
     try {
-      const whereClauses = generateWhereClauses(filters);
+      const whereSearchClauses = generateWhereSearchClauses(filters);
+      const orSearchClauses = generateOrSearchClauses(filters);
 
+      const generateQueryCompositeFilterConstraints =
+        (): QueryCompositeFilterConstraint => {
+          return orSearchClauses?.length > 0 && whereSearchClauses?.length > 0
+            ? and(...whereSearchClauses, or(...orSearchClauses))
+            : or(...orSearchClauses);
+        };
+
+      let q;
       // TODO: Add pagination and search by offset (see Firestore docs)
-      const q = query(
-        collectionRef,
-        orderBy("_id"),
-        limit(firestoreQueryLimit),
-        ...whereClauses
-      );
+      if (orSearchClauses?.length > 0) {
+        q = query(
+          collectionRef,
+          generateQueryCompositeFilterConstraints(),
+          orderBy("_id"),
+          limit(firestoreQueryLimit)
+        );
+      } else {
+        q = query(
+          collectionRef,
+          ...whereSearchClauses,
+          orderBy("_id"),
+          limit(firestoreQueryLimit)
+        );
+      }
 
       const querySnapshot = await getDocs(q);
       const data = querySnapshot.docs.map(async (doc) => {

@@ -46,7 +46,7 @@ export default function SearchResultCard({
     WARD,
   } = building;
 
-  const buildingAge = new Date().getFullYear() - parseInt(YEAR_BUILT, 10);
+  const buildingAge = new Date().getFullYear() - YEAR_BUILT;
   const emptyLabel = <span className="italic text-gray-400">N/A</span>;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -85,7 +85,7 @@ export default function SearchResultCard({
         <button
           type="button"
           className="text-cyan-700"
-          onClick={() => onShowMapModal()}
+          onClick={onShowMapModal}
         >
           <i className="fa-solid fa-map mr-1" />
           Show on map
@@ -175,7 +175,11 @@ export default function SearchResultCard({
               <i className="fa-solid fa-wheelchair mr-1" />
               Barrier-free accessible entrance
             </p>
-            <p className={formatLabelStyle(NO_OF_ELEVATORS)}>
+            <p
+              className={
+                NO_OF_ELEVATORS > 0 ? "" : "line-through text-gray-400"
+              }
+            >
               <i className="fa-solid fa-elevator mr-1" />
               Elevators
             </p>

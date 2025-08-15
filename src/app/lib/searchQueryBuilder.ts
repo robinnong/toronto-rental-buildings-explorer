@@ -1,13 +1,15 @@
-import { FilterTypes } from "./../types/global";
+import { FilterType } from "./../types/global";
 import { FirestoreWhereClause } from "../types/global";
 
 /**
  * Builds a Firestore query where clause based on the filter key and a defined condition
+ * See: https://firebase.google.com/docs/firestore/query-data/queries
+ *
  * @param {string} key The filter key
  * @returns {FirestoreWhereClause[]} The Firestore where clause(s)
  */
 export default function searchQueryBuilder(
-  key: FilterTypes
+  key: FilterType
 ): FirestoreWhereClause[] {
   switch (key) {
     case "balconies":
@@ -18,7 +20,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "locker-storage":
+    case "locker_storage":
       return [
         {
           fieldPath: "LOCKER_OR_STORAGE_ROOM",
@@ -26,7 +28,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "no-smoking":
+    case "no_smoking":
       return [
         {
           fieldPath: "NON_SMOKING_BUILDING",
@@ -34,7 +36,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "pets-allowed":
+    case "pets_allowed":
       return [
         {
           fieldPath: "PETS_ALLOWED",
@@ -42,7 +44,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "laundry-room":
+    case "laundry_room":
       return [
         {
           fieldPath: "LAUNDRY_ROOM",
@@ -50,7 +52,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "low-rise":
+    case "low_rise":
       return [
         {
           fieldPath: "CONFIRMED_STOREYS",
@@ -58,7 +60,7 @@ export default function searchQueryBuilder(
           value: 5,
         },
       ];
-    case "mid-rise":
+    case "mid_rise":
       // Range query requires 2 separate where clauses
       return [
         {
@@ -72,7 +74,7 @@ export default function searchQueryBuilder(
           value: 14,
         },
       ];
-    case "high-rise":
+    case "high_rise":
       return [
         {
           fieldPath: "CONFIRMED_STOREYS",
@@ -84,16 +86,16 @@ export default function searchQueryBuilder(
       return [
         {
           fieldPath: "AIR_CONDITIONING_TYPE",
-          opStr: "!=",
-          value: "NONE",
+          opStr: "==",
+          value: "CENTRAL AIR",
         },
       ];
     case "elevator":
       return [
         {
           fieldPath: "NO_OF_ELEVATORS",
-          opStr: "!=",
-          value: "0",
+          opStr: ">",
+          value: 0,
         },
       ];
     case "gym":
@@ -112,7 +114,7 @@ export default function searchQueryBuilder(
           value: null,
         },
       ];
-    case "bike-parking":
+    case "bike_parking":
       return [
         {
           fieldPath: "BIKE_PARKING",
@@ -120,7 +122,7 @@ export default function searchQueryBuilder(
           value: "Not Available",
         },
       ];
-    case "barrier-free-entrance":
+    case "barrier_free_entrance":
       return [
         {
           fieldPath: "BARRIER_FREE_ACCESSIBILTY_ENTR",

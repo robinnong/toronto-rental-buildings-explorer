@@ -2,13 +2,9 @@
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import {
-  AppliedFilterMap,
-  FetchDataResponse,
-  FilterTypes,
-  FirestoreWhereClause,
-} from "@/app/types/global";
+import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
+import SearchBarAppliedFilters from "./SearchBarAppliedFilters";
 
 type Props = {
   setPreviewedBuildingMap: Dispatch<SetStateAction<FetchDataResponse>>;
@@ -17,11 +13,24 @@ type Props = {
 export default function SearchResultsList({
   setPreviewedBuildingMap,
 }: Props): ReactElement {
-  const { filteredSearchResults, page, setPage, isLoading, fetchData } =
-    useContext(SearchContext);
+  const {
+    appliedFiltersMap,
+    filteredSearchResults,
+    page,
+    setPage,
+    isLoading,
+    fetchData,
+  } = useContext(SearchContext);
 
   return (
     <div className="flex flex-col gap-2 h-full w-full mb-4">
+      {Object.keys(appliedFiltersMap).length > 0 && (
+        <div className="flex flex-col gap-1">
+          <span>Applied filters:</span>
+          <SearchBarAppliedFilters />
+        </div>
+      )}
+
       {filteredSearchResults?.length > 0 && (
         <div className="flex justify-between">
           <span>
@@ -65,7 +74,6 @@ export default function SearchResultsList({
           />
         ))}
       </ul>
-
       {!isLoading && filteredSearchResults?.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full gap-2">
           <i className="fa-solid fa-magnifying-glass fa-2x mb-2 text-gray-400" />

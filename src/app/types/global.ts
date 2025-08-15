@@ -1,21 +1,21 @@
 import { FieldPath, WhereFilterOp } from "firebase/firestore";
 
-export type FilterTypes =
+export type FilterType =
   | "aircon" // AIR_CONDITIONING_TYPE
-  | "barrier-free-entrance" // BARRIER_FREE_ACCESSIBILTY_ENTR
+  | "barrier_free_entrance" // BARRIER_FREE_ACCESSIBILTY_ENTR
   | "balconies" // BALCONIES
-  | "bike-parking" // BIKE_PARKING
+  | "bike_parking" // BIKE_PARKING
   | "elevator" // NO_OF_ELEVATORS
   | "gym" // DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
-  | "high-rise" // CONFIRMED_STOREYS
-  | "laundry-room" // LAUNDRY_ROOM
-  | "locker-storage" // LOCKER_OR_STORAGE_ROOM
-  | "low-rise" // CONFIRMED_STOREYS
-  | "mid-rise" // CONFIRMED_STOREYS
-  | "no-smoking" // NON_SMOKING_BUILDING
+  | "high_rise" // CONFIRMED_STOREYS
+  | "laundry_room" // LAUNDRY_ROOM
+  | "locker_storage" // LOCKER_OR_STORAGE_ROOM
+  | "low_rise" // CONFIRMED_STOREYS
+  | "mid_rise" // CONFIRMED_STOREYS
+  | "no_smoking" // NON_SMOKING_BUILDING
   | "parking" // PARKING_TYPE
-  | "pets-allowed" // PETS_ALLOWED
-  | "year-built"; // YEAR_BUILT
+  | "pets_allowed" // PETS_ALLOWED
+  | "year_built"; // YEAR_BUILT
 
 export type FirestoreWhereClause = {
   fieldPath: string | FieldPath;
@@ -24,13 +24,13 @@ export type FirestoreWhereClause = {
 };
 
 export type FilterOption = {
-  key: FilterTypes;
+  key: FilterType;
   label: string;
   iconClass: string;
 };
 
 export type AppliedFilterMap = {
-  [key in FilterTypes]?: FirestoreWhereClause[];
+  [key in FilterType]?: FirestoreWhereClause[];
 };
 
 export type FetchDataResponse = {
@@ -68,10 +68,10 @@ export type FetchDataResponse = {
   LAUNDRY_ROOM_HOURS_OF_OPERATION: string;
   LAUNDRY_ROOM_LOCATION: string;
   LOCKER_OR_STORAGE_ROOM: string;
-  NO_BARRIER_FREE_ACCESSBLE_UNITS: string;
-  NO_OF_ACCESSIBLE_PARKING_SPACES: string;
-  NO_OF_ELEVATORS: string; // elevator
-  NO_OF_LAUNDRY_ROOM_MACHINES: string;
+  NO_BARRIER_FREE_ACCESSBLE_UNITS: number;
+  NO_OF_ACCESSIBLE_PARKING_SPACES: number;
+  NO_OF_ELEVATORS: number; // elevator
+  NO_OF_LAUNDRY_ROOM_MACHINES: number;
   NON_SMOKING_BUILDING: string; // no-smoking
   OUTDOOR_GARBAGE_STORAGE_AREA: string;
   PARKING_TYPE: string; // parking
@@ -93,10 +93,10 @@ export type FetchDataResponse = {
   VISITOR_PARKING: string;
   WARD: string;
   WINDOW_TYPE: string;
-  YEAR_BUILT: string;
-  YEAR_OF_REPLACEMENT: string;
-  YEAR_REGISTERED: string;
-  NO_OF_STOREYS: string;
-  NO_OF_UNITS: string;
-  NO_BARRIER_FREE_ACCESSIBLE_UNITS: string;
+  YEAR_BUILT: number;
+  YEAR_OF_REPLACEMENT: number;
+  YEAR_REGISTERED: number;
+  NO_OF_STOREYS: number;
+  NO_OF_UNITS: number;
+  NO_BARRIER_FREE_ACCESSIBLE_UNITS: number;
 };

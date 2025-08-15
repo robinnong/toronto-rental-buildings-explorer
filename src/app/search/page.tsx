@@ -31,30 +31,6 @@ export default function SearchPage(): ReactElement {
           showFiltersModal={showFiltersModal}
           setShowFiltersModal={setShowFiltersModal}
         />
-
-        <footer className="bg-cyan-700 text-white h-[48px] flex items-center justify-center">
-          <p>
-            ©2025&nbsp;
-            <a
-              className="underline"
-              href="https://github.com/robinnong"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              Robin Nong
-            </a>
-            . Photo by&nbsp;
-            <a
-              className="underline"
-              href="https://www.pexels.com/photo/high-rise-buildings-under-blue-sky-1868676/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ennvisionn
-            </a>
-            .
-          </p>
-        </footer>
       </div>
     </SearchContext.Provider>
   );

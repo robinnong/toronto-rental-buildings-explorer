@@ -1,4 +1,4 @@
-import { FilterOption } from "../types/global";
+import { FilterOption, FilterType } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
@@ -120,55 +120,106 @@ export const torontoPostalCodesByKey: Record<string, string[]> = {
   ],
 };
 
+export const filterLabels: Record<FilterType, string> = {
+  aircon: "Air conditioning",
+  barrier_free_entrance: "Barrier-free entrance",
+  balconies: "Balconies",
+  bike_parking: "Bike parking",
+  elevator: "Elevator",
+  gym: "Gym",
+  high_rise: "High rise",
+  laundry_room: "Laundry room",
+  locker_storage: "Locker/storage room",
+  low_rise: "Low rise",
+  mid_rise: "Mid rise",
+  no_smoking: "Non-smoking building",
+  parking: "Parking",
+  pets_allowed: "Pets allowed",
+  year_built: "Year built",
+};
+
+export const filterIcons: Record<FilterType, string> = {
+  aircon: "fa-snowflake",
+  barrier_free_entrance: "fa-wheelchair",
+  balconies: "fa-door-open",
+  bike_parking: "fa-bicycle",
+  elevator: "fa-elevator",
+  gym: "fa-dumbbell",
+  high_rise: "fa-cubes-stacked",
+  laundry_room: "fa-tshirt",
+  locker_storage: "fa-key",
+  low_rise: "fa-cube",
+  mid_rise: "fa-cubes",
+  no_smoking: "fa-ban-smoking",
+  parking: "fa-car",
+  pets_allowed: "fa-paw",
+  year_built: "fa-calendar",
+};
+
 export const buildingStoreysFilters: FilterOption[] = [
   {
-    key: "low-rise",
-    label: "Low rise (<5 storeys)",
-    iconClass: "fa-cube",
-  },
-
-  {
-    key: "mid-rise",
-    label: "Mid rise (5 ~ 14 storeys)",
-    iconClass: "fa-cubes",
+    key: "low_rise",
+    label: `${filterLabels.low_rise} (<5 storeys)`,
+    iconClass: filterIcons.low_rise,
   },
   {
-    key: "high-rise",
-    label: "High rise (>14 storeys)",
-    iconClass: "fa-cubes-stacked",
+    key: "mid_rise",
+    label: `${filterLabels.mid_rise} (5 ~ 14 storeys)`,
+    iconClass: filterIcons.mid_rise,
+  },
+  {
+    key: "high_rise",
+    label: `${filterLabels.high_rise} (>14 storeys)`,
+    iconClass: filterIcons.high_rise,
   },
 ];
 
 export const buildingFeatureFilters: FilterOption[] = [
-  { key: "aircon", label: "Air conditioning", iconClass: "fa-snowflake" },
+  { key: "aircon", label: filterLabels.aircon, iconClass: filterIcons.aircon },
   {
-    key: "no-smoking",
-    label: "Non-smoking building",
-    iconClass: "fa-ban-smoking",
+    key: "no_smoking",
+    label: filterLabels.no_smoking,
+    iconClass: filterIcons.no_smoking,
   },
-  { key: "elevator", label: "Elevator", iconClass: "fa-elevator" },
-  { key: "pets-allowed", label: "Pets allowed", iconClass: "fa-paw" },
-  { key: "balconies", label: "Balconies", iconClass: "fa-door-open" },
-  { key: "gym", label: "Gym", iconClass: "fa-dumbbell" },
   {
-    key: "locker-storage",
-    label: "Locker/storage room",
-    iconClass: "fa-key",
+    key: "elevator",
+    label: filterLabels.elevator,
+    iconClass: filterIcons.elevator,
+  },
+  {
+    key: "pets_allowed",
+    label: filterLabels.pets_allowed,
+    iconClass: filterIcons.pets_allowed,
+  },
+  {
+    key: "balconies",
+    label: filterLabels.balconies,
+    iconClass: filterIcons.balconies,
+  },
+  { key: "gym", label: filterLabels.gym, iconClass: filterIcons.gym },
+  {
+    key: "locker_storage",
+    label: filterLabels.locker_storage,
+    iconClass: filterIcons.locker_storage,
   },
   {
     key: "parking",
-    label: "Parking",
-    iconClass: "fa-car",
+    label: filterLabels.parking,
+    iconClass: filterIcons.parking,
   },
   {
-    key: "laundry-room",
-    label: "Laundry room",
-    iconClass: "fa-tshirt",
+    key: "laundry_room",
+    label: filterLabels.laundry_room,
+    iconClass: filterIcons.laundry_room,
   },
-  { key: "bike-parking", label: "Bike parking", iconClass: "fa-bicycle" },
   {
-    key: "barrier-free-entrance",
-    label: "Barrier-free entrance",
-    iconClass: "fa-wheelchair",
+    key: "bike_parking",
+    label: filterLabels.bike_parking,
+    iconClass: filterIcons.bike_parking,
+  },
+  {
+    key: "barrier_free_entrance",
+    label: filterLabels.barrier_free_entrance,
+    iconClass: filterIcons.barrier_free_entrance,
   },
 ];

@@ -1,11 +1,11 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
-import { AppliedFilterMap, FilterTypes } from "@/app/types/global";
+import { AppliedFilterMap, FilterType } from "@/app/types/global";
 import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
-  id: FilterTypes;
+  id: FilterType;
   label: string;
   iconClass: string;
   disabled: boolean;
