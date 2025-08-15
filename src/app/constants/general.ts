@@ -153,7 +153,7 @@ export const filterIcons: Record<FilterType, string> = {
   no_smoking: "fa-ban-smoking",
   parking: "fa-car",
   pets_allowed: "fa-paw",
-  year_built: "fa-calendar",
+  year_built: "fa-hammer",
 };
 
 export const buildingStoreysFilters: FilterOption[] = [

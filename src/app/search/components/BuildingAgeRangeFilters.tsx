@@ -2,14 +2,7 @@
 
 import DualRangeSlider from "@/app/components/utils/DualRangeSlider";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import {
-  ReactElement,
-  use,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 
 type Props = {
   disabled: boolean;
@@ -32,29 +25,39 @@ export default function BuildingAgeRangeFilters({
   const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
 
   const handleChange = (range: { min: number; max: number }) => {
-    setAppliedFiltersMap((prev) => ({
-      ...prev,
-      "year-built":
-        range.min !== startYear || range.max !== currentYear
-          ? [
-              { fieldPath: "YEAR_BUILT", opStr: ">=", value: range.min },
-              { fieldPath: "YEAR_BUILT", opStr: "<=", value: range.max },
-            ]
-          : [],
-    }));
+    if (range.min === startYear && range.max === currentYear) {
+      setAppliedFiltersMap((prev) => {
+        const { year_built: removed, ...rest } = prev;
+        return rest;
+      });
+    } else {
+      setAppliedFiltersMap((prev) => ({
+        ...prev,
+        year_built:
+          range.min !== startYear || range.max !== currentYear
+            ? [
+                { fieldPath: "YEAR_BUILT", opStr: ">=", value: range.min },
+                { fieldPath: "YEAR_BUILT", opStr: "<=", value: range.max },
+              ]
+            : [],
+      }));
+    }
   };
 
+  // Initialize range inputs
   useEffect(() => {
-    if (appliedFiltersMap?.["year-built"].length === 0) {
+    if (appliedFiltersMap?.year_built?.length > 0) {
+      setRangeStartValue(appliedFiltersMap?.year_built?.[0]?.value as number);
+      setRangeEndValue(appliedFiltersMap?.year_built?.[1]?.value as number);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (appliedFiltersMap?.year_built?.length === 0) {
       setRangeStartValue(startYear);
       setRangeEndValue(currentYear);
-    } else if (appliedFiltersMap?.["year-built"]?.length > 0) {
-      setRangeStartValue(
-        appliedFiltersMap?.["year-built"]?.[0]?.value as number
-      );
-      setRangeEndValue(appliedFiltersMap?.["year-built"]?.[1]?.value as number);
     }
-  }, [appliedFiltersMap?.["year-built"]]);
+  }, [appliedFiltersMap?.year_built]);
 
   useEffect(() => {
     handleChange({ min: rangeStartValue, max: rangeEndValue });

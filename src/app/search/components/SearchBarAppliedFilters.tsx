@@ -14,28 +14,18 @@ export default function SearchBarAppliedFilters(): ReactElement {
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
     const clauses = Object.keys(appliedFiltersMap) as FilterType[];
 
-    const keyValuePairs: { k: FilterType; v: ReactNode }[] = [];
+    if (clauses.length === 0) return [];
 
-    clauses.forEach((key) => {
-      if (key === "mid_rise") {
-        keyValuePairs.push({ k: key, v: "Mid rise" });
-      } else if (key === "year_built") {
-        keyValuePairs.push({ k: key, v: "Year built" });
-      } else {
-        keyValuePairs.push({
-          k: key,
-          v:
-            (
-              <>
-                <i className={`fas ${filterIcons[key]} mr-1`} />
-                {filterLabels[key]}
-              </>
-            ) || camelCaseToTitleCase(key),
-        });
-      }
-    });
-
-    return keyValuePairs;
+    return clauses.map((key) => ({
+      k: key,
+      v:
+        (
+          <>
+            <i className={`fas ${filterIcons[key]} mr-1`} />
+            {filterLabels[key]}
+          </>
+        ) || camelCaseToTitleCase(key),
+    }));
   }, [appliedFiltersMap]);
 
   return (
