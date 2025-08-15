@@ -96,7 +96,7 @@ export default function SearchResultCard({
         Ward: {WARD ?? emptyLabel}&nbsp;-&nbsp;
         {WARD != null && (
           <span className="font-semibold">
-            {camelCaseToTitleCase(ward25NamesNumbers[parseInt(WARD, 10)])}
+            {camelCaseToTitleCase(ward25NamesNumbers[WARD])}
           </span>
         )}
       </p>
@@ -228,10 +228,14 @@ export default function SearchResultCard({
               <i className="fa-solid fa-key mr-1" />
               Locker/Storage
             </p>
-            <p className={formatLabelStyle(PARKING_TYPE)}>
+            <p
+              className={
+                PARKING_TYPE?.length > 0 ? "" : "line-through text-gray-400"
+              }
+            >
               <i className="fa-solid fa-parking mr-1" />
               Parking type:&nbsp;
-              {formatStringLabel(PARKING_TYPE)}
+              {PARKING_TYPE?.length > 0 ? PARKING_TYPE.join(", ") : emptyLabel}
             </p>
             <p className={formatLabelStyle(VISITOR_PARKING)}>
               <i className="fa-solid fa-dollar" />

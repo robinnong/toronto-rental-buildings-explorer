@@ -35,19 +35,19 @@ export type AppliedFilterMap = {
 
 export type FetchDataResponse = {
   _id: number;
-  AIR_CONDITIONING_TYPE: string; // air-con
+  AIR_CONDITIONING_TYPE: string;
   AMENITIES_AVAILABLE: string;
   ANNUAL_FIRE_ALARM_TEST_RECORDS: string;
   ANNUAL_FIRE_PUMP_FLOW_TEST_RECORDS: string;
   APPROVED_FIRE_SAFETY_PLAN: string;
-  BALCONIES: string; // balconies
-  BARRIER_FREE_ACCESSIBILTY_ENTR: string; // barrier-free-entrance
-  BIKE_PARKING: string; // bike-parking
-  CONFIRMED_STOREYS: number; // low-rise, mid-rise, high-rise
+  BALCONIES: string;
+  BARRIER_FREE_ACCESSIBILTY_ENTR: string;
+  BIKE_PARKING: string;
+  CONFIRMED_STOREYS: number;
   CONFIRMED_UNITS: number;
   DATE_OF_LAST_INSPECTION_BY_TSSA: string;
   DESCRIPTION_OF_CHILD_PLAY_AREA: string;
-  DESCRIPTION_OF_INDOOR_EXERCISE_ROOM: string; // gym
+  DESCRIPTION_OF_INDOOR_EXERCISE_ROOM: string;
   DESCRIPTION_OF_OUTDOOR_REC_FACILITIES: string;
   ELEVATOR_PARTS_REPLACED: string;
   ELEVATOR_STATUS: string;
@@ -64,20 +64,20 @@ export type FetchDataResponse = {
   INTERCOM: string;
   IS_THERE_A_COOLING_ROOM: string;
   IS_THERE_EMERGENCY_POWER: string;
-  LAUNDRY_ROOM: string; // laundry-room
+  LAUNDRY_ROOM: string;
   LAUNDRY_ROOM_HOURS_OF_OPERATION: string;
   LAUNDRY_ROOM_LOCATION: string;
   LOCKER_OR_STORAGE_ROOM: string;
   NO_BARRIER_FREE_ACCESSBLE_UNITS: number;
   NO_OF_ACCESSIBLE_PARKING_SPACES: number;
-  NO_OF_ELEVATORS: number; // elevator
+  NO_OF_ELEVATORS: number;
   NO_OF_LAUNDRY_ROOM_MACHINES: number;
-  NON_SMOKING_BUILDING: string; // no-smoking
+  NON_SMOKING_BUILDING: string;
   OUTDOOR_GARBAGE_STORAGE_AREA: string;
-  PARKING_TYPE: string; // parking
+  PARKING_TYPE: string[];
   PCODE: string;
   PET_RESTRICTIONS: string;
-  PETS_ALLOWED: string; // pets-allowed
+  PETS_ALLOWED: string;
   PROP_MANAGEMENT_COMPANY_NAME: string;
   PROPERTY_TYPE: string;
   RECYCLING_BINS_LOCATION: string;
@@ -91,12 +91,9 @@ export type FetchDataResponse = {
   SPRINKLER_SYSTEM_YEAR_INSTALLED: string;
   TSSA_TEST_RECORDS: string;
   VISITOR_PARKING: string;
-  WARD: string;
+  WARD: number;
   WINDOW_TYPE: string;
   YEAR_BUILT: number;
   YEAR_OF_REPLACEMENT: number;
   YEAR_REGISTERED: number;
-  NO_OF_STOREYS: number;
-  NO_OF_UNITS: number;
-  NO_BARRIER_FREE_ACCESSIBLE_UNITS: number;
 };

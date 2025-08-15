@@ -86,8 +86,8 @@ export default function searchQueryBuilder(
       return [
         {
           fieldPath: "AIR_CONDITIONING_TYPE",
-          opStr: "==",
-          value: "CENTRAL AIR",
+          opStr: "in",
+          value: ["CENTRAL AIR", "INDIVIDUAL UNITS"],
         },
       ];
     case "elevator":
@@ -110,16 +110,23 @@ export default function searchQueryBuilder(
       return [
         {
           fieldPath: "PARKING_TYPE",
-          opStr: "!=",
-          value: null,
+          opStr: "array-contains-any",
+          value: [
+            "Ground Level Garage",
+            "Underground Garage",
+            "Carport",
+            "Garage accessible thru building",
+            "Surface Parking",
+            "Parking Deck",
+          ],
         },
       ];
     case "bike_parking":
       return [
         {
           fieldPath: "BIKE_PARKING",
-          opStr: "!=",
-          value: "Not Available",
+          opStr: "==",
+          value: "YES",
         },
       ];
     case "barrier_free_entrance":
