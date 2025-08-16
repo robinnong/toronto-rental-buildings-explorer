@@ -11,6 +11,7 @@ import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
 import SearchBarAppliedFilters from "./SearchBarAppliedFilters";
+import ReactPaginate from "react-paginate";
 
 type Props = {
   setPreviewedBuildingMap: Dispatch<SetStateAction<FetchDataResponse>>;
@@ -88,6 +89,24 @@ export default function SearchResultsList({
           />
         ))}
       </ul>
+
+      <ReactPaginate
+        className="flex justify-center gap-4 mt-4"
+        activeLinkClassName="font-bold bg-cyan-600 px-2 py-1 rounded-sm text-white"
+        pageClassName="cursor-pointer"
+        disabledClassName="text-gray-400 cursor-not-allowed"
+        pageCount={Math.round(filteredSearchResults?.length / 25)}
+        onClick={(data) => {
+          if (data.isPrevious && page > 1) {
+            setPage(page - 1);
+          } else if (data.isNext && page * 25 < filteredSearchResults.length) {
+            setPage(page + 1);
+          }
+        }}
+        onPageChange={(p) => {
+          setPage(p.selected + 1);
+        }}
+      />
 
       {!isLoading && filteredSearchResults?.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full gap-2">
