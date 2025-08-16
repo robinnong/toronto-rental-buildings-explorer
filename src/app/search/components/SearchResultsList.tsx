@@ -1,6 +1,12 @@
 "use client";
 
-import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useContext,
+  useMemo,
+} from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
@@ -21,6 +27,12 @@ export default function SearchResultsList({
     isLoading,
     fetchData,
   } = useContext(SearchContext);
+
+  const pageResults: FetchDataResponse[] = useMemo(() => {
+    const res = [...filteredSearchResults];
+
+    return res.splice((page - 1) * 25, 25);
+  }, [page, filteredSearchResults]);
 
   return (
     <div className="flex flex-col gap-2 h-full w-full mb-4">
@@ -43,30 +55,32 @@ export default function SearchResultsList({
               <>
                 <button
                   type="button"
-                  className="disabled:text-gray-500 hover:text-cyan-700"
+                  className="disabled:text-gray-400 hover:text-cyan-700"
                   disabled={page === 1}
                   onClick={() => setPage(page - 1)}
                 >
                   <i className="fa-solid fa-chevron-left fa-xs" />
                   Prev
                 </button>
-                |{" "}
               </>
             )}
-            <button
-              type="button"
-              className="disabled:text-gray-500 hover:text-cyan-700"
-              onClick={() => setPage(page + 1)}
-            >
-              Next
-              <i className="fa-solid fa-chevron-right fa-xs" />
-            </button>
+
+            {page * 25 < filteredSearchResults.length && (
+              <button
+                type="button"
+                className="disabled:text-gray-400 hover:text-cyan-700"
+                onClick={() => setPage(page + 1)}
+              >
+                Next
+                <i className="fa-solid fa-chevron-right fa-xs" />
+              </button>
+            )}
           </div>
         </div>
       )}
 
       <ul className="flex flex-col gap-2 w-full h-full">
-        {filteredSearchResults.map((building) => (
+        {pageResults.map((building) => (
           <SearchResultCard
             key={building._id}
             building={building}
@@ -74,6 +88,7 @@ export default function SearchResultsList({
           />
         ))}
       </ul>
+
       {!isLoading && filteredSearchResults?.length === 0 && (
         <div className="flex flex-col items-center justify-center h-full gap-2">
           <i className="fa-solid fa-magnifying-glass fa-2x mb-2 text-gray-400" />

@@ -12,7 +12,7 @@ export const firestoreDbPaths: [string, ...string[]] = [
   fsDbDoc,
   fsDbSubCollection,
 ];
-export const firestoreQueryLimit = 25;
+export const firestoreQueryLimit = 100;
 
 export const torontoPostalCodesByKey: Record<string, string[]> = {
   scarborough: [

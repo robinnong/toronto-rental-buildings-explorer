@@ -94,7 +94,7 @@ export default function useSearchContext(): SearchContextModel {
         };
 
       let q;
-      // TODO: Add pagination and search by offset (see Firestore docs)
+
       if (orSearchClauses?.length > 0) {
         q = query(
           collectionRef,
@@ -112,6 +112,7 @@ export default function useSearchContext(): SearchContextModel {
       }
 
       const querySnapshot = await getDocs(q);
+
       const data = querySnapshot.docs.map(async (doc) => {
         // doc.data() is never undefined for query doc snapshots
         return doc.data();
