@@ -31,6 +31,21 @@ export default function SearchPage(): ReactElement {
           showFiltersModal={showFiltersModal}
           setShowFiltersModal={setShowFiltersModal}
         />
+
+        <footer className="text-center bg-gray-100 p-4">
+          <p>
+            ©2025&nbsp;
+            <a
+              className="underline font-semibold"
+              href="https://github.com/robinnong"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Robin Nong
+            </a>
+            .
+          </p>
+        </footer>
       </div>
     </SearchContext.Provider>
   );

@@ -93,9 +93,10 @@ export default function SearchResultCard({
       </div>
 
       <p className="py-1">
-        Ward: {WARD ?? emptyLabel}&nbsp;-&nbsp;
+        Ward:&nbsp;
         {WARD != null && (
           <span className="font-semibold">
+            {WARD ?? emptyLabel}&nbsp;-&nbsp;
             {camelCaseToTitleCase(ward25NamesNumbers[WARD])}
           </span>
         )}
