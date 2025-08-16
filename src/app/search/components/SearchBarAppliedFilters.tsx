@@ -36,11 +36,10 @@ export default function SearchBarAppliedFilters(): ReactElement {
           label={v}
           onClick={async () => {
             // Remove applied filter and re-run the query
-            await setAppliedFiltersMap((prev) => {
-              const { [k as FilterType]: removed, ...rest } = prev;
-              return rest;
-            });
-            fetchData(appliedFiltersMap);
+            const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
+            const updatedFiltersMap = rest;
+            setAppliedFiltersMap(updatedFiltersMap);
+            fetchData(updatedFiltersMap);
           }}
         />
       ))}

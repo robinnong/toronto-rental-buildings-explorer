@@ -119,6 +119,8 @@ export default function useSearchContext(): SearchContextModel {
       });
       const res = (await Promise.all(data)) as FetchDataResponse[];
 
+      // Reset to first page
+      setPage(1);
       setSearchResults(res);
     } catch (error) {
       // TODO - Display error message to the user

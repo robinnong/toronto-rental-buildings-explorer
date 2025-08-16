@@ -1,20 +1,26 @@
 "use client";
 
 import DualRangeSlider from "@/app/components/utils/DualRangeSlider";
-import { SearchContext } from "@/app/hooks/useSearchContext";
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { AppliedFilterMap } from "@/app/types/global";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 type Props = {
-  disabled: boolean;
+  currentSelectedFilters: AppliedFilterMap;
+  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
  * Renders a dual range slider for filtering buildings by age, ranging between a 1900 and the current year.
- *
- * @param {boolean} disabled - Whether the filters are disabled
  */
 export default function BuildingAgeRangeFilters({
-  disabled,
+  currentSelectedFilters,
+  setCurrentSelectedFilters,
 }: Props): ReactElement {
   const startYear = 1900;
   const currentYear = new Date().getFullYear();
@@ -22,16 +28,14 @@ export default function BuildingAgeRangeFilters({
   const [rangeStartValue, setRangeStartValue] = useState<number>(startYear);
   const [rangeEndValue, setRangeEndValue] = useState<number>(currentYear);
 
-  const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
-
   const handleChange = (range: { min: number; max: number }) => {
     if (range.min === startYear && range.max === currentYear) {
-      setAppliedFiltersMap((prev) => {
+      setCurrentSelectedFilters((prev) => {
         const { year_built: removed, ...rest } = prev;
         return rest;
       });
     } else {
-      setAppliedFiltersMap((prev) => ({
+      setCurrentSelectedFilters((prev) => ({
         ...prev,
         year_built:
           range.min !== startYear || range.max !== currentYear
@@ -46,18 +50,22 @@ export default function BuildingAgeRangeFilters({
 
   // Initialize range inputs
   useEffect(() => {
-    if (appliedFiltersMap?.year_built?.length > 0) {
-      setRangeStartValue(appliedFiltersMap?.year_built?.[0]?.value as number);
-      setRangeEndValue(appliedFiltersMap?.year_built?.[1]?.value as number);
+    if (currentSelectedFilters?.year_built?.length > 0) {
+      setRangeStartValue(
+        currentSelectedFilters?.year_built?.[0]?.value as number
+      );
+      setRangeEndValue(
+        currentSelectedFilters?.year_built?.[1]?.value as number
+      );
     }
   }, []);
 
   useEffect(() => {
-    if (appliedFiltersMap?.year_built?.length === 0) {
+    if (currentSelectedFilters?.year_built?.length === 0) {
       setRangeStartValue(startYear);
       setRangeEndValue(currentYear);
     }
-  }, [appliedFiltersMap?.year_built]);
+  }, [currentSelectedFilters?.year_built]);
 
   useEffect(() => {
     handleChange({ min: rangeStartValue, max: rangeEndValue });
@@ -72,7 +80,6 @@ export default function BuildingAgeRangeFilters({
       setRangeStartValue={setRangeStartValue}
       rangeEndValue={rangeEndValue}
       setRangeEndValue={setRangeEndValue}
-      disabled={disabled}
     />
   );
 }

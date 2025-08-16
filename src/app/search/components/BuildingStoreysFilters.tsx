@@ -1,25 +1,23 @@
 "use client";
 
-import { ReactElement, useContext } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingStoreysFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
-import { SearchContext } from "@/app/hooks/useSearchContext";
+import { AppliedFilterMap } from "@/app/types/global";
 
 type Props = {
-  disabled: boolean;
+  currentSelectedFilters: AppliedFilterMap;
+  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
  * Options to filter buildings by number of storeys, rendered by <FiltersModal />
  * Options: "Low rise", "Mid rise", and "High rise".
- *
- * @param {boolean} disabled - Whether the filters are disabled
  */
 export default function BuildingStoreysFilters({
-  disabled,
+  currentSelectedFilters,
+  setCurrentSelectedFilters,
 }: Props): ReactElement {
-  const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
-
   return (
     <div>
       <h4 className="font-bold">Building size</h4>
@@ -30,9 +28,8 @@ export default function BuildingStoreysFilters({
             id={filter.key}
             label={filter.label}
             iconClass={filter.iconClass}
-            disabled={disabled}
-            appliedFiltersMap={appliedFiltersMap}
-            setAppliedFiltersMap={setAppliedFiltersMap}
+            appliedFiltersMap={currentSelectedFilters}
+            setAppliedFiltersMap={setCurrentSelectedFilters}
           />
         ))}
       </div>

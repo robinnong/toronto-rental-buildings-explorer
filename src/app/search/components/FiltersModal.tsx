@@ -1,6 +1,12 @@
 "use client";
 
-import { ReactElement, useCallback, useContext } from "react";
+import {
+  ReactElement,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import Modal from "@/app/components/utils/Modal";
 import BuildingAgeRangeFilters from "./BuildingAgeRangeFilters";
@@ -21,10 +27,18 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
   const { isLoading, appliedFiltersMap, setAppliedFiltersMap, fetchData } =
     useContext(SearchContext);
 
-  const handleSubmit = useCallback(() => {
-    fetchData(appliedFiltersMap);
-    onClose();
+  const [currentSelectedFilters, setCurrentSelectedFilters] =
+    useState<AppliedFilterMap>({} as AppliedFilterMap);
+
+  useEffect(() => {
+    setCurrentSelectedFilters(appliedFiltersMap);
   }, [appliedFiltersMap]);
+
+  const handleSubmit = useCallback(() => {
+    setAppliedFiltersMap(currentSelectedFilters);
+    fetchData(currentSelectedFilters);
+    onClose();
+  }, [currentSelectedFilters]);
 
   return (
     <Modal onClickOutside={onClose}>
@@ -47,9 +61,18 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
 
         {/* Modal body - filters */}
         <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
-          <BuildingAgeRangeFilters disabled={isLoading} />
-          <BuildingStoreysFilters disabled={isLoading} />
-          <BuildingFeatureFilters disabled={isLoading} />
+          <BuildingAgeRangeFilters
+            currentSelectedFilters={currentSelectedFilters}
+            setCurrentSelectedFilters={setCurrentSelectedFilters}
+          />
+          <BuildingStoreysFilters
+            currentSelectedFilters={currentSelectedFilters}
+            setCurrentSelectedFilters={setCurrentSelectedFilters}
+          />
+          <BuildingFeatureFilters
+            currentSelectedFilters={currentSelectedFilters}
+            setCurrentSelectedFilters={setCurrentSelectedFilters}
+          />
         </div>
 
         {/* Modal footer - actions */}
@@ -57,13 +80,15 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           <button
             type="button"
             className="text-cyan-700"
-            onClick={() => setAppliedFiltersMap({} as AppliedFilterMap)}
+            disabled={isLoading}
+            onClick={() => setCurrentSelectedFilters({} as AppliedFilterMap)}
           >
             Clear all
           </button>
           <button
             type="submit"
             className="bg-cyan-600 text-white py-2 px-4 rounded"
+            disabled={isLoading}
           >
             Apply filters
           </button>

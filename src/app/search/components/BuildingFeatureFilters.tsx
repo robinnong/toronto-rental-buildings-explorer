@@ -1,25 +1,23 @@
 "use client";
 
-import { ReactElement, useContext } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
-import { SearchContext } from "@/app/hooks/useSearchContext";
+import { AppliedFilterMap } from "@/app/types/global";
 
 type Props = {
-  disabled: boolean;
+  currentSelectedFilters: AppliedFilterMap;
+  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
  * Search filter options rendered by <FiltersModal />
  * Provides filters such as "Pets allowed", "Non-smoking building", etc.
- *
- * @param {boolean} disabled - Whether the filters are disabled
  */
 export default function BuildingFeatureFilters({
-  disabled,
+  currentSelectedFilters,
+  setCurrentSelectedFilters,
 }: Props): ReactElement {
-  const { appliedFiltersMap, setAppliedFiltersMap } = useContext(SearchContext);
-
   return (
     <div>
       <h4 className="font-bold">Building features</h4>
@@ -30,9 +28,8 @@ export default function BuildingFeatureFilters({
             id={key}
             label={label}
             iconClass={iconClass}
-            disabled={disabled}
-            appliedFiltersMap={appliedFiltersMap}
-            setAppliedFiltersMap={setAppliedFiltersMap}
+            appliedFiltersMap={currentSelectedFilters}
+            setAppliedFiltersMap={setCurrentSelectedFilters}
           />
         ))}
       </div>

@@ -8,7 +8,6 @@ type Props = {
   id: FilterType;
   label: string;
   iconClass: string;
-  disabled: boolean;
   appliedFiltersMap: AppliedFilterMap;
   setAppliedFiltersMap: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
@@ -20,7 +19,6 @@ export default function FilterPill({
   id,
   label,
   iconClass,
-  disabled,
   appliedFiltersMap,
   setAppliedFiltersMap,
 }: Props): ReactElement {
@@ -52,7 +50,6 @@ export default function FilterPill({
           }));
         }
       }}
-      disabled={disabled}
     >
       <i className={`fa-solid ${iconClass} mr-1`} />
       {label}
