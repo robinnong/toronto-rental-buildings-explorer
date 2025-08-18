@@ -11,10 +11,10 @@ import ReactPaginate from "react-paginate";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
+import AppliedFilters from "./AppliedFilters";
+import LoadingSkeleton from "../loading/LoadingSkeleton";
+import SearchSortBy from "../sort/SearchSortBy";
 import NoResults from "./NoResults";
-import LoadingSkeleton from "./loading/LoadingSkeleton";
-import SearchAppliedFilters from "./SearchAppliedFilters";
-import SearchSortBy from "./sort/SearchSortBy";
 
 type Props = {
   setPreviewedBuildingMap: Dispatch<SetStateAction<FetchDataResponse>>;
@@ -49,7 +49,7 @@ export default function SearchResultsList({
         <SearchSortBy />
       </div>
 
-      {Object.keys(appliedFiltersMap).length > 0 && <SearchAppliedFilters />}
+      {Object.keys(appliedFiltersMap).length > 0 && <AppliedFilters />}
 
       {(searchResults == null || isLoading) && <LoadingSkeleton />}
       {searchResults != null && !isLoading && (

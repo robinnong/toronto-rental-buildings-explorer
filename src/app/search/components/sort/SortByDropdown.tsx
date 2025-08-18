@@ -10,7 +10,7 @@ type Props = {
   onClose: () => void;
 };
 
-export default function SearchSortByDropdown({ onClose }: Props): ReactElement {
+export default function SortByDropdown({ onClose }: Props): ReactElement {
   const { sort, setSort, setPage } = useContext(SearchContext);
   const ref = useOnClickOutside(onClose);
 

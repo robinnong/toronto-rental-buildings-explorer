@@ -8,7 +8,7 @@ type Props = {
   onClick: () => void;
 };
 
-export default function SearchAppliedFilterPill({
+export default function AppliedFilterPill({
   label,
   disabled = false,
   onClick,

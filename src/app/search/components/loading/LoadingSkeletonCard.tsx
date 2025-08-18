@@ -1,4 +1,4 @@
-export default function SearchLoadingSkeletonCard() {
+export default function LoadingSkeletonCard() {
   return (
     <div className="animate-pulse p-4 rounded-sm bg-gray-100 flex flex-col gap-2">
       <div className="flex gap-4 justify-between">

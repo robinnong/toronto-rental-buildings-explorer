@@ -13,7 +13,7 @@ import { SearchContext } from "@/app/hooks/useSearchContext";
 type Props = {
   setShowFiltersModal: Dispatch<SetStateAction<boolean>>;
 };
-export default function SearchBar({
+export default function SearchHeader({
   setShowFiltersModal,
 }: Props): ReactElement {
   const { isLoading, searchResults, setFilteredSearchResults } =

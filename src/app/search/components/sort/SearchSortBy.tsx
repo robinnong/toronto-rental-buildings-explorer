@@ -3,7 +3,7 @@
 import { ReactElement, useContext, useState } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { sortByLabels } from "@/app/constants/general";
-import SearchSortByDropdown from "./SearchSortByDropdown";
+import SortByDropdown from "./SortByDropdown";
 
 export default function SearchSortBy(): ReactElement {
   const { sort, isLoading, filteredSearchResults } = useContext(SearchContext);
@@ -26,7 +26,7 @@ export default function SearchSortBy(): ReactElement {
         )}
       </button>
 
-      {isOpen && <SearchSortByDropdown onClose={() => setIsOpen(false)} />}
+      {isOpen && <SortByDropdown onClose={() => setIsOpen(false)} />}
     </div>
   );
 }

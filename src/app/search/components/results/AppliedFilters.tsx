@@ -4,10 +4,10 @@ import { ReactElement, ReactNode, useContext, useMemo } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FilterType } from "@/app/types/global";
 import { camelCaseToTitleCase } from "@/app/lib/camelCaseToTitleCase";
-import SearchAppliedFilterPill from "./SearchAppliedFilterPill";
+import AppliedFilterPill from "./AppliedFilterPill";
 import { filterIcons, filterLabels } from "@/app/constants/general";
 
-export default function SearchAppliedFilters(): ReactElement {
+export default function AppliedFilters(): ReactElement {
   const { appliedFiltersMap, setAppliedFiltersMap, fetchData, isLoading } =
     useContext(SearchContext);
 
@@ -31,7 +31,7 @@ export default function SearchAppliedFilters(): ReactElement {
   return (
     <div className="flex flex-wrap gap-1">
       {appliedFiltersList.map(({ k, v }) => (
-        <SearchAppliedFilterPill
+        <AppliedFilterPill
           key={k}
           label={v}
           disabled={isLoading}
