@@ -25,6 +25,7 @@ export default function SearchResultsList({
 }: Props): ReactElement {
   const {
     appliedFiltersMap,
+    searchResults,
     filteredSearchResults,
     page,
     setPage,
@@ -52,8 +53,8 @@ export default function SearchResultsList({
 
       {Object.keys(appliedFiltersMap).length > 0 && <SearchBarAppliedFilters />}
 
-      {isLoading && <LoadingSkeleton />}
-      {!isLoading && (
+      {(searchResults == null || isLoading) && <LoadingSkeleton />}
+      {searchResults != null && !isLoading && (
         <ul className="flex flex-col gap-2 w-full h-full">
           {pageResults.map((building) => (
             <SearchResultCard
@@ -69,6 +70,8 @@ export default function SearchResultsList({
         className="flex justify-center gap-4 mt-4"
         activeLinkClassName="font-bold bg-cyan-600 px-2 py-1 rounded-sm text-white"
         pageClassName="cursor-pointer"
+        previousClassName="cursor-pointer"
+        nextClassName="cursor-pointer"
         disabledClassName="text-gray-400 cursor-not-allowed"
         forcePage={page - 1}
         pageCount={Math.round(filteredSearchResults?.length / 25)}

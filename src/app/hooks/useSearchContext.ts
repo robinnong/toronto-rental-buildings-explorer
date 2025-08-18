@@ -49,7 +49,7 @@ export default function useSearchContext(): SearchContextModel {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState<number>(1);
   const [sort, setSort] = useState<Sort>("ward_number");
-  const [searchResults, setSearchResults] = useState<FetchDataResponse[]>([]);
+  const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
   const [filteredSearchResults, setFilteredSearchResults] = useState<
     FetchDataResponse[]
   >([]);
@@ -142,6 +142,8 @@ export default function useSearchContext(): SearchContextModel {
   };
 
   useEffect(() => {
+    if (searchResults == null) return;
+
     setFilteredSearchResults(searchResults);
   }, [searchResults]);
 

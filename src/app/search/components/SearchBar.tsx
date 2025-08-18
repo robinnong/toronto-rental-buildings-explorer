@@ -24,7 +24,7 @@ export default function SearchBar({
   const handleSubmit = useCallback(() => {
     if (searchString.length > 0) {
       // Filter results by address or property management name based on the search query
-      const res = searchResults.filter(
+      const res = searchResults?.filter(
         (apt) =>
           apt.SITE_ADDRESS?.toLowerCase().includes(
             searchString.toLowerCase()
@@ -46,6 +46,8 @@ export default function SearchBar({
         className="flex items-center gap-2 w-full"
         onSubmit={(e) => {
           e.preventDefault();
+
+          if (isLoading) return;
           handleSubmit();
         }}
       >
@@ -66,8 +68,8 @@ export default function SearchBar({
             <button
               className="absolute top-0 right-3 bottom-0"
               type="button"
-              disabled={isLoading}
               onClick={() => setSearchString("")}
+              disabled={isLoading}
             >
               <i className="fa-solid fa-xmark text-gray-500" />
             </button>
@@ -86,6 +88,7 @@ export default function SearchBar({
         type="button"
         className="text-nowrap border rounded-full border-gray-300 py-2 px-3 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700"
         onClick={() => setShowFiltersModal((prev) => !prev)}
+        disabled={isLoading}
       >
         <i className="fa-solid fa-sliders mr-1" />
         Filters
