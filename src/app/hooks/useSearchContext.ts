@@ -17,7 +17,7 @@ import {
   and,
   QueryCompositeFilterConstraint,
 } from "firebase/firestore";
-import { AppliedFilterMap, FetchDataResponse } from "@/app/types/global";
+import { AppliedFilterMap, FetchDataResponse, Sort } from "@/app/types/global";
 import { db } from "../firebase.config";
 import { firestoreDbPaths, firestoreQueryLimit } from "../constants/general";
 
@@ -30,6 +30,8 @@ export type SearchContextModel = {
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   isLoading: boolean;
+  sort: Sort;
+  setSort: Dispatch<SetStateAction<Sort>>;
   fetchData: (filters: AppliedFilterMap) => Promise<void>;
 };
 
@@ -44,6 +46,7 @@ export default function useSearchContext(): SearchContextModel {
     FetchDataResponse[]
   >([]);
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<Sort>("ward_number");
   const [appliedFiltersMap, setAppliedFiltersMap] = useState<AppliedFilterMap>(
     {} as AppliedFilterMap
   );
@@ -135,10 +138,26 @@ export default function useSearchContext(): SearchContextModel {
     fetchData({});
   }, []);
 
-  // Reset the filtered search results after fetching new data
   useEffect(() => {
     setFilteredSearchResults(searchResults);
   }, [searchResults]);
+
+  useEffect(() => {
+    if (sort === "ward_number") {
+      setFilteredSearchResults((prev) =>
+        [...prev].sort((a, b) => a.WARD - b.WARD)
+      );
+    } else if (sort === "year_built_asc") {
+      setFilteredSearchResults((prev) =>
+        [...prev].sort((a, b) => a.YEAR_BUILT - b.YEAR_BUILT)
+      );
+    } else if (sort === "year_built_desc") {
+      setFilteredSearchResults((prev) =>
+        [...prev].sort((a, b) => b.YEAR_BUILT - a.YEAR_BUILT)
+      );
+    }
+    setPage(1);
+  }, [searchResults, sort]);
 
   return {
     appliedFiltersMap,
@@ -148,6 +167,8 @@ export default function useSearchContext(): SearchContextModel {
     setFilteredSearchResults,
     page,
     setPage,
+    sort,
+    setSort,
     isLoading,
     fetchData,
   };

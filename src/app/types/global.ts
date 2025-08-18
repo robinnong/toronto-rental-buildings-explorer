@@ -29,6 +29,8 @@ export type FilterOption = {
   iconClass: string;
 };
 
+export type Sort = "ward_number" | "year_built_asc" | "year_built_desc";
+
 export type AppliedFilterMap = {
   [key in FilterType]?: FirestoreWhereClause[];
 };

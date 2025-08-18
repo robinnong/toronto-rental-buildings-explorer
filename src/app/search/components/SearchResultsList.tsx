@@ -8,10 +8,11 @@ import {
   useMemo,
 } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { FetchDataResponse } from "@/app/types/global";
+import { FetchDataResponse, Sort } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
 import SearchBarAppliedFilters from "./SearchBarAppliedFilters";
 import ReactPaginate from "react-paginate";
+import { camelCaseToTitleCase } from "@/app/lib/camelCaseToTitleCase";
 
 type Props = {
   setPreviewedBuildingMap: Dispatch<SetStateAction<FetchDataResponse>>;
@@ -25,6 +26,8 @@ export default function SearchResultsList({
     filteredSearchResults,
     page,
     setPage,
+    sort,
+    setSort,
     isLoading,
     fetchData,
   } = useContext(SearchContext);
@@ -45,37 +48,36 @@ export default function SearchResultsList({
       )}
 
       {filteredSearchResults?.length > 0 && (
-        <div className="flex justify-between">
+        <div className="flex justify-between items-end">
           <span>
             Found <strong>{filteredSearchResults.length}</strong>&nbsp;result
             {filteredSearchResults?.length === 1 ? "" : "s"}
           </span>
-
-          <div className="flex gap-4">
-            {page > 1 && (
-              <>
-                <button
-                  type="button"
-                  className="disabled:text-gray-400 hover:text-cyan-700"
-                  disabled={page === 1}
-                  onClick={() => setPage(page - 1)}
-                >
-                  <i className="fa-solid fa-chevron-left fa-xs" />
-                  Prev
-                </button>
-              </>
-            )}
-
-            {page * 25 < filteredSearchResults.length && (
-              <button
-                type="button"
-                className="disabled:text-gray-400 hover:text-cyan-700"
-                onClick={() => setPage(page + 1)}
+          <div className="flex gap-2 items-center relative">
+            <div>Sort by:</div>
+            <div className="cursor-pointer font-bold border border-gray-300 hover:border-cyan-600 hover:bg-sky-50 hover:text-cyan-700 py-1 rounded-full px-3">
+              {camelCaseToTitleCase(sort)}
+            </div>
+            <ul className="absolute top-7 cursor-pointer rounded-md bg-white right-0 border border-gray-300">
+              <li
+                className="rounded-md hover:bg-sky-50 hover:text-cyan-700 pt-2 p-2"
+                onClick={() => setSort("ward_number")}
               >
-                Next
-                <i className="fa-solid fa-chevron-right fa-xs" />
-              </button>
-            )}
+                Ward number
+              </li>
+              <li
+                className="rounded-md hover:bg-sky-50 hover:text-cyan-700 p-2"
+                onClick={() => setSort("year_built_asc")}
+              >
+                Year built (ascending)
+              </li>
+              <li
+                className="rounded-md hover:bg-sky-50 hover:text-cyan-700 p-2"
+                onClick={() => setSort("year_built_desc")}
+              >
+                Year built (descending)
+              </li>
+            </ul>
           </div>
         </div>
       )}
