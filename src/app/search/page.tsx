@@ -3,8 +3,10 @@
 import { ReactElement, useCallback, useEffect, useState } from "react";
 import useSearchContext, { SearchContext } from "../hooks/useSearchContext";
 import SearchBar from "./components/SearchBar";
-import SearchBody from "./components/SearchBody";
-import { Sort } from "../types/global";
+import { FetchDataResponse, Sort } from "../types/global";
+import FiltersModal from "./components/FiltersModal";
+import MapModal from "./components/MapModal";
+import SearchResultsList from "./components/results/SearchResultsList";
 
 export default function SearchPage(props: {
   searchParams?: Promise<{
@@ -27,6 +29,8 @@ export default function SearchPage(props: {
   }, []);
 
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
+  const [previewedBuildingMap, setPreviewedBuildingMap] =
+    useState<FetchDataResponse | null>(null);
 
   return (
     <SearchContext.Provider value={searchContext}>
@@ -45,10 +49,23 @@ export default function SearchPage(props: {
           </div>
         </header>
 
-        <SearchBody
-          showFiltersModal={showFiltersModal}
-          setShowFiltersModal={setShowFiltersModal}
-        />
+        <main className="w-full h-full grow-1 mx-auto max-w-3xl pt-4 pb-8 px-4">
+          <SearchResultsList
+            setPreviewedBuildingMap={setPreviewedBuildingMap}
+          />
+
+          {/* Modals: */}
+          {previewedBuildingMap && (
+            <MapModal
+              address={previewedBuildingMap.SITE_ADDRESS}
+              postalCode={previewedBuildingMap.PCODE}
+              onClose={() => setPreviewedBuildingMap(null)}
+            />
+          )}
+          {showFiltersModal && (
+            <FiltersModal onClose={() => setShowFiltersModal(false)} />
+          )}
+        </main>
 
         <footer className="text-center bg-gray-100 p-4">
           <p>

@@ -3,7 +3,7 @@
 import { ReactElement, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 
-export default function SearchNoResults(): ReactElement {
+export default function NoResults(): ReactElement {
   const { fetchData } = useContext(SearchContext);
 
   return (

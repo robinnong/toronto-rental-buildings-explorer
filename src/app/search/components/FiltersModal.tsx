@@ -9,9 +9,9 @@ import {
 } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import Modal from "@/app/components/utils/Modal";
-import BuildingAgeRangeFilters from "./BuildingAgeRangeFilters";
-import BuildingFeatureFilters from "./BuildingFeatureFilters";
-import BuildingStoreysFilters from "./BuildingStoreysFilters";
+import BuildingAgeRangeFilters from "./filters/BuildingAgeRangeFilters";
+import BuildingFeatureFilters from "./filters/BuildingFeatureFilters";
+import BuildingStoreysFilters from "./filters/BuildingStoreysFilters";
 import { AppliedFilterMap } from "@/app/types/global";
 
 type Props = {

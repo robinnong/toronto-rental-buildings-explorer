@@ -7,14 +7,14 @@ import {
   useContext,
   useMemo,
 } from "react";
+import ReactPaginate from "react-paginate";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
-import SearchBarAppliedFilters from "./SearchBarAppliedFilters";
-import ReactPaginate from "react-paginate";
-import SearchSortBy from "./SearchSortBy";
-import SearchNoResults from "./SearchNoResults";
-import LoadingSkeleton from "./LoadingSkeleton";
+import NoResults from "./NoResults";
+import LoadingSkeleton from "./loading/LoadingSkeleton";
+import SearchAppliedFilters from "./SearchAppliedFilters";
+import SearchSortBy from "./sort/SearchSortBy";
 
 type Props = {
   setPreviewedBuildingMap: Dispatch<SetStateAction<FetchDataResponse>>;
@@ -49,7 +49,7 @@ export default function SearchResultsList({
         <SearchSortBy />
       </div>
 
-      {Object.keys(appliedFiltersMap).length > 0 && <SearchBarAppliedFilters />}
+      {Object.keys(appliedFiltersMap).length > 0 && <SearchAppliedFilters />}
 
       {(searchResults == null || isLoading) && <LoadingSkeleton />}
       {searchResults != null && !isLoading && (
@@ -64,7 +64,7 @@ export default function SearchResultsList({
         </ul>
       )}
 
-      {!isLoading && filteredSearchResults?.length === 0 && <SearchNoResults />}
+      {!isLoading && filteredSearchResults?.length === 0 && <NoResults />}
 
       <ReactPaginate
         className={`flex justify-center gap-4 mt-4 ${
