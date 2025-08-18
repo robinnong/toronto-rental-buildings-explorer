@@ -29,20 +29,24 @@ export default function SearchBarAppliedFilters(): ReactElement {
   }, [appliedFiltersMap]);
 
   return (
-    <div className="flex flex-wrap gap-1">
-      {appliedFiltersList.map(({ k, v }) => (
-        <SearchBarAppliedFilterPill
-          key={k}
-          label={v}
-          onClick={async () => {
-            // Remove applied filter and re-run the query
-            const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
-            const updatedFiltersMap = rest;
-            setAppliedFiltersMap(updatedFiltersMap);
-            fetchData(updatedFiltersMap);
-          }}
-        />
-      ))}
+    <div className="flex flex-col gap-1">
+      <span>Applied filters:</span>
+
+      <div className="flex flex-wrap gap-1">
+        {appliedFiltersList.map(({ k, v }) => (
+          <SearchBarAppliedFilterPill
+            key={k}
+            label={v}
+            onClick={async () => {
+              // Remove applied filter and re-run the query
+              const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
+              const updatedFiltersMap = rest;
+              setAppliedFiltersMap(updatedFiltersMap);
+              fetchData(updatedFiltersMap);
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }
