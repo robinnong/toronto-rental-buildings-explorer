@@ -17,6 +17,7 @@ import {
   and,
   QueryCompositeFilterConstraint,
 } from "firebase/firestore";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AppliedFilterMap, FetchDataResponse, Sort } from "@/app/types/global";
 import { db } from "../firebase.config";
 import { firestoreDbPaths, firestoreQueryLimit } from "../constants/general";
@@ -29,9 +30,10 @@ export type SearchContextModel = {
   setFilteredSearchResults: Dispatch<SetStateAction<FetchDataResponse[]>>;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
-  isLoading: boolean;
+  setPageParams: (page: number) => void;
   sort: Sort;
   setSort: Dispatch<SetStateAction<Sort>>;
+  isLoading: boolean;
   fetchData: (filters: AppliedFilterMap) => Promise<void>;
 };
 
@@ -39,17 +41,26 @@ export const SearchContext = createContext<SearchContextModel>(null);
 
 export default function useSearchContext(): SearchContextModel {
   const collectionRef = collection(db, ...firestoreDbPaths);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const params = new URLSearchParams(searchParams);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [sort, setSort] = useState<Sort>("ward_number");
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>([]);
   const [filteredSearchResults, setFilteredSearchResults] = useState<
     FetchDataResponse[]
   >([]);
-  const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<Sort>("ward_number");
   const [appliedFiltersMap, setAppliedFiltersMap] = useState<AppliedFilterMap>(
     {} as AppliedFilterMap
   );
+
+  const setPageParams = (p: number) => {
+    params.set("page", `${p}`);
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   // Generates Firestore search WHERE clauses from the applied filters map
   const generateWhereSearchClauses = (
@@ -121,9 +132,6 @@ export default function useSearchContext(): SearchContextModel {
         return doc.data();
       });
       const res = (await Promise.all(data)) as FetchDataResponse[];
-
-      // Reset to first page
-      setPage(1);
       setSearchResults(res);
     } catch (error) {
       // TODO - Display error message to the user
@@ -133,31 +141,39 @@ export default function useSearchContext(): SearchContextModel {
     }
   };
 
-  // Initial data fetch on load
-  useEffect(() => {
-    fetchData({});
-  }, []);
-
   useEffect(() => {
     setFilteredSearchResults(searchResults);
   }, [searchResults]);
 
   useEffect(() => {
+    // Default sort
     if (sort === "ward_number") {
+      params.delete("sort");
       setFilteredSearchResults((prev) =>
         [...prev].sort((a, b) => a.WARD - b.WARD)
       );
     } else if (sort === "year_built_asc") {
+      params.set("sort", "year_built_asc");
       setFilteredSearchResults((prev) =>
         [...prev].sort((a, b) => a.YEAR_BUILT - b.YEAR_BUILT)
       );
     } else if (sort === "year_built_desc") {
+      params.set("sort", "year_built_desc");
       setFilteredSearchResults((prev) =>
         [...prev].sort((a, b) => b.YEAR_BUILT - a.YEAR_BUILT)
       );
     }
-    setPage(1);
-  }, [searchResults, sort]);
+
+    // Update URL query params
+    replace(`${pathname}?${params.toString()}`);
+  }, [sort]);
+
+  useEffect(() => setPageParams(page), [page]);
+
+  // Initial data fetch on load
+  useEffect(() => {
+    fetchData({});
+  }, []);
 
   return {
     appliedFiltersMap,
@@ -167,6 +183,7 @@ export default function useSearchContext(): SearchContextModel {
     setFilteredSearchResults,
     page,
     setPage,
+    setPageParams,
     sort,
     setSort,
     isLoading,

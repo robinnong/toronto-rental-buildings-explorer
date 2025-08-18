@@ -17,6 +17,8 @@ export type FilterType =
   | "pets_allowed" // PETS_ALLOWED
   | "year_built"; // YEAR_BUILT
 
+export type SortByType = "ward_number" | "year_built_asc" | "year_built_desc";
+
 export type FirestoreWhereClause = {
   fieldPath: string | FieldPath;
   opStr: WhereFilterOp;

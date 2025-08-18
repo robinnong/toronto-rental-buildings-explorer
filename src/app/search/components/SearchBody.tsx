@@ -1,12 +1,10 @@
 "use client";
 
-import { Dispatch, ReactElement, useContext, useState } from "react";
+import { Dispatch, ReactElement, useState } from "react";
 import SearchResultsList from "./SearchResultsList";
 import { FetchDataResponse } from "@/app/types/global";
 import FiltersModal from "./FiltersModal";
 import MapModal from "./MapModal";
-import { SearchContext } from "@/app/hooks/useSearchContext";
-import LoadingSkeleton from "./LoadingSkeleton";
 
 type Props = {
   showFiltersModal: boolean;
@@ -20,14 +18,9 @@ export default function SearchBody({
   const [previewedBuildingMap, setPreviewedBuildingMap] =
     useState<FetchDataResponse | null>(null);
 
-  const { isLoading } = useContext(SearchContext);
-
   return (
     <main className="w-full h-full grow-1 mx-auto max-w-3xl pt-4 pb-8 px-4">
-      {isLoading && <LoadingSkeleton />}
-      {!isLoading && (
-        <SearchResultsList setPreviewedBuildingMap={setPreviewedBuildingMap} />
-      )}
+      <SearchResultsList setPreviewedBuildingMap={setPreviewedBuildingMap} />
 
       {/* Modals: */}
       {previewedBuildingMap && (

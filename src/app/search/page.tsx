@@ -1,12 +1,30 @@
 "use client";
 
-import { ReactElement, useState } from "react";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 import useSearchContext, { SearchContext } from "../hooks/useSearchContext";
 import SearchBar from "./components/SearchBar";
 import SearchBody from "./components/SearchBody";
+import { Sort } from "../types/global";
 
-export default function SearchPage(): ReactElement {
+export default function SearchPage(props: {
+  searchParams?: Promise<{
+    sort?: string;
+    page?: string;
+  }>;
+}): ReactElement {
   const searchContext = useSearchContext();
+  const { setPage, setSort } = searchContext;
+
+  const getSearchParams = useCallback(async () => {
+    const searchParams = await props.searchParams;
+
+    setPage(Number(searchParams?.page) || 1);
+    setSort((searchParams?.sort as Sort) || "ward_number");
+  }, []);
+
+  useEffect(() => {
+    getSearchParams();
+  }, []);
 
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
 

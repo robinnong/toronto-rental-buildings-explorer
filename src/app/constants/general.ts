@@ -1,4 +1,4 @@
-import { FilterOption, FilterType } from "../types/global";
+import { FilterOption, FilterType, SortByType } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
@@ -119,6 +119,18 @@ export const torontoPostalCodesByKey: Record<string, string[]> = {
     "M7A",
   ],
 };
+
+export const sortByLabels: Record<SortByType, string> = {
+  ward_number: "Ward number",
+  year_built_asc: "Year built (ascending)",
+  year_built_desc: "Year built (descending)",
+};
+
+export const sortByOptions: { key: SortByType; label: string }[] = [
+  { key: "ward_number", label: sortByLabels.ward_number },
+  { key: "year_built_asc", label: sortByLabels.year_built_asc },
+  { key: "year_built_desc", label: sortByLabels.year_built_desc },
+];
 
 export const filterLabels: Record<FilterType, string> = {
   aircon: "Air conditioning",

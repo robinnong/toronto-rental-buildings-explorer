@@ -8,7 +8,7 @@ import SearchBarAppliedFilterPill from "./SearchBarAppliedFilterPill";
 import { filterIcons, filterLabels } from "@/app/constants/general";
 
 export default function SearchBarAppliedFilters(): ReactElement {
-  const { appliedFiltersMap, setAppliedFiltersMap, fetchData } =
+  const { appliedFiltersMap, setAppliedFiltersMap, fetchData, isLoading } =
     useContext(SearchContext);
 
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
@@ -29,24 +29,21 @@ export default function SearchBarAppliedFilters(): ReactElement {
   }, [appliedFiltersMap]);
 
   return (
-    <div className="flex flex-col gap-1">
-      <span>Applied filters:</span>
-
-      <div className="flex flex-wrap gap-1">
-        {appliedFiltersList.map(({ k, v }) => (
-          <SearchBarAppliedFilterPill
-            key={k}
-            label={v}
-            onClick={async () => {
-              // Remove applied filter and re-run the query
-              const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
-              const updatedFiltersMap = rest;
-              setAppliedFiltersMap(updatedFiltersMap);
-              fetchData(updatedFiltersMap);
-            }}
-          />
-        ))}
-      </div>
+    <div className="flex flex-wrap gap-1">
+      {appliedFiltersList.map(({ k, v }) => (
+        <SearchBarAppliedFilterPill
+          key={k}
+          label={v}
+          disabled={isLoading}
+          onClick={async () => {
+            // Remove applied filter and re-run the query
+            const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
+            const updatedFiltersMap = rest;
+            setAppliedFiltersMap(updatedFiltersMap);
+            fetchData(updatedFiltersMap);
+          }}
+        />
+      ))}
     </div>
   );
 }
