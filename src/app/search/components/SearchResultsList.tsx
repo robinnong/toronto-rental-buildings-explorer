@@ -41,15 +41,13 @@ export default function SearchResultsList({
 
   return (
     <div className="flex flex-col gap-2 h-full w-full mb-4">
-      {filteredSearchResults?.length > 0 && (
-        <div className="flex justify-between items-end">
-          <span>
-            Found <strong>{filteredSearchResults.length}</strong>&nbsp;result
-            {filteredSearchResults?.length === 1 ? "" : "s"}
-          </span>
-          <SearchSortBy />
-        </div>
-      )}
+      <div className="flex justify-between items-center">
+        <span>
+          Found <strong>{filteredSearchResults.length}</strong>&nbsp;result
+          {filteredSearchResults?.length === 1 ? "" : "s"}
+        </span>
+        <SearchSortBy />
+      </div>
 
       {Object.keys(appliedFiltersMap).length > 0 && <SearchBarAppliedFilters />}
 
@@ -66,8 +64,12 @@ export default function SearchResultsList({
         </ul>
       )}
 
+      {!isLoading && filteredSearchResults?.length === 0 && <SearchNoResults />}
+
       <ReactPaginate
-        className="flex justify-center gap-4 mt-4"
+        className={`flex justify-center gap-4 mt-4 ${
+          filteredSearchResults.length === 0 ? "hidden" : ""
+        }`}
         activeLinkClassName="font-bold bg-cyan-600 px-2 py-1 rounded-sm text-white"
         pageClassName="cursor-pointer"
         previousClassName="cursor-pointer"
@@ -89,8 +91,6 @@ export default function SearchResultsList({
           setPageParams(selected + 1);
         }}
       />
-
-      {!isLoading && filteredSearchResults?.length === 0 && <SearchNoResults />}
     </div>
   );
 }

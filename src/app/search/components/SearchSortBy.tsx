@@ -6,7 +6,7 @@ import { sortByLabels } from "@/app/constants/general";
 import SearchSortByDropdown from "./SearchSortByDropdown";
 
 export default function SearchSortBy(): ReactElement {
-  const { sort, isLoading } = useContext(SearchContext);
+  const { sort, isLoading, filteredSearchResults } = useContext(SearchContext);
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -14,9 +14,9 @@ export default function SearchSortBy(): ReactElement {
       <div>Sort by:</div>
       <button
         type="button"
-        className="flex cursor-pointer border border-gray-300 hover:border-cyan-600 hover:bg-sky-50 hover:text-cyan-700 py-1 rounded-full px-3 w-50"
+        className="flex cursor-pointer border border-gray-300 hover:border-cyan-600 hover:bg-sky-50 hover:text-cyan-700 py-1 rounded-full px-3 w-50 disabled:border-gray-300 disabled:text-gray-400 disabled:bg-white disabled:cursor-default"
         onClick={() => setIsOpen(!isOpen)}
-        disabled={isLoading}
+        disabled={isLoading || filteredSearchResults?.length === 0}
       >
         <span className="mr-1 grow-1">{sortByLabels[sort]}</span>
         {isOpen ? (
