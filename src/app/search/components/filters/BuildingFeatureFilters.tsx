@@ -4,6 +4,7 @@ import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
 import { AppliedFilterMap } from "@/app/types/global";
+import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
   appliedFilters: AppliedFilterMap;
@@ -25,11 +26,24 @@ export default function BuildingFeatureFilters({
         {buildingFeatureFilters.map(({ key, label, iconClass }) => (
           <FilterPill
             key={key}
-            id={key}
             label={label}
             iconClass={iconClass}
-            appliedFiltersMap={appliedFilters}
-            setAppliedFiltersMap={setAppliedFilters}
+            isActive={appliedFilters?.[key]?.length > 0}
+            onClick={() => {
+              if (appliedFilters[key]?.length > 0) {
+                // Remove the filter
+                setAppliedFilters((prev) => {
+                  const { [key]: removed, ...rest } = prev;
+                  return rest;
+                });
+              } else {
+                // Apply the filter
+                setAppliedFilters((prev) => ({
+                  ...prev,
+                  [key]: searchQueryBuilder(key),
+                }));
+              }
+            }}
           />
         ))}
       </div>
