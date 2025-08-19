@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useMemo,
-} from "react";
+import { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
 
 type Props = {
   title: string;
@@ -133,8 +127,13 @@ export default function DualRangeSlider({
             max={rangeEndValue}
             value={rangeStartValue}
             disabled={disabled}
+            // If input is empty when user focuses away, set value to 0
+            onBlur={(e) => {
+              if (Number.isNaN(e.target.valueAsNumber)) {
+                setRangeStartValue(0);
+              }
+            }}
             onChange={(e) => {
-              // TODO: Handle non-numeric inputs
               // Ensure that rangeStartValue does not exceed rangeEndValue
               if (e.target.valueAsNumber > rangeEndValue) {
                 setRangeStartValue(rangeEndValue);
@@ -156,7 +155,6 @@ export default function DualRangeSlider({
             value={rangeEndValue}
             disabled={disabled}
             onChange={(e) => {
-              // TODO: Handle non-numeric inputs
               // Ensure that rangeEndValue is always greater than rangeStartValue
               if (rangeStartValue <= e.target.valueAsNumber) {
                 setRangeEndValue(e.target.valueAsNumber);

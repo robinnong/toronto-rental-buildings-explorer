@@ -2,9 +2,9 @@
 
 import { FetchDataResponse } from "@/app/types/global";
 import { Dispatch, ReactElement, useState } from "react";
-import FiltersModal from "./FiltersModal";
-import MapModal from "./MapModal";
 import SearchResults from "./results/SearchResultsList";
+import MapModal from "./modals/MapModal";
+import FiltersModal from "./modals/FiltersModal";
 
 type Props = {
   showFiltersModal: boolean;

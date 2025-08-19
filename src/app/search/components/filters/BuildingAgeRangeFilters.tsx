@@ -31,13 +31,13 @@ export default function BuildingAgeRangeFilters({
   const handleChange = (range: { min: number; max: number }) => {
     if (range.min === startYear && range.max === currentYear) {
       setCurrentSelectedFilters((prev) => {
-        const { year_built: removed, ...rest } = prev;
+        const { YEAR_BUILT: removed, ...rest } = prev;
         return rest;
       });
     } else {
       setCurrentSelectedFilters((prev) => ({
         ...prev,
-        year_built:
+        YEAR_BUILT:
           range.min !== startYear || range.max !== currentYear
             ? [
                 { fieldPath: "YEAR_BUILT", opStr: ">=", value: range.min },
@@ -50,22 +50,22 @@ export default function BuildingAgeRangeFilters({
 
   // Initialize range inputs
   useEffect(() => {
-    if (currentSelectedFilters?.year_built?.length > 0) {
+    if (currentSelectedFilters?.YEAR_BUILT?.length > 0) {
       setRangeStartValue(
-        currentSelectedFilters?.year_built?.[0]?.value as number
+        currentSelectedFilters?.YEAR_BUILT?.[0]?.value as number
       );
       setRangeEndValue(
-        currentSelectedFilters?.year_built?.[1]?.value as number
+        currentSelectedFilters?.YEAR_BUILT?.[1]?.value as number
       );
     }
   }, []);
 
   useEffect(() => {
-    if (currentSelectedFilters?.year_built?.length === 0) {
+    if (currentSelectedFilters?.YEAR_BUILT?.length === 0) {
       setRangeStartValue(startYear);
       setRangeEndValue(currentYear);
     }
-  }, [currentSelectedFilters?.year_built]);
+  }, [currentSelectedFilters?.YEAR_BUILT]);
 
   useEffect(() => {
     handleChange({ min: rangeStartValue, max: rangeEndValue });

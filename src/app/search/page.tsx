@@ -4,7 +4,7 @@ import { ReactElement, useCallback, useEffect, useState } from "react";
 import useSearchContext, { SearchContext } from "../hooks/useSearchContext";
 import { Sort } from "../types/global";
 import SearchBody from "./components/SearchBody";
-import SearchHeader from "./components/Searchheader";
+import SearchHeader from "./components/SearchHeader";
 
 export default function SearchPage(props: {
   searchParams?: Promise<{

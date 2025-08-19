@@ -1,21 +1,22 @@
 import { FieldPath, WhereFilterOp } from "firebase/firestore";
 
 export type FilterType =
-  | "aircon" // AIR_CONDITIONING_TYPE
-  | "barrier_free_entrance" // BARRIER_FREE_ACCESSIBILTY_ENTR
-  | "balconies" // BALCONIES
-  | "bike_parking" // BIKE_PARKING
-  | "elevator" // NO_OF_ELEVATORS
-  | "gym" // DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
-  | "high_rise" // CONFIRMED_STOREYS
-  | "laundry_room" // LAUNDRY_ROOM
-  | "locker_storage" // LOCKER_OR_STORAGE_ROOM
-  | "low_rise" // CONFIRMED_STOREYS
-  | "mid_rise" // CONFIRMED_STOREYS
-  | "no_smoking" // NON_SMOKING_BUILDING
-  | "parking" // PARKING_TYPE
-  | "pets_allowed" // PETS_ALLOWED
-  | "year_built"; // YEAR_BUILT
+  | "AIR_CONDITIONING_TYPE"
+  | "BARRIER_FREE_ACCESSIBILTY_ENTR"
+  | "BALCONIES"
+  | "BIKE_PARKING"
+  | "NO_OF_ELEVATORS"
+  | "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM"
+  | "HIGH_RISE"
+  | "LAUNDRY_ROOM"
+  | "LOCKER_OR_STORAGE_ROOM"
+  | "LOW_RISE"
+  | "MID_RISE"
+  | "NON_SMOKING_BUILDING"
+  | "PARKING_TYPE"
+  | "PETS_ALLOWED"
+  | "VISITOR_PARKING"
+  | "YEAR_BUILT";
 
 export type SortByType = "ward_number" | "year_built_asc" | "year_built_desc";
 

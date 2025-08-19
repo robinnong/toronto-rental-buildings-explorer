@@ -3,9 +3,9 @@
 import { ReactElement, ReactNode, useContext, useMemo } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FilterType } from "@/app/types/global";
-import { camelCaseToTitleCase } from "@/app/lib/camelCaseToTitleCase";
+import camelCaseToTitleCase from "@/app/lib/camelCaseToTitleCase";
+import { FilterIcons, FilterLabels } from "@/app/constants/general";
 import AppliedFilterPill from "./AppliedFilterPill";
-import { filterIcons, filterLabels } from "@/app/constants/general";
 
 export default function AppliedFilters(): ReactElement {
   const { appliedFiltersMap, setAppliedFiltersMap, fetchData, isLoading } =
@@ -21,8 +21,8 @@ export default function AppliedFilters(): ReactElement {
       v:
         (
           <>
-            <i className={`fas ${filterIcons[key]} mr-1`} />
-            {filterLabels[key]}
+            <i className={`fas ${FilterIcons[key]} mr-1`} />
+            {FilterLabels[key]}
           </>
         ) || camelCaseToTitleCase(key),
     }));
@@ -35,7 +35,7 @@ export default function AppliedFilters(): ReactElement {
           key={k}
           label={v}
           disabled={isLoading}
-          onClick={async () => {
+          onClick={() => {
             // Remove applied filter and re-run the query
             const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
             const updatedFiltersMap = rest;

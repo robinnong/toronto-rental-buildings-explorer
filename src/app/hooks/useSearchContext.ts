@@ -69,7 +69,7 @@ export default function useSearchContext(): SearchContextModel {
     const clauses: QueryFieldFilterConstraint[] = [];
 
     Object.entries(appliedFiltersMap).forEach(([k, v]) => {
-      if (k !== "low_rise" && k !== "mid_rise" && k !== "high_rise") {
+      if (k !== "LOW_RISE" && k !== "MID_RISE" && k !== "HIGH_RISE") {
         clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
       }
     });
@@ -84,7 +84,7 @@ export default function useSearchContext(): SearchContextModel {
     const clauses: QueryFieldFilterConstraint[] = [];
 
     Object.entries(appliedFiltersMap).forEach(([k, v]) => {
-      if (k === "low_rise" || k === "mid_rise" || k === "high_rise") {
+      if (k === "LOW_RISE" || k === "MID_RISE" || k === "HIGH_RISE") {
         clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
       }
     });

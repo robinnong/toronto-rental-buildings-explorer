@@ -1,4 +1,4 @@
-export const evaluateStringToBoolean = (value: string): boolean => {
+const evaluateStringToBoolean = (value: string): boolean => {
   if (
     value == null ||
     value === "" ||
@@ -12,3 +12,5 @@ export const evaluateStringToBoolean = (value: string): boolean => {
   }
   return true;
 };
+
+export default evaluateStringToBoolean;

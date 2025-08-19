@@ -12,7 +12,7 @@ export default function searchQueryBuilder(
   key: FilterType
 ): FirestoreWhereClause[] {
   switch (key) {
-    case "balconies":
+    case "BALCONIES":
       return [
         {
           fieldPath: "BALCONIES",
@@ -20,7 +20,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "locker_storage":
+    case "LOCKER_OR_STORAGE_ROOM":
       return [
         {
           fieldPath: "LOCKER_OR_STORAGE_ROOM",
@@ -28,7 +28,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "no_smoking":
+    case "NON_SMOKING_BUILDING":
       return [
         {
           fieldPath: "NON_SMOKING_BUILDING",
@@ -36,7 +36,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "pets_allowed":
+    case "PETS_ALLOWED":
       return [
         {
           fieldPath: "PETS_ALLOWED",
@@ -44,7 +44,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "laundry_room":
+    case "LAUNDRY_ROOM":
       return [
         {
           fieldPath: "LAUNDRY_ROOM",
@@ -52,7 +52,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "low_rise":
+    case "LOW_RISE":
       return [
         {
           fieldPath: "CONFIRMED_STOREYS",
@@ -60,7 +60,7 @@ export default function searchQueryBuilder(
           value: 5,
         },
       ];
-    case "mid_rise":
+    case "MID_RISE":
       // Range query requires 2 separate where clauses
       return [
         {
@@ -74,7 +74,7 @@ export default function searchQueryBuilder(
           value: 14,
         },
       ];
-    case "high_rise":
+    case "HIGH_RISE":
       return [
         {
           fieldPath: "CONFIRMED_STOREYS",
@@ -82,7 +82,7 @@ export default function searchQueryBuilder(
           value: 14,
         },
       ];
-    case "aircon":
+    case "AIR_CONDITIONING_TYPE":
       return [
         {
           fieldPath: "AIR_CONDITIONING_TYPE",
@@ -90,7 +90,7 @@ export default function searchQueryBuilder(
           value: ["CENTRAL AIR", "INDIVIDUAL UNITS"],
         },
       ];
-    case "elevator":
+    case "NO_OF_ELEVATORS":
       return [
         {
           fieldPath: "NO_OF_ELEVATORS",
@@ -98,7 +98,7 @@ export default function searchQueryBuilder(
           value: 0,
         },
       ];
-    case "gym":
+    case "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM":
       return [
         {
           fieldPath: "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM",
@@ -106,7 +106,7 @@ export default function searchQueryBuilder(
           value: null,
         },
       ];
-    case "parking":
+    case "PARKING_TYPE":
       return [
         {
           fieldPath: "PARKING_TYPE",
@@ -121,7 +121,7 @@ export default function searchQueryBuilder(
           ],
         },
       ];
-    case "bike_parking":
+    case "BIKE_PARKING":
       return [
         {
           fieldPath: "BIKE_PARKING",
@@ -129,7 +129,7 @@ export default function searchQueryBuilder(
           value: "YES",
         },
       ];
-    case "barrier_free_entrance":
+    case "BARRIER_FREE_ACCESSIBILTY_ENTR":
       return [
         {
           fieldPath: "BARRIER_FREE_ACCESSIBILTY_ENTR",
