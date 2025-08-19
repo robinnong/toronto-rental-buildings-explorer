@@ -57,11 +57,6 @@ export default function useSearchContext(): SearchContextModel {
     {} as AppliedFilterMap
   );
 
-  const setPageParams = (p: number) => {
-    params.set("page", `${p}`);
-    replace(`${pathname}?${params.toString()}`);
-  };
-
   // Generates Firestore search WHERE clauses from the applied filters map
   const generateWhereSearchClauses = (
     appliedFiltersMap: AppliedFilterMap
@@ -148,29 +143,37 @@ export default function useSearchContext(): SearchContextModel {
   }, [searchResults]);
 
   useEffect(() => {
+    setSortParams(sort);
+
     // Default sort
     if (sort === "ward_number") {
-      params.delete("sort");
       setFilteredSearchResults((prev) =>
         [...prev].sort((a, b) => a.WARD - b.WARD)
       );
     } else if (sort === "year_built_asc") {
-      params.set("sort", "year_built_asc");
       setFilteredSearchResults((prev) =>
         [...prev].sort((a, b) => a.YEAR_BUILT - b.YEAR_BUILT)
       );
     } else if (sort === "year_built_desc") {
-      params.set("sort", "year_built_desc");
       setFilteredSearchResults((prev) =>
         [...prev].sort((a, b) => b.YEAR_BUILT - a.YEAR_BUILT)
       );
     }
-
-    // Update URL query params
-    replace(`${pathname}?${params.toString()}`);
   }, [sort]);
 
-  useEffect(() => setPageParams(page), [page]);
+  const setSortParams = (s: Sort) => {
+    if (s === "ward_number") {
+      params.delete("sort");
+    } else {
+      params.set("sort", `${s}`);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const setPageParams = (p: number) => {
+    params.set("page", `${p}`);
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   // Initial data fetch on load
   useEffect(() => {

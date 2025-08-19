@@ -2,7 +2,7 @@
 
 import { ReactElement, useContext, useState } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { sortByLabels } from "@/app/constants/general";
+import { sortLabels } from "@/app/constants/general";
 import SortByDropdown from "./SortByDropdown";
 
 export default function SearchSortBy(): ReactElement {
@@ -18,7 +18,7 @@ export default function SearchSortBy(): ReactElement {
         onClick={() => setIsOpen(!isOpen)}
         disabled={isLoading || filteredSearchResults?.length === 0}
       >
-        <span className="mr-1 grow-1">{sortByLabels[sort]}</span>
+        <span className="mr-1 grow-1">{sortLabels[sort]}</span>
         {isOpen ? (
           <i className="fas fa-times" />
         ) : (

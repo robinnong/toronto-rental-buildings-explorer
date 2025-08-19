@@ -29,6 +29,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
 
   const [currentSelectedFilters, setCurrentSelectedFilters] =
     useState<AppliedFilterMap>({} as AppliedFilterMap);
+  const [isValid, setIsValid] = useState<boolean>(true);
 
   useEffect(() => {
     setCurrentSelectedFilters(appliedFiltersMap);
@@ -47,7 +48,9 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         action=""
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit();
+          if (isValid) {
+            handleSubmit();
+          }
         }}
       >
         <div className="border-b border-gray-200 p-3 flex justify-between">
@@ -64,6 +67,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           <BuildingAgeRangeFilters
             currentSelectedFilters={currentSelectedFilters}
             setCurrentSelectedFilters={setCurrentSelectedFilters}
+            setIsValid={setIsValid}
           />
           <BuildingStoreysFilters
             currentSelectedFilters={currentSelectedFilters}
@@ -87,8 +91,8 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           </button>
           <button
             type="submit"
-            className="bg-cyan-600 text-white py-2 px-4 rounded"
-            disabled={isLoading}
+            className="bg-cyan-600 text-white py-2 px-4 rounded disabled:opacity-50"
+            disabled={isLoading || !isValid}
           >
             Apply filters
           </button>

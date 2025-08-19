@@ -16,7 +16,7 @@ type Props = {
 export default function SearchHeader({
   setShowFiltersModal,
 }: Props): ReactElement {
-  const { isLoading, searchResults, setFilteredSearchResults } =
+  const { isLoading, searchResults, setFilteredSearchResults, setPage } =
     useContext(SearchContext);
 
   const [searchString, setSearchString] = useState("");
@@ -38,6 +38,8 @@ export default function SearchHeader({
     } else {
       setFilteredSearchResults(searchResults);
     }
+
+    setPage(1); // Reset to first page
   }, [searchResults, searchString]);
 
   return (
@@ -86,7 +88,7 @@ export default function SearchHeader({
 
       <button
         type="button"
-        className="text-nowrap border rounded-full border-gray-300 py-2 px-3 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700"
+        className="text-nowrap border rounded-full border-gray-300 py-2 px-3 hover:bg-sky-50 hover:border-cyan-600 hover:text-cyan-700 disabled:border-gray-300 disabled:text-gray-400 disabled:bg-white disabled:cursor-default"
         onClick={() => setShowFiltersModal((prev) => !prev)}
         disabled={isLoading}
       >

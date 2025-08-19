@@ -1,4 +1,4 @@
-import { FilterOption, FilterType, SortByType } from "../types/global";
+import { FilterOption, FilterType, SortType } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
@@ -14,16 +14,16 @@ export const firestoreDbPaths: [string, ...string[]] = [
 ];
 export const firestoreQueryLimit = 100;
 
-export const sortByLabels: Record<SortByType, string> = {
+export const sortLabels: Record<SortType, string> = {
   ward_number: "Ward number",
   year_built_asc: "Year built (ascending)",
   year_built_desc: "Year built (descending)",
 };
 
-export const sortByOptions: { key: SortByType; label: string }[] = [
-  { key: "ward_number", label: sortByLabels.ward_number },
-  { key: "year_built_asc", label: sortByLabels.year_built_asc },
-  { key: "year_built_desc", label: sortByLabels.year_built_desc },
+export const sortOptions: { key: SortType; label: string }[] = [
+  { key: "ward_number", label: sortLabels.ward_number },
+  { key: "year_built_asc", label: sortLabels.year_built_asc },
+  { key: "year_built_desc", label: sortLabels.year_built_desc },
 ];
 
 export enum FilterLabels {
@@ -77,7 +77,6 @@ const filterKeys: FilterType[] = [
   "PARKING_TYPE",
   "PETS_ALLOWED",
   "VISITOR_PARKING",
-  "YEAR_BUILT",
 ];
 
 export const buildingFeatureFilters: FilterOption[] = filterKeys.map((key) => ({

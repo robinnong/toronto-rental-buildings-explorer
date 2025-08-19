@@ -1,6 +1,12 @@
 "use client";
 
-import { Dispatch, ReactElement, SetStateAction, useMemo } from "react";
+import {
+  Dispatch,
+  ReactElement,
+  SetStateAction,
+  useEffect,
+  useMemo,
+} from "react";
 
 type Props = {
   title: string;
@@ -10,6 +16,7 @@ type Props = {
   setRangeStartValue: Dispatch<SetStateAction<number>>;
   rangeEndValue: number;
   setRangeEndValue: Dispatch<SetStateAction<number>>;
+  setIsValid: Dispatch<SetStateAction<boolean>>;
   disabled?: boolean;
 };
 
@@ -36,6 +43,7 @@ export default function DualRangeSlider({
   setRangeStartValue,
   rangeEndValue,
   setRangeEndValue,
+  setIsValid,
   disabled,
 }: Props): ReactElement {
   const sliderBaseColour = "#d1d1d1";
@@ -65,6 +73,24 @@ export default function DualRangeSlider({
       ${sliderBaseColour} 100%
     )`;
   }, [rangeStartValue, rangeEndValue]);
+
+  const isMinValid = useMemo(
+    () =>
+      !!(
+        rangeStartValue < rangeEndValue && rangeStartValue >= defaultSliderMin
+      ),
+    [rangeStartValue, rangeEndValue]
+  );
+
+  const isMaxValid = useMemo(
+    () =>
+      !!(rangeEndValue > rangeStartValue && rangeEndValue <= defaultSliderMax),
+    [rangeStartValue, rangeEndValue]
+  );
+
+  useEffect(() => {
+    setIsValid(isMinValid && isMaxValid);
+  }, [isMinValid, isMaxValid]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -122,17 +148,13 @@ export default function DualRangeSlider({
             type="number"
             id="minInput"
             name="minInput"
-            className="border border-gray-300 p-1 text-center w-14 rounded-md focus:border-cyan-600 ml-1"
+            className={`border border-gray-300 p-1 text-center w-14 rounded-md focus:border-cyan-600 ml-1 ${
+              !isMinValid ? "border-rose-700 text-rose-700" : ""
+            }`}
             min={defaultSliderMin}
             max={rangeEndValue}
             value={rangeStartValue}
             disabled={disabled}
-            // If input is empty when user focuses away, set value to 0
-            onBlur={(e) => {
-              if (Number.isNaN(e.target.valueAsNumber)) {
-                setRangeStartValue(0);
-              }
-            }}
             onChange={(e) => {
               // Ensure that rangeStartValue does not exceed rangeEndValue
               if (e.target.valueAsNumber > rangeEndValue) {
@@ -149,7 +171,9 @@ export default function DualRangeSlider({
             type="number"
             id="maxInput"
             name="maxInput"
-            className="border border-gray-300 p-1 text-center w-14 rounded-md focus:border-cyan-600 ml-1"
+            className={`border border-gray-300 p-1 text-center w-14 rounded-md focus:border-cyan-600 ml-1 ${
+              !isMaxValid ? "border-rose-700 text-rose-700" : ""
+            }`}
             min={rangeStartValue}
             max={defaultSliderMax}
             value={rangeEndValue}

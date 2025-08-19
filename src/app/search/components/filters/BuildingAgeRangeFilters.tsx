@@ -13,6 +13,7 @@ import {
 type Props = {
   currentSelectedFilters: AppliedFilterMap;
   setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  setIsValid: Dispatch<SetStateAction<boolean>>;
 };
 
 /**
@@ -21,6 +22,7 @@ type Props = {
 export default function BuildingAgeRangeFilters({
   currentSelectedFilters,
   setCurrentSelectedFilters,
+  setIsValid,
 }: Props): ReactElement {
   const startYear = 1900;
   const currentYear = new Date().getFullYear();
@@ -80,6 +82,7 @@ export default function BuildingAgeRangeFilters({
       setRangeStartValue={setRangeStartValue}
       rangeEndValue={rangeEndValue}
       setRangeEndValue={setRangeEndValue}
+      setIsValid={setIsValid}
     />
   );
 }
