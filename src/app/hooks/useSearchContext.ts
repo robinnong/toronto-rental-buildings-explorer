@@ -16,6 +16,7 @@ import {
   or,
   and,
   QueryCompositeFilterConstraint,
+  QueryOrderByConstraint,
 } from "firebase/firestore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AppliedFilterMap, FetchDataResponse, Sort } from "@/app/types/global";
@@ -33,6 +34,7 @@ export type SearchContextModel = {
   setPageParams: (page: number) => void;
   sort: Sort;
   setSort: Dispatch<SetStateAction<Sort>>;
+  setSortParams: (sort: Sort) => void;
   isLoading: boolean;
   fetchData: (filters: AppliedFilterMap) => Promise<void>;
 };
@@ -87,13 +89,38 @@ export default function useSearchContext(): SearchContextModel {
     return clauses;
   };
 
+  const generateOrderBySearchClauses = (s: Sort) => {
+    let clause: QueryOrderByConstraint;
+
+    switch (s) {
+      case "ward_number":
+        clause = orderBy("WARD");
+        break;
+      case "year_built_asc":
+        clause = orderBy("YEAR_BUILT", "asc");
+        break;
+      case "year_built_desc":
+        clause = orderBy("YEAR_BUILT", "desc");
+        break;
+      default:
+        clause = orderBy("WARD");
+        break;
+    }
+
+    return [clause, orderBy("_id")];
+  };
+
   // Queries the Firestore database for apartments based on the applied filters
-  const fetchData = async (filters: AppliedFilterMap) => {
+  const fetchData = async (
+    filters: AppliedFilterMap,
+    sort: Sort = "ward_number"
+  ) => {
     setIsLoading(true);
 
     try {
       const whereSearchClauses = generateWhereSearchClauses(filters);
       const orSearchClauses = generateOrSearchClauses(filters);
+      const orderBySearchClauses = generateOrderBySearchClauses(sort);
 
       const generateQueryCompositeFilterConstraints =
         (): QueryCompositeFilterConstraint => {
@@ -108,14 +135,14 @@ export default function useSearchContext(): SearchContextModel {
         q = query(
           collectionRef,
           generateQueryCompositeFilterConstraints(),
-          orderBy("_id"),
+          ...orderBySearchClauses,
           limit(firestoreQueryLimit)
         );
       } else {
         q = query(
           collectionRef,
           ...whereSearchClauses,
-          orderBy("_id"),
+          ...orderBySearchClauses,
           limit(firestoreQueryLimit)
         );
       }
@@ -141,25 +168,6 @@ export default function useSearchContext(): SearchContextModel {
 
     setFilteredSearchResults(searchResults);
   }, [searchResults]);
-
-  useEffect(() => {
-    setSortParams(sort);
-
-    // Default sort
-    if (sort === "ward_number") {
-      setFilteredSearchResults((prev) =>
-        [...prev].sort((a, b) => a.WARD - b.WARD)
-      );
-    } else if (sort === "year_built_asc") {
-      setFilteredSearchResults((prev) =>
-        [...prev].sort((a, b) => a.YEAR_BUILT - b.YEAR_BUILT)
-      );
-    } else if (sort === "year_built_desc") {
-      setFilteredSearchResults((prev) =>
-        [...prev].sort((a, b) => b.YEAR_BUILT - a.YEAR_BUILT)
-      );
-    }
-  }, [sort]);
 
   const setSortParams = (s: Sort) => {
     if (s === "ward_number") {
@@ -191,6 +199,7 @@ export default function useSearchContext(): SearchContextModel {
     setPageParams,
     sort,
     setSort,
+    setSortParams,
     isLoading,
     fetchData,
   };

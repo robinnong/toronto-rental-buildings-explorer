@@ -51,7 +51,7 @@ export default function SearchResultsList({
 
       {Object.keys(appliedFiltersMap).length > 0 && <AppliedFilters />}
 
-      {(searchResults == null || isLoading) && <LoadingSkeleton />}
+      {isLoading && <LoadingSkeleton />}
       {searchResults != null && !isLoading && (
         <ul className="flex flex-col gap-2 w-full h-full">
           {pageResults.map((building) => (

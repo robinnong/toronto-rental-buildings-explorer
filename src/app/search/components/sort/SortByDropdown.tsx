@@ -10,7 +10,14 @@ type Props = {
 };
 
 export default function SortByDropdown({ onClose }: Props): ReactElement {
-  const { sort, setSort, setPage } = useContext(SearchContext);
+  const {
+    sort,
+    setSort,
+    setPage,
+    setSortParams,
+    appliedFiltersMap,
+    fetchData,
+  } = useContext(SearchContext);
   const ref = useOnClickOutside(onClose);
 
   return (
@@ -27,6 +34,8 @@ export default function SortByDropdown({ onClose }: Props): ReactElement {
           onClick={() => {
             // Reset to first page after applying a sort and close the dropdown
             setSort(key);
+            setSortParams(sort);
+            fetchData(appliedFiltersMap, key);
             setPage(1);
             onClose();
           }}

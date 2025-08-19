@@ -1,4 +1,4 @@
-import { FilterOption, FilterType, SortType } from "../types/global";
+import { FilterOption, FilterType, Sort } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
@@ -14,13 +14,13 @@ export const firestoreDbPaths: [string, ...string[]] = [
 ];
 export const firestoreQueryLimit = 100;
 
-export const sortLabels: Record<SortType, string> = {
+export const sortLabels: Record<Sort, string> = {
   ward_number: "Ward number",
   year_built_asc: "Year built (ascending)",
   year_built_desc: "Year built (descending)",
 };
 
-export const sortOptions: { key: SortType; label: string }[] = [
+export const sortOptions: { key: Sort; label: string }[] = [
   { key: "ward_number", label: sortLabels.ward_number },
   { key: "year_built_asc", label: sortLabels.year_built_asc },
   { key: "year_built_desc", label: sortLabels.year_built_desc },
