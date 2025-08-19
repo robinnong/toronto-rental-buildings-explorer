@@ -60,7 +60,7 @@ export enum FilterIcons {
   NON_SMOKING_BUILDING = "fa-ban-smoking",
   PARKING_TYPE = "fa-car",
   PETS_ALLOWED = "fa-paw",
-  VISITOR_PARKING = "fa-car",
+  VISITOR_PARKING = "fa-dollar",
   YEAR_BUILT = "fa-hammer",
 }
 

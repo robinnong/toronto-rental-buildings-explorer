@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactElement, ReactNode, useMemo, useState } from "react";
-import { FilterLabels } from "@/app/constants/general";
+import { FilterIcons, FilterLabels } from "@/app/constants/general";
 import { FetchDataResponse } from "@/app/types/global";
 import camelCaseToTitleCase from "@/app/lib/camelCaseToTitleCase";
 import evaluateStringToBoolean from "@/app/lib/evaluateStringToBoolean";
@@ -166,15 +166,17 @@ export default function SearchResultCard({
           <div className="flex flex-col gap-1 w-1/3 max-sm:w-full">
             <h4 className="font-bold mb-1">Building Features</h4>
             <p className={formatLabelStyle(AIR_CONDITIONING_TYPE)}>
-              <i className="fa-solid fa-snowflake mr-1" />
+              <i className={`fas ${FilterIcons.AIR_CONDITIONING_TYPE} mr-1`} />
               {FilterLabels.AIR_CONDITIONING_TYPE}
             </p>
             <p className={formatLabelStyle(BALCONIES)}>
-              <i className="fa-solid fa-door-open mr-1" />
+              <i className={`fas ${FilterIcons.BALCONIES} mr-1`} />
               {FilterLabels.BALCONIES}
             </p>
             <p className={formatLabelStyle(BARRIER_FREE_ACCESSIBILTY_ENTR)}>
-              <i className="fa-solid fa-wheelchair mr-1" />
+              <i
+                className={`fas ${FilterIcons.BARRIER_FREE_ACCESSIBILTY_ENTR} mr-1`}
+              />
               {FilterLabels.BARRIER_FREE_ACCESSIBILTY_ENTR}
             </p>
             <p
@@ -182,19 +184,19 @@ export default function SearchResultCard({
                 NO_OF_ELEVATORS > 0 ? "" : "line-through text-gray-400"
               }
             >
-              <i className="fa-solid fa-NO_OF_ELEVATORS mr-1" />
+              <i className={`fas ${FilterIcons.NO_OF_ELEVATORS} mr-1`} />
               {FilterLabels.NO_OF_ELEVATORS}
             </p>
             <p className={formatLabelStyle(HEATING_TYPE)}>
-              <i className="fa-solid fa-temperature-arrow-up mr-1" />
+              <i className="fas fa-temperature-arrow-up mr-1" />
               Heating type:&nbsp;{formatStringLabel(HEATING_TYPE)}
             </p>
             <p className={formatLabelStyle(NON_SMOKING_BUILDING)}>
-              <i className="fa-solid fa-smoking-ban mr-1" />
+              <i className={`fas ${FilterIcons.NON_SMOKING_BUILDING} mr-1`} />
               {FilterLabels.NON_SMOKING_BUILDING}
             </p>
             <p className={formatLabelStyle(PETS_ALLOWED)}>
-              <i className="fa-solid fa-paw mr-1" />
+              <i className={`fas ${FilterIcons.PETS_ALLOWED} mr-1`} />
               {FilterLabels.PETS_ALLOWED}
             </p>
           </div>
@@ -203,11 +205,11 @@ export default function SearchResultCard({
             <p
               className={formatLabelStyle(DESCRIPTION_OF_INDOOR_EXERCISE_ROOM)}
             >
-              <i className="fa-solid fa-dumbbell mr-1" />
+              <i className={`fas ${FilterIcons.PARKING_TYPE} mr-1`} />
               {FilterLabels.DESCRIPTION_OF_INDOOR_EXERCISE_ROOM}
             </p>
             <p className={formatLabelStyle(LAUNDRY_ROOM)}>
-              <i className="fa-solid fa-shirt mr-1" />
+              <i className={`fas ${FilterIcons.LAUNDRY_ROOM} mr-1`} />
               {FilterLabels.LAUNDRY_ROOM}
             </p>
             <p
@@ -215,19 +217,19 @@ export default function SearchResultCard({
                 DESCRIPTION_OF_OUTDOOR_REC_FACILITIES
               )}
             >
-              <i className="fa-solid fa-tree mr-1" />
+              <i className="fas fa-tree mr-1" />
               Outdoor amenities
             </p>
           </div>
           <div className="flex flex-col gap-1 w-1/3 max-sm:w-full">
             <h4 className="font-bold mb-1">Parking & Storage</h4>
             <p className={formatLabelStyle(BIKE_PARKING)}>
-              <i className="fa-solid fa-bicycle mr-1" />
+              <i className={`fas ${FilterIcons.BIKE_PARKING} mr-1`} />
               {FilterLabels.BIKE_PARKING}:&nbsp;
               {formatStringLabel(BIKE_PARKING)}
             </p>
             <p className={formatLabelStyle(LOCKER_OR_STORAGE_ROOM)}>
-              <i className="fa-solid fa-key mr-1" />
+              <i className={`fas ${FilterIcons.LOCKER_OR_STORAGE_ROOM} mr-1`} />
               {FilterLabels.LOCKER_OR_STORAGE_ROOM}
             </p>
             <p
@@ -235,13 +237,13 @@ export default function SearchResultCard({
                 PARKING_TYPE?.length > 0 ? "" : "line-through text-gray-400"
               }
             >
-              <i className="fa-solid fa-PARKING_TYPE mr-1" />
+              <i className={`fas ${FilterIcons.PARKING_TYPE} mr-1`} />
               {FilterLabels.PARKING_TYPE}
               :&nbsp;
               {PARKING_TYPE?.length > 0 ? PARKING_TYPE.join(", ") : emptyLabel}
             </p>
             <p className={formatLabelStyle(VISITOR_PARKING)}>
-              <i className="fa-solid fa-dollar" />
+              <i className={`fas ${FilterIcons.VISITOR_PARKING} mr-1`} />
               {FilterLabels.VISITOR_PARKING}:&nbsp;
               {formatStringLabel(VISITOR_PARKING)}
             </p>
