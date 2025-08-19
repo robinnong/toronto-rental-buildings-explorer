@@ -33,7 +33,6 @@ type Props = {
  * @param {number} rangeEndValue - Range end (controlled value)
  * @param {Dispatch<SetStateAction<number>>} setRangeEndValue - Function to set the range end value
  * @param {boolean} disabled - Disabled state
- * @returns The dual range slider component
  */
 export default function DualRangeSlider({
   title,

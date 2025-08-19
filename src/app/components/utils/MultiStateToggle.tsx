@@ -10,6 +10,15 @@ type Props = {
   onClick: (key: FilterType) => void;
 };
 
+/**
+ * A reusable multi-state toggle component.
+ * Only one state can be active at a time.
+ *
+ * Props for MultiStateToggle
+ * @param states {FilterOption[]} - List of possible toggle states.
+ * @param checkIsActive {(key: FilterType) => boolean} - Function to check if a state is active.
+ * @param onClick {(key: FilterType) => void} - Function to call when a state is clicked.
+ */
 export default function MultiStateToggle({
   states,
   checkIsActive,

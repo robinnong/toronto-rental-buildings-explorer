@@ -10,7 +10,13 @@ type Props = {
 };
 
 /**
- * Wrapper for filters in the FiltersModal component
+ * A reusable pill wrapper for filter options in the FiltersModal component
+ *
+ * Props for FilterPill
+ * @param {string} label - Pill label
+ * @param {boolean} isActive - Pill active state
+ * @param {string} iconClass - Pill icon
+ * @param {function} onClick - Function to call when clicked
  */
 export default function FilterPill({
   label,

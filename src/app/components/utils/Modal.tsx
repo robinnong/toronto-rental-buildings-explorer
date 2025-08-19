@@ -6,12 +6,12 @@ import useOnClickOutside from "@/app/hooks/useOnClickOutside";
 type Props = { onClickOutside: () => void; children: ReactNode };
 
 /**
- * A reusable modal component with a transparent background overlay
+ * A reusable modal wrapper component with a transparent background overlay
  * and functionality to close the modal when clicking outside of it.
  *
+ * Props for Modal
  * @param {function} onClickOutside - Function to call when clicking outside the modal
  * @param {ReactNode} children - The content to display inside the modal
- * @returns The modal component
  */
 export default function Modal({
   onClickOutside,
