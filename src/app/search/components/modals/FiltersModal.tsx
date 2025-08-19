@@ -65,17 +65,17 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         {/* Modal body - filters */}
         <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
           <BuildingAgeRangeFilters
-            currentSelectedFilters={currentSelectedFilters}
-            setCurrentSelectedFilters={setCurrentSelectedFilters}
+            appliedFilters={currentSelectedFilters}
+            setAppliedFilters={setCurrentSelectedFilters}
             setIsValid={setIsValid}
           />
           <BuildingStoreysFilters
-            currentSelectedFilters={currentSelectedFilters}
-            setCurrentSelectedFilters={setCurrentSelectedFilters}
+            appliedFilters={currentSelectedFilters}
+            setAppliedFilters={setCurrentSelectedFilters}
           />
           <BuildingFeatureFilters
-            currentSelectedFilters={currentSelectedFilters}
-            setCurrentSelectedFilters={setCurrentSelectedFilters}
+            appliedFilters={currentSelectedFilters}
+            setAppliedFilters={setCurrentSelectedFilters}
           />
         </div>
 

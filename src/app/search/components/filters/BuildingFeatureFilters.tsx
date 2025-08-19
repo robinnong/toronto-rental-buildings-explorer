@@ -6,8 +6,8 @@ import FilterPill from "@/app/components/utils/FilterPill";
 import { AppliedFilterMap } from "@/app/types/global";
 
 type Props = {
-  currentSelectedFilters: AppliedFilterMap;
-  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  appliedFilters: AppliedFilterMap;
+  setAppliedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
@@ -15,8 +15,8 @@ type Props = {
  * Provides filters such as "Pets allowed", "Non-smoking building", etc.
  */
 export default function BuildingFeatureFilters({
-  currentSelectedFilters,
-  setCurrentSelectedFilters,
+  appliedFilters,
+  setAppliedFilters,
 }: Props): ReactElement {
   return (
     <div>
@@ -28,8 +28,8 @@ export default function BuildingFeatureFilters({
             id={key}
             label={label}
             iconClass={iconClass}
-            appliedFiltersMap={currentSelectedFilters}
-            setAppliedFiltersMap={setCurrentSelectedFilters}
+            appliedFiltersMap={appliedFilters}
+            setAppliedFiltersMap={setAppliedFilters}
           />
         ))}
       </div>

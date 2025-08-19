@@ -41,7 +41,6 @@ export enum FilterLabels {
   NON_SMOKING_BUILDING = "Non-smoking building",
   PARKING_TYPE = "Parking",
   PETS_ALLOWED = "Pets allowed",
-  VISITOR_PARKING = "Visitor parking",
   YEAR_BUILT = "Year built",
 }
 
@@ -60,7 +59,6 @@ export enum FilterIcons {
   NON_SMOKING_BUILDING = "fa-ban-smoking",
   PARKING_TYPE = "fa-car",
   PETS_ALLOWED = "fa-paw",
-  VISITOR_PARKING = "fa-dollar",
   YEAR_BUILT = "fa-hammer",
 }
 
@@ -76,7 +74,6 @@ const filterKeys: FilterType[] = [
   "NON_SMOKING_BUILDING",
   "PARKING_TYPE",
   "PETS_ALLOWED",
-  "VISITOR_PARKING",
 ];
 
 export const buildingFeatureFilters: FilterOption[] = filterKeys.map((key) => ({

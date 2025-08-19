@@ -243,8 +243,8 @@ export default function SearchResultCard({
               {PARKING_TYPE?.length > 0 ? PARKING_TYPE.join(", ") : emptyLabel}
             </p>
             <p className={formatLabelStyle(VISITOR_PARKING)}>
-              <i className={`fas ${FilterIcons.VISITOR_PARKING} mr-1`} />
-              {FilterLabels.VISITOR_PARKING}:&nbsp;
+              <i className="fas fa-dollar mr-1" />
+              Visitor parking:&nbsp;
               {formatStringLabel(VISITOR_PARKING)}
             </p>
           </div>

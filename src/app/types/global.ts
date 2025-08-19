@@ -15,7 +15,6 @@ export type FilterType =
   | "NON_SMOKING_BUILDING"
   | "PARKING_TYPE"
   | "PETS_ALLOWED"
-  | "VISITOR_PARKING"
   | "YEAR_BUILT";
 
 export type Sort = "ward_number" | "year_built_asc" | "year_built_desc";

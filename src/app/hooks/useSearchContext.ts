@@ -13,9 +13,6 @@ import {
   query,
   QueryFieldFilterConstraint,
   where,
-  or,
-  and,
-  QueryCompositeFilterConstraint,
   QueryOrderByConstraint,
 } from "firebase/firestore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -66,24 +63,7 @@ export default function useSearchContext(): SearchContextModel {
     const clauses: QueryFieldFilterConstraint[] = [];
 
     Object.entries(appliedFiltersMap).forEach(([k, v]) => {
-      if (k !== "LOW_RISE" && k !== "MID_RISE" && k !== "HIGH_RISE") {
-        clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
-      }
-    });
-
-    return clauses;
-  };
-
-  // Generates Firestore search WHERE clauses to be wrapped in or() from the applied filters map
-  const generateOrSearchClauses = (
-    appliedFiltersMap: AppliedFilterMap
-  ): QueryFieldFilterConstraint[] => {
-    const clauses: QueryFieldFilterConstraint[] = [];
-
-    Object.entries(appliedFiltersMap).forEach(([k, v]) => {
-      if (k === "LOW_RISE" || k === "MID_RISE" || k === "HIGH_RISE") {
-        clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
-      }
+      clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
     });
 
     return clauses;
@@ -119,33 +99,14 @@ export default function useSearchContext(): SearchContextModel {
 
     try {
       const whereSearchClauses = generateWhereSearchClauses(filters);
-      const orSearchClauses = generateOrSearchClauses(filters);
       const orderBySearchClauses = generateOrderBySearchClauses(sort);
 
-      const generateQueryCompositeFilterConstraints =
-        (): QueryCompositeFilterConstraint => {
-          return orSearchClauses?.length > 0 && whereSearchClauses?.length > 0
-            ? and(...whereSearchClauses, or(...orSearchClauses))
-            : or(...orSearchClauses);
-        };
-
-      let q;
-
-      if (orSearchClauses?.length > 0) {
-        q = query(
-          collectionRef,
-          generateQueryCompositeFilterConstraints(),
-          ...orderBySearchClauses,
-          limit(firestoreQueryLimit)
-        );
-      } else {
-        q = query(
-          collectionRef,
-          ...whereSearchClauses,
-          ...orderBySearchClauses,
-          limit(firestoreQueryLimit)
-        );
-      }
+      const q = query(
+        collectionRef,
+        ...whereSearchClauses,
+        ...orderBySearchClauses,
+        limit(firestoreQueryLimit)
+      );
 
       const querySnapshot = await getDocs(q);
 

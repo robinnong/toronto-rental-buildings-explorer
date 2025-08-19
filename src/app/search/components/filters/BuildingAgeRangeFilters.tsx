@@ -11,8 +11,8 @@ import {
 } from "react";
 
 type Props = {
-  currentSelectedFilters: AppliedFilterMap;
-  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  appliedFilters: AppliedFilterMap;
+  setAppliedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
   setIsValid: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -20,8 +20,8 @@ type Props = {
  * Renders a dual range slider for filtering buildings by age, ranging between a 1900 and the current year.
  */
 export default function BuildingAgeRangeFilters({
-  currentSelectedFilters,
-  setCurrentSelectedFilters,
+  appliedFilters,
+  setAppliedFilters,
   setIsValid,
 }: Props): ReactElement {
   const startYear = 1900;
@@ -32,12 +32,12 @@ export default function BuildingAgeRangeFilters({
 
   const handleChange = (range: { min: number; max: number }) => {
     if (range.min === startYear && range.max === currentYear) {
-      setCurrentSelectedFilters((prev) => {
+      setAppliedFilters((prev) => {
         const { YEAR_BUILT: removed, ...rest } = prev;
         return rest;
       });
     } else {
-      setCurrentSelectedFilters((prev) => ({
+      setAppliedFilters((prev) => ({
         ...prev,
         YEAR_BUILT:
           range.min !== startYear || range.max !== currentYear
@@ -52,22 +52,18 @@ export default function BuildingAgeRangeFilters({
 
   // Initialize range inputs
   useEffect(() => {
-    if (currentSelectedFilters?.YEAR_BUILT?.length > 0) {
-      setRangeStartValue(
-        currentSelectedFilters?.YEAR_BUILT?.[0]?.value as number
-      );
-      setRangeEndValue(
-        currentSelectedFilters?.YEAR_BUILT?.[1]?.value as number
-      );
+    if (appliedFilters?.YEAR_BUILT?.length > 0) {
+      setRangeStartValue(appliedFilters?.YEAR_BUILT?.[0]?.value as number);
+      setRangeEndValue(appliedFilters?.YEAR_BUILT?.[1]?.value as number);
     }
   }, []);
 
   useEffect(() => {
-    if (currentSelectedFilters?.YEAR_BUILT?.length === 0) {
+    if (appliedFilters?.YEAR_BUILT?.length === 0) {
       setRangeStartValue(startYear);
       setRangeEndValue(currentYear);
     }
-  }, [currentSelectedFilters?.YEAR_BUILT]);
+  }, [appliedFilters?.YEAR_BUILT]);
 
   useEffect(() => {
     handleChange({ min: rangeStartValue, max: rangeEndValue });
