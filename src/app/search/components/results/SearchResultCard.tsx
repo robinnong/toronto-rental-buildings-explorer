@@ -75,7 +75,7 @@ export default function SearchResultCard({
   }, [PCODE]);
 
   return (
-    <li className="p-4 rounded-sm border border-solid border-gray-200 bg-white">
+    <li className="p-4 rounded-sm border border-solid border-gray-200 bg-white hover:bg-gray-50">
       <div className="flex justify-between items-start">
         <div>
           <h3 className="font-semibold text-[16px] mb-1">
