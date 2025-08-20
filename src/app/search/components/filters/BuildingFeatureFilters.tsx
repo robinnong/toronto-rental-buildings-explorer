@@ -3,7 +3,7 @@
 import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
-import { AppliedFilterMap } from "@/app/types/global";
+import { AppliedFilterMap, FilterType } from "@/app/types/global";
 import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
@@ -19,6 +19,24 @@ export default function BuildingFeatureFilters({
   appliedFilters,
   setAppliedFilters,
 }: Props): ReactElement {
+  const setFilter = (key: FilterType) => {
+    if (appliedFilters[key]?.length > 0) {
+      // Remove the filter
+      setAppliedFilters((prev) => {
+        const { [key]: removed, ...rest } = prev;
+        return rest;
+      });
+    } else {
+      // Apply the filter
+      setAppliedFilters((prev) => ({
+        ...prev,
+        [key]: searchQueryBuilder(key),
+      }));
+    }
+  };
+
+  const checkIsActive = (key: FilterType) => appliedFilters[key]?.length > 0;
+
   return (
     <div>
       <h4 className="font-bold">Building features</h4>
@@ -28,22 +46,8 @@ export default function BuildingFeatureFilters({
             key={key}
             label={label}
             iconClass={iconClass}
-            isActive={appliedFilters?.[key]?.length > 0}
-            onClick={() => {
-              if (appliedFilters[key]?.length > 0) {
-                // Remove the filter
-                setAppliedFilters((prev) => {
-                  const { [key]: removed, ...rest } = prev;
-                  return rest;
-                });
-              } else {
-                // Apply the filter
-                setAppliedFilters((prev) => ({
-                  ...prev,
-                  [key]: searchQueryBuilder(key),
-                }));
-              }
-            }}
+            isActive={checkIsActive(key)}
+            onClick={() => setFilter(key)}
           />
         ))}
       </div>
