@@ -2,7 +2,7 @@
 
 import { ReactElement, ReactNode, useContext, useMemo } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { FilterType } from "@/app/types/global";
+import { FilterType, FirestoreWhereClause } from "@/app/types/global";
 import camelCaseToTitleCase from "@/app/lib/camelCaseToTitleCase";
 import { FilterIcons, FilterLabels } from "@/app/constants/general";
 import AppliedFilterPill from "./AppliedFilterPill";
@@ -12,20 +12,24 @@ export default function AppliedFilters(): ReactElement {
     useContext(SearchContext);
 
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
-    const clauses = Object.keys(appliedFiltersMap) as FilterType[];
+    const clauses = Object.entries(appliedFiltersMap) as [
+      FilterType,
+      FirestoreWhereClause[]
+    ][];
 
     if (clauses.length === 0) return [];
 
-    return clauses.map((key) => ({
-      k: key,
-      v:
-        (
+    return clauses
+      .filter((c) => c[1].length > 0)
+      .map((c) => ({
+        k: c[0],
+        v: (
           <>
-            <i className={`fas ${FilterIcons[key]} mr-1`} />
-            {FilterLabels[key]}
+            <i className={`fas ${FilterIcons[c[0]]} mr-1`} />
+            {FilterLabels[c[0]] || camelCaseToTitleCase(c[0])}
           </>
-        ) || camelCaseToTitleCase(key),
-    }));
+        ),
+      }));
   }, [appliedFiltersMap]);
 
   return (

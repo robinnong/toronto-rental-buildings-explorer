@@ -36,9 +36,9 @@ export default function BuildingStoreysFilters({
             } else {
               // Apply the filter as the active state and clear the rest
               const updatedFilters = {
-                LOW_RISE: key === "LOW_RISE" ? searchQueryBuilder(key) : null,
-                MID_RISE: key === "MID_RISE" ? searchQueryBuilder(key) : null,
-                HIGH_RISE: key === "HIGH_RISE" ? searchQueryBuilder(key) : null,
+                LOW_RISE: key === "LOW_RISE" ? searchQueryBuilder(key) : [],
+                MID_RISE: key === "MID_RISE" ? searchQueryBuilder(key) : [],
+                HIGH_RISE: key === "HIGH_RISE" ? searchQueryBuilder(key) : [],
               };
               setAppliedFilters((prev) => ({
                 ...prev,

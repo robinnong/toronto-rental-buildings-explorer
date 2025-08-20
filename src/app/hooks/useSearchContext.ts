@@ -59,15 +59,11 @@ export default function useSearchContext(): SearchContextModel {
   // Generates Firestore search WHERE clauses from the applied filters map
   const generateWhereSearchClauses = (
     appliedFiltersMap: AppliedFilterMap
-  ): QueryFieldFilterConstraint[] => {
-    const clauses: QueryFieldFilterConstraint[] = [];
-
-    Object.entries(appliedFiltersMap).forEach(([k, v]) => {
-      clauses.push(...v.map((c) => where(c.fieldPath, c.opStr, c.value)));
-    });
-
-    return clauses;
-  };
+  ): QueryFieldFilterConstraint[] =>
+    Object.values(appliedFiltersMap).reduce((acc, curr) => {
+      acc.push(...curr.map((c) => where(c.fieldPath, c.opStr, c.value)));
+      return acc;
+    }, [] as QueryFieldFilterConstraint[]);
 
   const generateOrderBySearchClauses = (s: Sort) => {
     let clause: QueryOrderByConstraint;
