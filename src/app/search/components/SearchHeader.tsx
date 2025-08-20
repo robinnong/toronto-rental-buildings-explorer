@@ -58,7 +58,7 @@ export default function SearchHeader({
         </label>
         <div className="relative w-full">
           <input
-            className="w-full min-w-[200px] rounded-full py-2 px-4 border border-solid border-gray-300 focus:border-cyan-700 pr-8"
+            className="w-full rounded-full py-2 px-4 border border-solid border-gray-300 focus:border-cyan-700 pr-8"
             type="text"
             id="search"
             placeholder="Search by address or property management name"

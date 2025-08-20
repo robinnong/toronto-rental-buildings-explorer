@@ -30,27 +30,25 @@ export default function MapModal({
 
   return (
     <Modal onClickOutside={onClose}>
-      <div className="w-sm">
-        {/* Modal header */}
-        <div className="p-3 flex justify-between">
-          <h4 className="text-md font-semibold">Map</h4>
+      {/* Modal header */}
+      <div className="p-3 flex justify-between">
+        <h4 className="text-md font-semibold">Map</h4>
 
-          <button type="button" onClick={onClose}>
-            <span className="sr-only">Close</span>
-            <i className="fa-solid fa-xmark fa-xl text-cyan-600" />
-          </button>
-        </div>
-
-        {/* Embedded Google Map */}
-        <iframe
-          className="w-full h-100"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen
-          title="Google Maps Preview"
-          src={googleMapSrc}
-        />
+        <button type="button" onClick={onClose}>
+          <span className="sr-only">Close</span>
+          <i className="fa-solid fa-xmark fa-xl text-cyan-600" />
+        </button>
       </div>
+
+      {/* Embedded Google Map */}
+      <iframe
+        className="w-full h-100"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        allowFullScreen
+        title="Google Maps Preview"
+        src={googleMapSrc}
+      />
     </Modal>
   );
 }
