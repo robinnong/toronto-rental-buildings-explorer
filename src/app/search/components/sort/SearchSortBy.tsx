@@ -11,7 +11,7 @@ export default function SearchSortBy(): ReactElement {
 
   return (
     <div className="flex gap-2 items-center relative">
-      <div>Sort by:</div>
+      <span className="text-nowrap">Sort by:</span>
       <button
         type="button"
         className="flex cursor-pointer border border-gray-300 hover:border-cyan-600 hover:bg-sky-50 hover:text-cyan-700 py-1 rounded-full px-3 w-50 disabled:border-gray-300 disabled:text-gray-400 disabled:bg-white disabled:cursor-default"

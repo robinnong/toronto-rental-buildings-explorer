@@ -126,7 +126,8 @@ export default function SearchResultCard({
             ) : (
               emptyLabel
             )}
-            &nbsp;·&nbsp;<span className="whitespace-nowrap">Year built</span>
+            &nbsp;·&nbsp;
+            <span className="whitespace-nowrap">Year built</span>
             :&nbsp;
             {YEAR_BUILT ? (
               <>

@@ -36,7 +36,6 @@ export default function SortByDropdown({ onClose }: Props): ReactElement {
             setSort(key);
             setSortParams(sort);
             fetchData(appliedFiltersMap, key);
-            setPage(1);
             onClose();
           }}
         >

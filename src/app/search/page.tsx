@@ -29,7 +29,7 @@ export default function SearchPage(props: {
 
   return (
     <SearchContext.Provider value={searchContext}>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col min-w-xs">
         <header className="flex items-center sticky z-10 top-0 flex bg-white border-b border-gray-100 shadow-sm p-3 max-lg:justify-between">
           <h1 className="lg:w-1/3 text-md font-extrabold text-cyan-800">
             <a href="/" className="flex items-center gap inline-block">

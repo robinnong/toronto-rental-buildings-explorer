@@ -33,7 +33,7 @@ export type SearchContextModel = {
   setSort: Dispatch<SetStateAction<Sort>>;
   setSortParams: (sort: Sort) => void;
   isLoading: boolean;
-  fetchData: (filters: AppliedFilterMap) => Promise<void>;
+  fetchData: (filters: AppliedFilterMap, sort?: Sort) => Promise<void>;
 };
 
 export const SearchContext = createContext<SearchContextModel>(null);
@@ -116,6 +116,8 @@ export default function useSearchContext(): SearchContextModel {
       // TODO - Display error message to the user
       console.error("Error fetching data:", error);
     } finally {
+      setPage(1); // Reset to the first page
+      setPageParams(1);
       setIsLoading(false);
     }
   };

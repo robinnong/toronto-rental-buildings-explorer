@@ -40,9 +40,9 @@ export default function SearchResultsList({
   }, [page, filteredSearchResults]);
 
   return (
-    <div className="flex flex-col gap-2 h-full w-full mb-4">
-      <div className="flex justify-between items-center">
-        <span>
+    <div className="flex flex-col gap-1 h-full w-full mb-4">
+      <div className="flex flex-wrap gap-1 justify-between items-center ">
+        <span className="text-nowrap">
           Found <strong>{filteredSearchResults.length}</strong>&nbsp;result
           {filteredSearchResults?.length === 1 ? "" : "s"}
         </span>
@@ -52,7 +52,7 @@ export default function SearchResultsList({
       {Object.keys(appliedFiltersMap).length > 0 && <AppliedFilters />}
 
       {isLoading && <LoadingSkeleton />}
-      {searchResults != null && !isLoading && (
+      {pageResults?.length > 0 && !isLoading && (
         <ul className="flex flex-col gap-2 w-full h-full">
           {pageResults.map((building) => (
             <SearchResultCard
