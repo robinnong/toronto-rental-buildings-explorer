@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useContext,
-  useMemo,
-} from "react";
-import ReactPaginate from "react-paginate";
+import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
@@ -25,26 +18,20 @@ export default function SearchResultsList({
 }: Props): ReactElement {
   const {
     appliedFiltersMap,
-    searchResults,
+    searchCount,
     filteredSearchResults,
-    page,
-    setPage,
-    setPageParams,
+    currentSort,
+    currentPage,
     isLoading,
+    fetchData,
   } = useContext(SearchContext);
-
-  const pageResults: FetchDataResponse[] = useMemo(() => {
-    const res = [...filteredSearchResults];
-
-    return res.splice((page - 1) * 25, 25);
-  }, [page, filteredSearchResults]);
 
   return (
     <div className="flex flex-col gap-1 h-full w-full mb-4">
       <div className="flex flex-wrap gap-1 justify-between items-center ">
         <span className="text-nowrap">
-          Found <strong>{filteredSearchResults.length}</strong>&nbsp;result
-          {filteredSearchResults?.length === 1 ? "" : "s"}
+          Found <strong>{searchCount}</strong>&nbsp;result
+          {searchCount === 1 ? "" : "s"}
         </span>
         <SearchSortBy />
       </div>
@@ -52,9 +39,9 @@ export default function SearchResultsList({
       {Object.keys(appliedFiltersMap).length > 0 && <AppliedFilters />}
 
       {isLoading && <LoadingSkeleton />}
-      {pageResults?.length > 0 && !isLoading && (
+      {filteredSearchResults.length > 0 && !isLoading && (
         <ul className="flex flex-col gap-2 w-full h-full">
-          {pageResults.map((building) => (
+          {filteredSearchResults.map((building) => (
             <SearchResultCard
               key={building._id}
               building={building}
@@ -64,33 +51,46 @@ export default function SearchResultsList({
         </ul>
       )}
 
-      {!isLoading && filteredSearchResults?.length === 0 && <NoResults />}
+      {!isLoading && searchCount === 0 && <NoResults />}
 
-      <ReactPaginate
-        className={`flex justify-center gap-4 mt-4 ${
-          filteredSearchResults.length === 0 ? "hidden" : ""
-        }`}
-        activeLinkClassName="font-bold bg-cyan-600 px-2 py-1 rounded-sm text-white"
-        pageClassName="cursor-pointer"
-        previousClassName="cursor-pointer"
-        nextClassName="cursor-pointer"
-        disabledClassName="text-gray-400 cursor-not-allowed"
-        forcePage={page - 1}
-        pageCount={Math.round(filteredSearchResults?.length / 25)}
-        onClick={({ isPrevious, isNext }) => {
-          if (isPrevious && page > 1) {
-            setPage(page - 1);
-            setPageParams(page - 1);
-          } else if (isNext && page * 25 < filteredSearchResults.length) {
-            setPage(page + 1);
-            setPageParams(page + 1);
-          }
-        }}
-        onPageChange={({ selected }) => {
-          setPage(selected + 1);
-          setPageParams(selected + 1);
-        }}
-      />
+      {searchCount > 0 && (
+        <div className="flex gap-4 w-full justify-center mt-2">
+          <button
+            type="button"
+            className="disabled:text-gray-400"
+            onClick={() => {
+              if (currentPage > 1) {
+                fetchData({
+                  filters: appliedFiltersMap,
+                  page: currentPage - 1,
+                  sort: currentSort,
+                });
+              }
+            }}
+            disabled={currentPage == 1}
+          >
+            <i className="fas fa-chevron-left mr-1" />
+            Previous
+          </button>
+          <button
+            type="button"
+            className="disabled:text-gray-400"
+            onClick={() => {
+              if (currentPage * 25 < searchCount) {
+                fetchData({
+                  filters: appliedFiltersMap,
+                  page: currentPage + 1,
+                  sort: currentSort,
+                });
+              }
+            }}
+            disabled={currentPage >= Math.round(searchCount / 25)}
+          >
+            Next
+            <i className="fas fa-chevron-right ml-1" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

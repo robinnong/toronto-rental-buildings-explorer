@@ -17,7 +17,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "BALCONIES",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
     case "LOCKER_OR_STORAGE_ROOM":
@@ -25,7 +25,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "LOCKER_OR_STORAGE_ROOM",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
     case "NON_SMOKING_BUILDING":
@@ -33,7 +33,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "NON_SMOKING_BUILDING",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
     case "PETS_ALLOWED":
@@ -41,7 +41,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "PETS_ALLOWED",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
     case "LAUNDRY_ROOM":
@@ -49,7 +49,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "LAUNDRY_ROOM",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
     case "LOW_RISE":
@@ -126,7 +126,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "BIKE_PARKING",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
     case "BARRIER_FREE_ACCESSIBILTY_ENTR":
@@ -134,7 +134,7 @@ export default function searchQueryBuilder(
         {
           fieldPath: "BARRIER_FREE_ACCESSIBILTY_ENTR",
           opStr: "==",
-          value: "YES",
+          value: true,
         },
       ];
 

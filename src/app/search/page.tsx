@@ -9,7 +9,6 @@ import SearchHeader from "./components/SearchHeader";
 export default function SearchPage(props: {
   searchParams?: Promise<{
     sort?: string;
-    page?: string;
   }>;
 }): ReactElement {
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
@@ -18,8 +17,7 @@ export default function SearchPage(props: {
 
   const getSearchParams = async () => {
     const searchParams = await props.searchParams;
-    searchContext.setPage(Number(searchParams?.page) || 1);
-    searchContext.setSort((searchParams?.sort as Sort) || "ward_number");
+    searchContext.setCurrentSort((searchParams?.sort as Sort) || "ward_number");
   };
 
   useEffect(() => {

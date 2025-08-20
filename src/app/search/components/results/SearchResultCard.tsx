@@ -168,11 +168,17 @@ export default function SearchResultCard({
               <i className={`fas ${FilterIcons.AIR_CONDITIONING_TYPE} mr-1`} />
               {FilterLabels.AIR_CONDITIONING_TYPE}
             </p>
-            <p className={formatLabelStyle(BALCONIES)}>
+            <p className={BALCONIES ? "" : "line-through text-gray-400"}>
               <i className={`fas ${FilterIcons.BALCONIES} mr-1`} />
               {FilterLabels.BALCONIES}
             </p>
-            <p className={formatLabelStyle(BARRIER_FREE_ACCESSIBILTY_ENTR)}>
+            <p
+              className={
+                BARRIER_FREE_ACCESSIBILTY_ENTR
+                  ? ""
+                  : "line-through text-gray-400"
+              }
+            >
               <i
                 className={`fas ${FilterIcons.BARRIER_FREE_ACCESSIBILTY_ENTR} mr-1`}
               />
@@ -190,11 +196,15 @@ export default function SearchResultCard({
               <i className="fas fa-temperature-arrow-up mr-1" />
               Heating type:&nbsp;{formatStringLabel(HEATING_TYPE)}
             </p>
-            <p className={formatLabelStyle(NON_SMOKING_BUILDING)}>
+            <p
+              className={
+                NON_SMOKING_BUILDING ? "" : "line-through text-gray-400"
+              }
+            >
               <i className={`fas ${FilterIcons.NON_SMOKING_BUILDING} mr-1`} />
               {FilterLabels.NON_SMOKING_BUILDING}
             </p>
-            <p className={formatLabelStyle(PETS_ALLOWED)}>
+            <p className={PETS_ALLOWED ? "" : "line-through text-gray-400"}>
               <i className={`fas ${FilterIcons.PETS_ALLOWED} mr-1`} />
               {FilterLabels.PETS_ALLOWED}
             </p>
@@ -207,7 +217,7 @@ export default function SearchResultCard({
               <i className={`fas ${FilterIcons.PARKING_TYPE} mr-1`} />
               {FilterLabels.DESCRIPTION_OF_INDOOR_EXERCISE_ROOM}
             </p>
-            <p className={formatLabelStyle(LAUNDRY_ROOM)}>
+            <p className={LAUNDRY_ROOM ? "" : "line-through text-gray-400"}>
               <i className={`fas ${FilterIcons.LAUNDRY_ROOM} mr-1`} />
               {FilterLabels.LAUNDRY_ROOM}
             </p>
@@ -222,12 +232,16 @@ export default function SearchResultCard({
           </div>
           <div className="flex flex-col gap-1 w-1/3 max-sm:w-full">
             <h4 className="font-bold mb-1">Parking & Storage</h4>
-            <p className={formatLabelStyle(BIKE_PARKING)}>
+            <p className={BIKE_PARKING ? "" : "line-through text-gray-400"}>
               <i className={`fas ${FilterIcons.BIKE_PARKING} mr-1`} />
               {FilterLabels.BIKE_PARKING}:&nbsp;
-              {formatStringLabel(BIKE_PARKING)}
+              {FilterLabels.BIKE_PARKING}
             </p>
-            <p className={formatLabelStyle(LOCKER_OR_STORAGE_ROOM)}>
+            <p
+              className={
+                LOCKER_OR_STORAGE_ROOM ? "" : "line-through text-gray-400"
+              }
+            >
               <i className={`fas ${FilterIcons.LOCKER_OR_STORAGE_ROOM} mr-1`} />
               {FilterLabels.LOCKER_OR_STORAGE_ROOM}
             </p>

@@ -3,13 +3,17 @@
 import { ReactElement, ReactNode, useContext, useMemo } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FilterType, FirestoreWhereClause } from "@/app/types/global";
-import camelCaseToTitleCase from "@/app/lib/camelCaseToTitleCase";
 import { FilterIcons, FilterLabels } from "@/app/constants/general";
 import AppliedFilterPill from "./AppliedFilterPill";
 
 export default function AppliedFilters(): ReactElement {
-  const { appliedFiltersMap, setAppliedFiltersMap, fetchData, isLoading } =
-    useContext(SearchContext);
+  const {
+    appliedFiltersMap,
+    setAppliedFiltersMap,
+    fetchData,
+    isLoading,
+    currentSort,
+  } = useContext(SearchContext);
 
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
     const clauses = Object.entries(appliedFiltersMap) as [
@@ -47,7 +51,11 @@ export default function AppliedFilters(): ReactElement {
             const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
             const updatedFiltersMap = rest;
             setAppliedFiltersMap(updatedFiltersMap);
-            fetchData(updatedFiltersMap);
+            fetchData({
+              filters: updatedFiltersMap,
+              page: 1, // Reset to first page
+              sort: currentSort, // Keep existing sort
+            });
           }}
         />
       ))}

@@ -16,7 +16,7 @@ type Props = {
 export default function SearchHeader({
   setShowFiltersModal,
 }: Props): ReactElement {
-  const { isLoading, searchResults, setFilteredSearchResults, setPage } =
+  const { isLoading, searchResults, setFilteredSearchResults } =
     useContext(SearchContext);
 
   const [searchString, setSearchString] = useState("");
@@ -38,8 +38,6 @@ export default function SearchHeader({
     } else {
       setFilteredSearchResults(searchResults);
     }
-
-    setPage(1); // Reset to first page
   }, [searchResults, searchString]);
 
   return (

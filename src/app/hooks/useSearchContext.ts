@@ -6,49 +6,66 @@ import {
   useState,
 } from "react";
 import {
-  collection,
-  getDocs,
+  collectionGroup,
+  getCountFromServer,
   limit,
   orderBy,
+  getDocs,
   query,
   QueryFieldFilterConstraint,
   where,
+  startAfter,
+  startAt,
+  endBefore,
+  limitToLast,
   QueryOrderByConstraint,
+  DocumentData,
+  QueryDocumentSnapshot,
+  QueryEndAtConstraint,
+  QueryStartAtConstraint,
 } from "firebase/firestore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AppliedFilterMap, FetchDataResponse, Sort } from "@/app/types/global";
 import { db } from "../firebase.config";
-import { firestoreDbPaths, firestoreQueryLimit } from "../constants/general";
+import { firestoreQueryLimit, fsDbSubCollection } from "../constants/general";
 
 export type SearchContextModel = {
   appliedFiltersMap: AppliedFilterMap;
   setAppliedFiltersMap: Dispatch<SetStateAction<AppliedFilterMap>>;
+  searchCount: number;
   searchResults: FetchDataResponse[];
   filteredSearchResults: FetchDataResponse[];
   setFilteredSearchResults: Dispatch<SetStateAction<FetchDataResponse[]>>;
-  page: number;
-  setPage: Dispatch<SetStateAction<number>>;
-  setPageParams: (page: number) => void;
-  sort: Sort;
-  setSort: Dispatch<SetStateAction<Sort>>;
+  currentPage: number;
+  currentSort: Sort;
+  setCurrentSort: Dispatch<SetStateAction<Sort>>;
   setSortParams: (sort: Sort) => void;
   isLoading: boolean;
-  fetchData: (filters: AppliedFilterMap, sort?: Sort) => Promise<void>;
+  fetchData: (q: {
+    filters?: AppliedFilterMap;
+    page?: number;
+    sort?: Sort;
+  }) => Promise<void>;
 };
 
 export const SearchContext = createContext<SearchContextModel>(null);
 
 export default function useSearchContext(): SearchContextModel {
-  const collectionRef = collection(db, ...firestoreDbPaths);
+  const collectionGroupRef = collectionGroup(db, fsDbSubCollection);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const params = new URLSearchParams(searchParams);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState<number>(1);
-  const [sort, setSort] = useState<Sort>("ward_number");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentSort, setCurrentSort] = useState<Sort>("ward_number");
+  const [firstVisibleDoc, setFirstVisibleDoc] =
+    useState<QueryDocumentSnapshot<DocumentData, DocumentData>>(null);
+  const [lastVisibleDoc, setLastVisibleDoc] =
+    useState<QueryDocumentSnapshot<DocumentData, DocumentData>>(null);
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
+  const [searchCount, setSearchCount] = useState<number>(0);
   const [filteredSearchResults, setFilteredSearchResults] = useState<
     FetchDataResponse[]
   >([]);
@@ -60,10 +77,12 @@ export default function useSearchContext(): SearchContextModel {
   const generateWhereSearchClauses = (
     appliedFiltersMap: AppliedFilterMap
   ): QueryFieldFilterConstraint[] =>
-    Object.values(appliedFiltersMap).reduce((acc, curr) => {
-      acc.push(...curr.map((c) => where(c.fieldPath, c.opStr, c.value)));
-      return acc;
-    }, [] as QueryFieldFilterConstraint[]);
+    appliedFiltersMap
+      ? Object.values(appliedFiltersMap).reduce((acc, curr) => {
+          acc.push(...curr.map((c) => where(c.fieldPath, c.opStr, c.value)));
+          return acc;
+        }, [] as QueryFieldFilterConstraint[])
+      : [];
 
   const generateOrderBySearchClauses = (s: Sort) => {
     let clause: QueryOrderByConstraint;
@@ -86,27 +105,69 @@ export default function useSearchContext(): SearchContextModel {
     return [clause, orderBy("_id")];
   };
 
-  // Queries the Firestore database for apartments based on the applied filters
-  const fetchData = async (
-    filters: AppliedFilterMap,
-    sort: Sort = "ward_number"
+  const generatePageSearchClause = (
+    p: number
+  ): QueryStartAtConstraint | QueryEndAtConstraint => {
+    let clause: QueryStartAtConstraint | QueryEndAtConstraint;
+
+    if (p === 1 && !firstVisibleDoc) {
+      clause = startAt(null);
+    } else if (p > currentPage) {
+      clause = startAfter(lastVisibleDoc);
+    } else if (p < currentPage) {
+      clause = endBefore(firstVisibleDoc);
+    } else if (p == currentPage) {
+      clause = startAt(firstVisibleDoc);
+    }
+    return clause;
+  };
+
+  const generateLimitSearchClause = (
+    pageSearchClause: QueryStartAtConstraint | QueryEndAtConstraint
   ) => {
+    if (pageSearchClause.type === "endBefore") {
+      return limitToLast(firestoreQueryLimit);
+    }
+    return limit(firestoreQueryLimit);
+  };
+
+  // Queries the Firestore database for apartments based on the applied filters
+  const fetchData = async (q: {
+    filters?: AppliedFilterMap;
+    page?: number;
+    sort?: Sort;
+  }) => {
     setIsLoading(true);
 
     try {
-      const whereSearchClauses = generateWhereSearchClauses(filters);
-      const orderBySearchClauses = generateOrderBySearchClauses(sort);
+      const whereSearchClauses = generateWhereSearchClauses(q.filters);
+      const orderBySearchClauses = generateOrderBySearchClauses(q.sort);
+      const pageSearchClause = generatePageSearchClause(q.page ?? 1);
+      const limitSearchClause = generateLimitSearchClause(pageSearchClause);
 
-      const q = query(
-        collectionRef,
+      const searchQ = query(
+        collectionGroupRef,
         ...whereSearchClauses,
         ...orderBySearchClauses,
-        limit(firestoreQueryLimit)
+        pageSearchClause,
+        limitSearchClause
+      );
+      const countQ = query(
+        collectionGroupRef,
+        ...whereSearchClauses,
+        orderBy("_id")
       );
 
-      const querySnapshot = await getDocs(q);
-
-      const data = querySnapshot.docs.map(async (doc) => {
+      const getCountQuerySnapshot = await getCountFromServer(countQ);
+      const getDocsQuerySnapshot = await getDocs(searchQ);
+      setSearchCount(getCountQuerySnapshot.data().count);
+      const data = getDocsQuerySnapshot.docs.map(async (doc, i) => {
+        if (i === 0) {
+          setFirstVisibleDoc(doc);
+        }
+        if (i === getDocsQuerySnapshot.docs.length - 1) {
+          setLastVisibleDoc(doc);
+        }
         // doc.data() is never undefined for query doc snapshots
         return doc.data();
       });
@@ -116,8 +177,7 @@ export default function useSearchContext(): SearchContextModel {
       // TODO - Display error message to the user
       console.error("Error fetching data:", error);
     } finally {
-      setPage(1); // Reset to the first page
-      setPageParams(1);
+      setCurrentPage(q.page ?? 1);
       setIsLoading(false);
     }
   };
@@ -137,11 +197,6 @@ export default function useSearchContext(): SearchContextModel {
     replace(`${pathname}?${params.toString()}`);
   };
 
-  const setPageParams = (p: number) => {
-    params.set("page", `${p}`);
-    replace(`${pathname}?${params.toString()}`);
-  };
-
   // Initial data fetch on load
   useEffect(() => {
     fetchData({});
@@ -150,14 +205,13 @@ export default function useSearchContext(): SearchContextModel {
   return {
     appliedFiltersMap,
     setAppliedFiltersMap,
+    searchCount,
     searchResults,
     filteredSearchResults,
     setFilteredSearchResults,
-    page,
-    setPage,
-    setPageParams,
-    sort,
-    setSort,
+    currentPage,
+    currentSort,
+    setCurrentSort,
     setSortParams,
     isLoading,
     fetchData,

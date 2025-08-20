@@ -24,8 +24,13 @@ type Props = {
  * @param {Function} onClose Callback function to close the modal.
  */
 export default function FiltersModal({ onClose }: Props): ReactElement {
-  const { isLoading, appliedFiltersMap, setAppliedFiltersMap, fetchData } =
-    useContext(SearchContext);
+  const {
+    isLoading,
+    appliedFiltersMap,
+    setAppliedFiltersMap,
+    fetchData,
+    currentSort,
+  } = useContext(SearchContext);
 
   const [currentSelectedFilters, setCurrentSelectedFilters] =
     useState<AppliedFilterMap>({} as AppliedFilterMap);
@@ -37,7 +42,11 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
 
   const handleSubmit = useCallback(() => {
     setAppliedFiltersMap(currentSelectedFilters);
-    fetchData(currentSelectedFilters);
+    fetchData({
+      filters: currentSelectedFilters,
+      page: 1, // Reset to first page
+      sort: currentSort, // Keep existing sort
+    });
     onClose();
   }, [currentSelectedFilters]);
 
