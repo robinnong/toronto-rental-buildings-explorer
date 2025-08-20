@@ -36,7 +36,7 @@ export default function MapModal({
 
         <button type="button" onClick={onClose}>
           <span className="sr-only">Close</span>
-          <i className="fa-solid fa-xmark fa-xl text-cyan-600" />
+          <i className="fas fa-xmark fa-xl text-cyan-600" />
         </button>
       </div>
 

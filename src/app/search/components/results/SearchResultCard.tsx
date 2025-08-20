@@ -88,7 +88,7 @@ export default function SearchResultCard({
           className="text-cyan-700"
           onClick={onShowMapModal}
         >
-          <i className="fa-solid fa-map mr-1" />
+          <i className="fas fa-map mr-1" />
           Show on map
         </button>
       </div>
@@ -154,9 +154,7 @@ export default function SearchResultCard({
             onClick={() => setIsOpen(!isOpen)}
           >
             <span>See more</span>
-            <i
-              className={`ml-1 fa-solid fa-chevron-${isOpen ? "up" : "down"}`}
-            />
+            <i className={`ml-1 fas fa-chevron-${isOpen ? "up" : "down"}`} />
           </button>
         </div>
       </div>

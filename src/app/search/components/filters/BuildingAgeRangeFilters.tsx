@@ -65,9 +65,10 @@ export default function BuildingAgeRangeFilters({
     }
   }, [appliedFilters?.YEAR_BUILT]);
 
-  useEffect(() => {
-    handleChange({ min: rangeStartValue, max: rangeEndValue });
-  }, [rangeStartValue, rangeEndValue]);
+  useEffect(
+    () => handleChange({ min: rangeStartValue, max: rangeEndValue }),
+    [rangeStartValue, rangeEndValue]
+  );
 
   return (
     <DualRangeSlider

@@ -34,7 +34,7 @@ export default function FilterPill({
       }`}
       onClick={onClick}
     >
-      <i className={`fa-solid ${iconClass} mr-1`} />
+      <i className={`fas ${iconClass} mr-1`} />
       {label}
     </button>
   );

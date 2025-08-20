@@ -87,9 +87,10 @@ export default function DualRangeSlider({
     [rangeStartValue, rangeEndValue]
   );
 
-  useEffect(() => {
-    setIsValid(isMinValid && isMaxValid);
-  }, [isMinValid, isMaxValid]);
+  useEffect(
+    () => setIsValid(isMinValid && isMaxValid),
+    [isMinValid, isMaxValid]
+  );
 
   return (
     <div className="flex flex-col gap-4">

@@ -73,7 +73,7 @@ export default function SearchHeader({
               onClick={() => setSearchString("")}
               disabled={isLoading}
             >
-              <i className="fa-solid fa-xmark text-gray-500" />
+              <i className="fas fa-xmark text-gray-500" />
             </button>
           )}
         </div>
@@ -82,7 +82,7 @@ export default function SearchHeader({
           className="bg-cyan-600 text-white p-2 rounded-full"
           disabled={isLoading}
         >
-          <i className="fa-solid fa-magnifying-glass" />
+          <i className="fas fa-magnifying-glass" />
         </button>
       </form>
 
@@ -92,7 +92,7 @@ export default function SearchHeader({
         onClick={() => setShowFiltersModal((prev) => !prev)}
         disabled={isLoading}
       >
-        <i className="fa-solid fa-sliders mr-1" />
+        <i className="fas fa-sliders mr-1" />
         Filters
       </button>
     </div>

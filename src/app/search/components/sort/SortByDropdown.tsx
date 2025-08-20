@@ -10,14 +10,8 @@ type Props = {
 };
 
 export default function SortByDropdown({ onClose }: Props): ReactElement {
-  const {
-    sort,
-    setSort,
-    setPage,
-    setSortParams,
-    appliedFiltersMap,
-    fetchData,
-  } = useContext(SearchContext);
+  const { sort, setSort, setSortParams, appliedFiltersMap, fetchData } =
+    useContext(SearchContext);
   const ref = useOnClickOutside(onClose);
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactElement, useCallback, useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import useSearchContext, { SearchContext } from "../hooks/useSearchContext";
 import { Sort } from "../types/global";
 import SearchBody from "./components/SearchBody";
@@ -16,12 +16,11 @@ export default function SearchPage(props: {
 
   const searchContext = useSearchContext();
 
-  const getSearchParams = useCallback(async () => {
+  const getSearchParams = async () => {
     const searchParams = await props.searchParams;
-
     searchContext.setPage(Number(searchParams?.page) || 1);
     searchContext.setSort((searchParams?.sort as Sort) || "ward_number");
-  }, []);
+  };
 
   useEffect(() => {
     getSearchParams();
@@ -33,7 +32,7 @@ export default function SearchPage(props: {
         <header className="flex items-center sticky z-10 top-0 flex bg-white border-b border-gray-100 shadow-sm p-3 max-lg:justify-between">
           <h1 className="lg:w-1/3 text-md font-extrabold text-cyan-800">
             <a href="/" className="flex items-center gap inline-block">
-              <i className="fa-solid fa-building mr-1" />
+              <i className="fas fa-building mr-1" />
               <span className="max-sm:hidden">
                 Toronto Rental Building Explorer
               </span>

@@ -26,7 +26,10 @@ export default function AppliedFilters(): ReactElement {
         v: (
           <>
             <i className={`fas ${FilterIcons[c[0]]} mr-1`} />
-            {FilterLabels[c[0]] || camelCaseToTitleCase(c[0])}
+            {FilterLabels[c[0]]}
+            {/* Display the range for YEAR_BUILT filter */}
+            {c[0] === "YEAR_BUILT" &&
+              ` (${c[1].map((clause) => clause.value).join(" to ")})`}
           </>
         ),
       }));
