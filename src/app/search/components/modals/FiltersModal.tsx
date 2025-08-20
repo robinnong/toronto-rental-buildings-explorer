@@ -40,6 +40,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     setCurrentSelectedFilters(appliedFiltersMap);
   }, [appliedFiltersMap]);
 
+  // TODO: Inject filters into the url query params
   const handleSubmit = useCallback(() => {
     setAppliedFiltersMap(currentSelectedFilters);
     fetchData({

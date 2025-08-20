@@ -24,7 +24,7 @@ export default function SortByDropdown({ onClose }: Props): ReactElement {
   // Query with new sort option and close the dropdown after applying a sort
   const onSelect = (key: Sort) => {
     setCurrentSort(key);
-    setSortParams(currentSort);
+    setSortParams(key);
     fetchData({ filters: appliedFiltersMap, page: currentPage, sort: key });
     onClose();
   };

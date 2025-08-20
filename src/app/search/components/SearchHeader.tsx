@@ -21,6 +21,7 @@ export default function SearchHeader({
 
   const [searchString, setSearchString] = useState("");
 
+  // TODO: Use Firestore query and move search to backend
   const handleSubmit = useCallback(() => {
     if (searchString.length > 0) {
       // Filter results by address or property management name based on the search query
