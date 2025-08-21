@@ -58,10 +58,6 @@ newRecords.records.forEach((obj) => {
       obj[key] = parseInt(obj[key], 10);
     }
 
-    if (key === "PARKING_TYPE") {
-      obj[key] = [obj[key]];
-    }
-
     // Remove unwanted properties
     if (!propsToKeep.includes(key)) {
       delete obj[key];

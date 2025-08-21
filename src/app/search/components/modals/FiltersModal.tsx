@@ -26,8 +26,8 @@ type Props = {
 export default function FiltersModal({ onClose }: Props): ReactElement {
   const {
     isLoading,
-    appliedFiltersMap,
-    setAppliedFiltersMap,
+    currentAppliedFilters,
+    setCurrentAppliedFilters,
     fetchFirestoreData,
     currentSearchString,
     currentSort,
@@ -39,12 +39,12 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
   const [isValid, setIsValid] = useState<boolean>(true);
 
   useEffect(() => {
-    setCurrentSelectedFilters(appliedFiltersMap);
-  }, [appliedFiltersMap]);
+    setCurrentSelectedFilters(currentAppliedFilters);
+  }, [currentAppliedFilters]);
 
   // TODO: Inject filters into the url query params
   const handleSubmit = useCallback(() => {
-    setAppliedFiltersMap(currentSelectedFilters);
+    setCurrentAppliedFilters(currentSelectedFilters);
 
     if (currentSearchString?.length === 0) {
       fetchFirestoreData({
@@ -53,6 +53,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
       });
     } else if (currentSearchString?.length > 0) {
       fetchTextAndFilterData({
+        query: currentSearchString,
         filters: currentSelectedFilters,
         sort: currentSort,
       });

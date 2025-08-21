@@ -15,7 +15,7 @@ export default function SortByDropdown({ onClose }: Props): ReactElement {
     currentSearchString,
     currentSort,
     setCurrentSort,
-    appliedFiltersMap,
+    currentAppliedFilters,
     fetchAlgoliaData,
     fetchFirestoreData,
     fetchTextAndFilterData,
@@ -29,18 +29,22 @@ export default function SortByDropdown({ onClose }: Props): ReactElement {
     // Changing sort with search string and filters applied
     if (
       currentSearchString?.length > 0 &&
-      Object.keys(appliedFiltersMap).length > 0
+      Object.keys(currentAppliedFilters).length > 0
     ) {
-      fetchTextAndFilterData({ filters: appliedFiltersMap, sort: key });
+      fetchTextAndFilterData({
+        query: currentSearchString,
+        filters: currentAppliedFilters,
+        sort: key,
+      });
     }
     // Changing sort with no search string and no filters applied
     // OR
     // Changing sort with search string and no filters applied
-    else if (Object.keys(appliedFiltersMap).length === 0) {
+    else if (Object.keys(currentAppliedFilters).length === 0) {
       fetchAlgoliaData({ query: currentSearchString, sort: key });
     } else {
       // Changing sort with no search string and with filters applied
-      fetchFirestoreData({ filters: appliedFiltersMap, sort: key });
+      fetchFirestoreData({ filters: currentAppliedFilters, sort: key });
     }
     onClose();
   };

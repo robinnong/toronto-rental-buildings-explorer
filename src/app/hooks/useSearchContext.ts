@@ -3,37 +3,31 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useState,
 } from "react";
 import {
   collectionGroup,
   getCountFromServer,
-  limit,
   orderBy,
   getDocs,
   query,
-  QueryFieldFilterConstraint,
-  where,
-  startAfter,
-  startAt,
-  endBefore,
-  limitToLast,
-  QueryOrderByConstraint,
   DocumentData,
   QueryDocumentSnapshot,
-  QueryEndAtConstraint,
-  QueryStartAtConstraint,
 } from "firebase/firestore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AppliedFilterMap, FetchDataResponse, Sort } from "@/app/types/global";
 import { db } from "../firebase.config";
-import { firestoreQueryLimit, fsDbSubCollection } from "../constants/general";
+import { fsDbSubCollection } from "../constants/general";
+import generateOrderBySearchClauses from "../lib/generateOrderBySearchClauses";
+import generateWhereSearchClauses from "../lib/generateWhereSearchClauses";
+import generateLimitSearchClause from "../lib/generateLimitSearchClause";
+import generatePageSearchClause from "../lib/generatePageSearchClause";
+import generateIdsSearchClauses from "../lib/generateIdsSearchClauses";
 
 export type SearchContextModel = {
-  appliedFiltersMap: AppliedFilterMap;
-  setAppliedFiltersMap: Dispatch<SetStateAction<AppliedFilterMap>>;
+  currentAppliedFilters: AppliedFilterMap;
+  setCurrentAppliedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
   searchCount: number;
   searchResults: FetchDataResponse[];
   currentSearchString: string;
@@ -42,7 +36,6 @@ export type SearchContextModel = {
   currentSort: Sort;
   setCurrentSort: Dispatch<SetStateAction<Sort>>;
   isLoading: boolean;
-  searchByText: () => Promise<void>;
   fetchAlgoliaData: (q: {
     query?: string;
     page?: number;
@@ -55,6 +48,7 @@ export type SearchContextModel = {
     ids?: number[];
   }) => Promise<void>;
   fetchTextAndFilterData: (q: {
+    query?: string;
     filters?: AppliedFilterMap;
     page?: number;
     sort?: Sort;
@@ -71,8 +65,10 @@ export default function useSearchContext(): SearchContextModel {
   const params = new URLSearchParams(searchParams);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [currentSearchString, setCurrentSearchString] = useState("");
+  const [currentAppliedFilters, setCurrentAppliedFilters] =
+    useState<AppliedFilterMap>({} as AppliedFilterMap);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentSearchString, setCurrentSearchString] = useState("");
   const [currentSort, setCurrentSort] = useState<Sort>("ward_number");
   const [firstVisibleDoc, setFirstVisibleDoc] =
     useState<QueryDocumentSnapshot<DocumentData, DocumentData>>(null);
@@ -80,9 +76,6 @@ export default function useSearchContext(): SearchContextModel {
     useState<QueryDocumentSnapshot<DocumentData, DocumentData>>(null);
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
   const [searchCount, setSearchCount] = useState<number>(0);
-  const [appliedFiltersMap, setAppliedFiltersMap] = useState<AppliedFilterMap>(
-    {} as AppliedFilterMap
-  );
 
   const setSortParams = (s: Sort) => {
     if (s === "ward_number") {
@@ -91,76 +84,6 @@ export default function useSearchContext(): SearchContextModel {
       params.set("sort", `${s}`);
     }
     replace(`${pathname}?${params.toString()}`);
-  };
-
-  // Generates Firestore search WHERE clauses from the applied filters map
-  const generateWhereSearchClauses = (
-    appliedFiltersMap: AppliedFilterMap
-  ): QueryFieldFilterConstraint[] =>
-    appliedFiltersMap
-      ? Object.values(appliedFiltersMap).reduce((acc, curr) => {
-          acc.push(...curr.map((c) => where(c.fieldPath, c.opStr, c.value)));
-          return acc;
-        }, [] as QueryFieldFilterConstraint[])
-      : [];
-
-  const generateOrderBySearchClauses = (s: Sort) => {
-    let clause: QueryOrderByConstraint;
-
-    switch (s) {
-      case "ward_number":
-        clause = orderBy("WARD");
-        break;
-      case "year_built_asc":
-        clause = orderBy("YEAR_BUILT", "asc");
-        break;
-      case "year_built_desc":
-        clause = orderBy("YEAR_BUILT", "desc");
-        break;
-      default:
-        clause = orderBy("WARD");
-        break;
-    }
-
-    return [clause, orderBy("_id")];
-  };
-
-  const generatePageSearchClause = (
-    p: number
-  ): QueryStartAtConstraint | QueryEndAtConstraint => {
-    let clause: QueryStartAtConstraint | QueryEndAtConstraint;
-
-    if (p === 1 && !firstVisibleDoc) {
-      clause = startAt(null);
-    } else if (p > currentPage) {
-      clause = startAfter(lastVisibleDoc);
-    } else if (p < currentPage) {
-      clause = endBefore(firstVisibleDoc);
-    } else if (p == currentPage) {
-      clause = startAt(firstVisibleDoc);
-    }
-    return clause;
-  };
-
-  const generateLimitSearchClause = (
-    pageSearchClause: QueryStartAtConstraint | QueryEndAtConstraint
-  ) => {
-    if (pageSearchClause.type === "endBefore") {
-      return limitToLast(firestoreQueryLimit);
-    }
-    return limit(firestoreQueryLimit);
-  };
-
-  const generateIdsSearchClauses = (
-    ids: number[]
-  ): QueryFieldFilterConstraint[] => {
-    const clause: QueryFieldFilterConstraint[] = [];
-
-    if (ids?.length > 0) {
-      clause.push(where("_id", "in", ids));
-    }
-
-    return clause;
   };
 
   // Queries the Firestore database for apartments based on the applied filters
@@ -181,7 +104,12 @@ export default function useSearchContext(): SearchContextModel {
       const whereSearchClauses = generateWhereSearchClauses(filters);
       const idsSearchClauses = generateIdsSearchClauses(ids);
       const orderBySearchClauses = generateOrderBySearchClauses(sort);
-      const pageSearchClause = generatePageSearchClause(page);
+      const pageSearchClause = generatePageSearchClause(
+        page,
+        currentPage,
+        firstVisibleDoc,
+        lastVisibleDoc
+      );
       const limitSearchClause = generateLimitSearchClause(pageSearchClause);
 
       const searchQ =
@@ -256,28 +184,26 @@ export default function useSearchContext(): SearchContextModel {
     try {
       setIsLoading(true);
 
-      const primaryIndex = process.env.ALGOLIA_INDEX_NAME; // Default index
-      let indexName = primaryIndex; // Default index
+      const primaryIdx = process.env.ALGOLIA_INDEX_NAME; // Default index
+      let indexName = primaryIdx; // Default index
 
       if (sort === "ward_number") {
-        indexName = `${primaryIndex}_ward_asc`;
+        indexName = `${primaryIdx}_ward_asc`;
       }
       if (sort === "year_built_asc") {
-        indexName = `${primaryIndex}_year_built_asc`;
+        indexName = `${primaryIdx}_year_built_asc`;
       }
       if (sort === "year_built_desc") {
-        indexName = `${primaryIndex}_year_built_dsc`;
+        indexName = `${primaryIdx}_year_built_dsc`;
       }
 
       // The backend search service will query the fields 'SITE_ADDRESS' and 'PROP_MANAGEMENT_COMPANY_NAME'
       const results = await client.searchSingleIndex({
         indexName,
-        searchParams: query
-          ? {
-              query,
-              page: page - 1, // Algolia uses 0-based pagination
-            }
-          : { page: page - 1 },
+        searchParams: {
+          query,
+          page: page - 1, // Algolia uses 0-based pagination
+        },
       });
 
       setSearchCount(results?.nbHits);
@@ -296,42 +222,34 @@ export default function useSearchContext(): SearchContextModel {
   // Since Algolia only supports text search and Firestore does not,
   // we need to fetch the Algolia data and filtered Firestore data separately
   // when applying both text search and filters at the same time
-  const fetchTextAndFilterData = useCallback(
-    async ({
+  const fetchTextAndFilterData = async ({
+    query = "",
+    filters,
+    page = 1,
+    sort = "ward_number",
+  }: {
+    query?: string;
+    filters?: AppliedFilterMap;
+    page?: number;
+    sort?: Sort;
+  }) => {
+    // First, fetch the Algolia data based on the text search string and the applied sort index
+    const textQueryRes = await fetchAlgoliaData({
+      query,
+      sort,
+      page,
+    });
+
+    // Then, pass in the IDs of the Algolia search results as a filter to Firestore
+    const ids = textQueryRes.map(({ _id }) => _id);
+
+    // Finally fetch and display the Firestore data based on the applied filters
+    fetchFirestoreData({
       filters,
-      page = 1,
-      sort = "ward_number",
-    }: {
-      filters?: AppliedFilterMap;
-      page?: number;
-      sort?: Sort;
-    }) => {
-      // First, fetch the Algolia data based on the text search string and the applied sort index
-      const textQueryRes = await fetchAlgoliaData({
-        query: currentSearchString,
-        sort,
-        page,
-      });
-
-      // Then, pass in the IDs of the Algolia search results as a filter to Firestore
-      const recordIds = textQueryRes.map((r) => r._id);
-      // Finally fetch and display the Firestore data based on the applied filters
-      fetchFirestoreData({
-        filters,
-        sort,
-        ids: recordIds,
-      });
-    },
-    [currentSearchString]
-  );
-
-  const searchByText = useCallback(async () => {
-    if (currentSearchString.length > 0) {
-      fetchAlgoliaData({ query: currentSearchString, sort: currentSort });
-    } else {
-      fetchAlgoliaData({ sort: currentSort });
-    }
-  }, [currentSearchString, currentSort]);
+      sort,
+      ids,
+    });
+  };
 
   // Initial data fetch on load
   useEffect(() => {
@@ -339,8 +257,8 @@ export default function useSearchContext(): SearchContextModel {
   }, []);
 
   return {
-    appliedFiltersMap,
-    setAppliedFiltersMap,
+    currentAppliedFilters,
+    setCurrentAppliedFilters,
     searchCount,
     searchResults,
     currentSearchString,
@@ -349,7 +267,6 @@ export default function useSearchContext(): SearchContextModel {
     currentSort,
     setCurrentSort,
     isLoading,
-    searchByText,
     fetchAlgoliaData,
     fetchFirestoreData,
     fetchTextAndFilterData,

@@ -17,7 +17,7 @@ export default function SearchResultsList({
   setPreviewedBuildingMap,
 }: Props): ReactElement {
   const {
-    appliedFiltersMap,
+    currentAppliedFilters,
     searchCount,
     searchResults,
     currentSearchString,
@@ -29,6 +29,43 @@ export default function SearchResultsList({
     fetchTextAndFilterData,
   } = useContext(SearchContext);
 
+  const handlePageChange = (key: "prev" | "next") => {
+    const newPage = key === "next" ? currentPage + 1 : currentPage - 1;
+
+    if (
+      (key === "prev" && currentPage > 1) ||
+      (key === "next" && currentPage * 25 < searchCount)
+    ) {
+      if (
+        currentSearchString?.length > 0 &&
+        Object.keys(currentAppliedFilters).length > 0
+      ) {
+        // Changing page with search string and filters applied
+        fetchTextAndFilterData({
+          query: currentSearchString,
+          filters: currentAppliedFilters,
+          sort: currentSort,
+          page: newPage,
+        });
+      } else if (Object.keys(currentAppliedFilters).length === 0) {
+        // Changing page with no search string and no filters applied
+        // OR
+        // Changing page with search string and no filters applied
+        fetchAlgoliaData({
+          query: currentSearchString,
+          sort: currentSort,
+          page: newPage,
+        });
+      } else {
+        fetchFirestoreData({
+          filters: currentAppliedFilters,
+          page: newPage,
+          sort: currentSort,
+        });
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col gap-1 h-full w-full mb-4">
       <div className="flex flex-wrap gap-1 justify-between items-center ">
@@ -39,7 +76,7 @@ export default function SearchResultsList({
         <SearchSortBy />
       </div>
 
-      {Object.keys(appliedFiltersMap).length > 0 && <AppliedFilters />}
+      {Object.keys(currentAppliedFilters).length > 0 && <AppliedFilters />}
 
       {isLoading && <LoadingSkeleton />}
       {searchCount > 0 && !isLoading && (
@@ -61,37 +98,7 @@ export default function SearchResultsList({
           <button
             type="button"
             className="disabled:text-gray-400"
-            onClick={() => {
-              if (currentPage > 1) {
-                // Changing page with search string and filters applied
-                if (
-                  currentSearchString?.length > 0 &&
-                  Object.keys(appliedFiltersMap).length > 0
-                ) {
-                  fetchTextAndFilterData({
-                    filters: appliedFiltersMap,
-                    sort: currentSort,
-                    page: currentPage - 1,
-                  });
-                }
-                // Changing page with no search string and no filters applied
-                // OR
-                // Changing page with search string and no filters applied
-                else if (Object.keys(appliedFiltersMap).length === 0) {
-                  fetchAlgoliaData({
-                    query: currentSearchString,
-                    sort: currentSort,
-                    page: currentPage - 1,
-                  });
-                } else {
-                  fetchFirestoreData({
-                    filters: appliedFiltersMap,
-                    page: currentPage - 1,
-                    sort: currentSort,
-                  });
-                }
-              }
-            }}
+            onClick={() => handlePageChange("prev")}
             disabled={currentPage == 1}
           >
             <i className="fas fa-chevron-left mr-1" />
@@ -100,37 +107,7 @@ export default function SearchResultsList({
           <button
             type="button"
             className="disabled:text-gray-400"
-            onClick={() => {
-              if (currentPage * 25 < searchCount) {
-                // Changing page with search string and filters applied
-                if (
-                  currentSearchString?.length > 0 &&
-                  Object.keys(appliedFiltersMap).length > 0
-                ) {
-                  fetchTextAndFilterData({
-                    filters: appliedFiltersMap,
-                    sort: currentSort,
-                    page: currentPage + 1,
-                  });
-                }
-                // Changing page with no search string and no filters applied
-                // OR
-                // Changing page with search string and no filters applied
-                else if (Object.keys(appliedFiltersMap).length === 0) {
-                  fetchAlgoliaData({
-                    query: currentSearchString,
-                    sort: currentSort,
-                    page: currentPage + 1,
-                  });
-                } else {
-                  fetchFirestoreData({
-                    filters: appliedFiltersMap,
-                    page: currentPage + 1,
-                    sort: currentSort,
-                  });
-                }
-              }
-            }}
+            onClick={() => handlePageChange("next")}
             disabled={currentPage >= Math.round(searchCount / 25)}
           >
             Next

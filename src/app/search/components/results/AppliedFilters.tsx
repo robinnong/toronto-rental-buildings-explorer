@@ -8,8 +8,8 @@ import AppliedFilterPill from "./AppliedFilterPill";
 
 export default function AppliedFilters(): ReactElement {
   const {
-    appliedFiltersMap,
-    setAppliedFiltersMap,
+    currentAppliedFilters,
+    setCurrentAppliedFilters,
     fetchTextAndFilterData,
     fetchFirestoreData,
     isLoading,
@@ -18,7 +18,7 @@ export default function AppliedFilters(): ReactElement {
   } = useContext(SearchContext);
 
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
-    const clauses = Object.entries(appliedFiltersMap) as [
+    const clauses = Object.entries(currentAppliedFilters) as [
       FilterType,
       FirestoreWhereClause[]
     ][];
@@ -39,7 +39,27 @@ export default function AppliedFilters(): ReactElement {
           </>
         ),
       }));
-  }, [appliedFiltersMap]);
+  }, [currentAppliedFilters]);
+
+  const handleClick = (k: FilterType) => {
+    // Remove applied filter and re-run the query
+    const { [k as FilterType]: removed, ...rest } = currentAppliedFilters;
+    const updatedFiltersMap = rest;
+    setCurrentAppliedFilters(updatedFiltersMap);
+
+    if (currentSearchString?.length === 0) {
+      fetchFirestoreData({
+        filters: updatedFiltersMap,
+        sort: currentSort, // Keep existing sort
+      });
+    } else if (currentSearchString?.length > 0) {
+      fetchTextAndFilterData({
+        query: currentSearchString,
+        filters: updatedFiltersMap,
+        sort: currentSort,
+      });
+    }
+  };
 
   return (
     <div className="flex flex-wrap gap-1">
@@ -48,24 +68,7 @@ export default function AppliedFilters(): ReactElement {
           key={k}
           label={v}
           disabled={isLoading}
-          onClick={() => {
-            // Remove applied filter and re-run the query
-            const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
-            const updatedFiltersMap = rest;
-            setAppliedFiltersMap(updatedFiltersMap);
-
-            if (currentSearchString?.length === 0) {
-              fetchFirestoreData({
-                filters: updatedFiltersMap,
-                sort: currentSort, // Keep existing sort
-              });
-            } else if (currentSearchString?.length > 0) {
-              fetchTextAndFilterData({
-                filters: updatedFiltersMap,
-                sort: currentSort,
-              });
-            }
-          }}
+          onClick={() => handleClick(k)}
         />
       ))}
     </div>
