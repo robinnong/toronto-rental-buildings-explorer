@@ -4,7 +4,7 @@ import { ReactElement, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 
 export default function NoResults(): ReactElement {
-  const { fetchData } = useContext(SearchContext);
+  const { fetchAlgoliaData } = useContext(SearchContext);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-2 rounded-sm border border-solid border-gray-200 py-10 px-4 h-full">
@@ -14,7 +14,7 @@ export default function NoResults(): ReactElement {
       <button
         type="button"
         className="text-cyan-700 mt-2"
-        onClick={() => fetchData({})}
+        onClick={() => fetchAlgoliaData({})}
       >
         Clear filters
       </button>

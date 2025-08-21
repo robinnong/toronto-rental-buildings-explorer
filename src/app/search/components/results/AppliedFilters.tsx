@@ -10,9 +10,11 @@ export default function AppliedFilters(): ReactElement {
   const {
     appliedFiltersMap,
     setAppliedFiltersMap,
-    fetchData,
+    fetchTextAndFilterData,
+    fetchFirestoreData,
     isLoading,
     currentSort,
+    currentSearchString,
   } = useContext(SearchContext);
 
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
@@ -51,11 +53,18 @@ export default function AppliedFilters(): ReactElement {
             const { [k as FilterType]: removed, ...rest } = appliedFiltersMap;
             const updatedFiltersMap = rest;
             setAppliedFiltersMap(updatedFiltersMap);
-            fetchData({
-              filters: updatedFiltersMap,
-              page: 1, // Reset to first page
-              sort: currentSort, // Keep existing sort
-            });
+
+            if (currentSearchString?.length === 0) {
+              fetchFirestoreData({
+                filters: updatedFiltersMap,
+                sort: currentSort, // Keep existing sort
+              });
+            } else if (currentSearchString?.length > 0) {
+              fetchTextAndFilterData({
+                filters: updatedFiltersMap,
+                sort: currentSort,
+              });
+            }
           }}
         />
       ))}

@@ -17,14 +17,14 @@ type Props = {
 };
 
 /**
- * Renders a dual range slider for filtering buildings by age, ranging between a 1900 and the current year.
+ * Renders a dual range slider for filtering buildings by age, ranging between a 1800 and the current year.
  */
 export default function BuildingAgeRangeFilters({
   appliedFilters,
   setAppliedFilters,
   setIsValid,
 }: Props): ReactElement {
-  const startYear = 1900;
+  const startYear = 1800;
   const currentYear = new Date().getFullYear();
 
   const [rangeStartValue, setRangeStartValue] = useState<number>(startYear);

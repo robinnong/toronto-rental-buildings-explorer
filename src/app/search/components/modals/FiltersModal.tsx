@@ -28,8 +28,10 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     isLoading,
     appliedFiltersMap,
     setAppliedFiltersMap,
-    fetchData,
+    fetchFirestoreData,
+    currentSearchString,
     currentSort,
+    fetchTextAndFilterData,
   } = useContext(SearchContext);
 
   const [currentSelectedFilters, setCurrentSelectedFilters] =
@@ -43,13 +45,21 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
   // TODO: Inject filters into the url query params
   const handleSubmit = useCallback(() => {
     setAppliedFiltersMap(currentSelectedFilters);
-    fetchData({
-      filters: currentSelectedFilters,
-      page: 1, // Reset to first page
-      sort: currentSort, // Keep existing sort
-    });
+
+    if (currentSearchString?.length === 0) {
+      fetchFirestoreData({
+        filters: currentSelectedFilters,
+        sort: currentSort, // Keep existing sort
+      });
+    } else if (currentSearchString?.length > 0) {
+      fetchTextAndFilterData({
+        filters: currentSelectedFilters,
+        sort: currentSort,
+      });
+    }
+
     onClose();
-  }, [currentSelectedFilters]);
+  }, [currentSelectedFilters, currentSearchString, currentSort]);
 
   return (
     <Modal onClickOutside={onClose}>

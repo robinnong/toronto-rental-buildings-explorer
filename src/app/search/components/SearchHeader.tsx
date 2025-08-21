@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 
 type Props = {
@@ -16,30 +9,12 @@ type Props = {
 export default function SearchHeader({
   setShowFiltersModal,
 }: Props): ReactElement {
-  const { isLoading, searchResults, setFilteredSearchResults } =
-    useContext(SearchContext);
-
-  const [searchString, setSearchString] = useState("");
-
-  // TODO: Use Firestore query and move search to backend
-  const handleSubmit = useCallback(() => {
-    if (searchString.length > 0) {
-      // Filter results by address or property management name based on the search query
-      const res = searchResults?.filter(
-        (apt) =>
-          apt.SITE_ADDRESS?.toLowerCase().includes(
-            searchString.toLowerCase()
-          ) ||
-          apt.PROP_MANAGEMENT_COMPANY_NAME?.toLowerCase().includes(
-            searchString.toLowerCase()
-          )
-      );
-
-      setFilteredSearchResults(res);
-    } else {
-      setFilteredSearchResults(searchResults);
-    }
-  }, [searchResults, searchString]);
+  const {
+    isLoading,
+    searchByText,
+    currentSearchString,
+    setCurrentSearchString,
+  } = useContext(SearchContext);
 
   return (
     <div className="flex items-center justify-center gap-2 max-w-lg">
@@ -47,9 +22,8 @@ export default function SearchHeader({
         className="flex items-center gap-2 w-full"
         onSubmit={(e) => {
           e.preventDefault();
-
           if (isLoading) return;
-          handleSubmit();
+          searchByText();
         }}
       >
         <label htmlFor="search" className="sr-only">
@@ -62,14 +36,14 @@ export default function SearchHeader({
             id="search"
             placeholder="Search by address or property management name"
             disabled={isLoading}
-            value={searchString}
-            onChange={(e) => setSearchString(e.target.value)}
+            value={currentSearchString}
+            onChange={(e) => setCurrentSearchString(e.target.value)}
           />
-          {searchString?.length > 0 && (
+          {currentSearchString?.length > 0 && (
             <button
               className="absolute top-0 right-3 bottom-0"
               type="button"
-              onClick={() => setSearchString("")}
+              onClick={() => setCurrentSearchString("")}
               disabled={isLoading}
             >
               <i className="fas fa-xmark text-gray-500" />

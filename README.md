@@ -44,3 +44,4 @@ This project pulls data from the City of Toronto's Open Data Portal - [Apartment
 - Frameworks: React, [Tailwind CSS](https://tailwindcss.com), Next.js
 - Bundler: Turbopack
 - Cloud DB: [Firestore Database](https://firebase.google.com/docs/firestore)
+- Text search service: [Algolia](https://www.algolia.com/doc/api-client/javascript/getting-started/#install)

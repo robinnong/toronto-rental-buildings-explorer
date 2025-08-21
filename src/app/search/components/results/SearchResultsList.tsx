@@ -19,11 +19,14 @@ export default function SearchResultsList({
   const {
     appliedFiltersMap,
     searchCount,
-    filteredSearchResults,
+    searchResults,
+    currentSearchString,
     currentSort,
     currentPage,
     isLoading,
-    fetchData,
+    fetchAlgoliaData,
+    fetchFirestoreData,
+    fetchTextAndFilterData,
   } = useContext(SearchContext);
 
   return (
@@ -39,9 +42,9 @@ export default function SearchResultsList({
       {Object.keys(appliedFiltersMap).length > 0 && <AppliedFilters />}
 
       {isLoading && <LoadingSkeleton />}
-      {filteredSearchResults.length > 0 && !isLoading && (
+      {searchCount > 0 && !isLoading && (
         <ul className="flex flex-col gap-2 w-full h-full">
-          {filteredSearchResults.map((building) => (
+          {searchResults.map((building) => (
             <SearchResultCard
               key={building._id}
               building={building}
@@ -60,11 +63,33 @@ export default function SearchResultsList({
             className="disabled:text-gray-400"
             onClick={() => {
               if (currentPage > 1) {
-                fetchData({
-                  filters: appliedFiltersMap,
-                  page: currentPage - 1,
-                  sort: currentSort,
-                });
+                // Changing page with search string and filters applied
+                if (
+                  currentSearchString?.length > 0 &&
+                  Object.keys(appliedFiltersMap).length > 0
+                ) {
+                  fetchTextAndFilterData({
+                    filters: appliedFiltersMap,
+                    sort: currentSort,
+                    page: currentPage - 1,
+                  });
+                }
+                // Changing page with no search string and no filters applied
+                // OR
+                // Changing page with search string and no filters applied
+                else if (Object.keys(appliedFiltersMap).length === 0) {
+                  fetchAlgoliaData({
+                    query: currentSearchString,
+                    sort: currentSort,
+                    page: currentPage - 1,
+                  });
+                } else {
+                  fetchFirestoreData({
+                    filters: appliedFiltersMap,
+                    page: currentPage - 1,
+                    sort: currentSort,
+                  });
+                }
               }
             }}
             disabled={currentPage == 1}
@@ -77,11 +102,33 @@ export default function SearchResultsList({
             className="disabled:text-gray-400"
             onClick={() => {
               if (currentPage * 25 < searchCount) {
-                fetchData({
-                  filters: appliedFiltersMap,
-                  page: currentPage + 1,
-                  sort: currentSort,
-                });
+                // Changing page with search string and filters applied
+                if (
+                  currentSearchString?.length > 0 &&
+                  Object.keys(appliedFiltersMap).length > 0
+                ) {
+                  fetchTextAndFilterData({
+                    filters: appliedFiltersMap,
+                    sort: currentSort,
+                    page: currentPage + 1,
+                  });
+                }
+                // Changing page with no search string and no filters applied
+                // OR
+                // Changing page with search string and no filters applied
+                else if (Object.keys(appliedFiltersMap).length === 0) {
+                  fetchAlgoliaData({
+                    query: currentSearchString,
+                    sort: currentSort,
+                    page: currentPage + 1,
+                  });
+                } else {
+                  fetchFirestoreData({
+                    filters: appliedFiltersMap,
+                    page: currentPage + 1,
+                    sort: currentSort,
+                  });
+                }
               }
             }}
             disabled={currentPage >= Math.round(searchCount / 25)}
