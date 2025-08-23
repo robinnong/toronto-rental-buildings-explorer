@@ -1,8 +1,8 @@
 # Toronto Rental Buildings Explorer
 
-![Landing page](./public/home-page-screenshot.png)
-![Search page](./public/search-index-screenshot.png.jpg)
-![Search filters](./public/search-filters-screenshot.png.jpg)
+![Landing page](./public/home-page-screenshot.jpg)
+![Search page](./public/search-index-screenshot.png)
+![Search filters](./public/search-filters-screenshot.png)
 
 This project returns an index of the first 1100 of all 3500 registered rental buildings in Toronto, allowing users to sort and filter by building features.
 
