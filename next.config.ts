@@ -3,7 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   env: {
-    ALCHEMY_RPC_URL: process.env.ALCHEMY_RPC_URL,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
