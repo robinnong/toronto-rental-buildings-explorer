@@ -1,8 +1,6 @@
 <!-- TODO: Add screenshots -->
 <!-- TODO: Add design process -->
 
-Live project at: [Link](https://robinnong.github.io/toronto-rental-buildings-explorer/)
-
 ## Data Sources
 
 This project pulls data from the following City of Toronto's Open Data Portal datasets:
