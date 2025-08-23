@@ -10,11 +10,11 @@ import SearchSortBy from "../sort/SearchSortBy";
 import NoResults from "./NoResults";
 
 type Props = {
-  setPreviewedBuildingMap: Dispatch<SetStateAction<FetchDataResponse>>;
+  setShowMapModal: Dispatch<SetStateAction<FetchDataResponse>>;
 };
 
 export default function SearchResultsList({
-  setPreviewedBuildingMap,
+  setShowMapModal,
 }: Props): ReactElement {
   const {
     currentAppliedFilters,
@@ -85,7 +85,7 @@ export default function SearchResultsList({
             <SearchResultCard
               key={building._id}
               building={building}
-              onShowMapModal={() => setPreviewedBuildingMap(building)}
+              onShowMapModal={() => setShowMapModal(building)}
             />
           ))}
         </ul>

@@ -83,6 +83,7 @@ export default function useSearchContext(): SearchContextModel {
     } else if (s != null) {
       params.set("sort", `${s}`);
     }
+
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -154,11 +155,11 @@ export default function useSearchContext(): SearchContextModel {
 
       setSearchResults(res);
       setSearchCount(getCountQuerySnapshot.data().count);
-      setSortParams(sort);
     } catch (error) {
       // TODO - Display error message to the user
       console.error("Error fetching data:", error);
     } finally {
+      setSortParams(sort);
       setCurrentPage(page);
       setIsLoading(false);
     }
@@ -208,13 +209,14 @@ export default function useSearchContext(): SearchContextModel {
 
       setSearchCount(results?.nbHits);
       setSearchResults(results?.hits as FetchDataResponse[]);
-      setCurrentPage(page);
 
       return results?.hits as FetchDataResponse[];
     } catch (error) {
       // TODO: Display error to the user
       console.error("Error searching:", error);
     } finally {
+      setSortParams(sort);
+      setCurrentPage(page);
       setIsLoading(false);
     }
   };
