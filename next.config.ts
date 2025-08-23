@@ -4,9 +4,6 @@ const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: "export", // Required for static export to GitHub Pages
-  basePath: isProd ? "/toronto-rental-buildings-explorer" : "",
-  assetPrefix: isProd ? "/toronto-rental-buildings-explorer" : "",
   GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
   FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
   FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
