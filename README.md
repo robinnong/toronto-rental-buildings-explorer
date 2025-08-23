@@ -2,7 +2,7 @@
 
 ![Landing page](./public/home-page-screenshot.jpg)
 
-This project returns an index of the first 1100 of all 3500 registered rental buildings in Toronto, allowing users to sort and filter by building features.
+Toronto Rental Buildings Explorer allowing users to sort and filter an index of the first 1100 of all 3500 registered rental buildings in Toronto.
 
 Live project at [toronto-rental-buildings-explorer.vercel.app](https://toronto-rental-buildings-explorer.vercel.app/)
 
