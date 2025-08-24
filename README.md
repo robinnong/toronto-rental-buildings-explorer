@@ -6,6 +6,11 @@ Toronto Rental Buildings Explorer allows users to sort and filter an index of re
 
 Live project at [toronto-rental-buildings-explorer.vercel.app](https://toronto-rental-buildings-explorer.vercel.app/)
 
+## TODO
+- [ ] Clean and load the remaining records (currently loaded 1100 of 3500 in both Firestore DB and Algolia search index)
+- [ ] Add support for pagination
+- [ ] Inject search filters as query params
+
 ## Data Sources
 
 This project pulls data from the following City of Toronto's Open Data Portal datasets:
