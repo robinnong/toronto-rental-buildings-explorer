@@ -8,6 +8,8 @@ Live project at [toronto-rental-buildings-explorer.vercel.app](https://toronto-r
 
 ## TODO
 - [ ] Clean and load the remaining records (currently loaded 1100 of 3500 in both Firestore DB and Algolia search index)
+- [ ] Build the indices to support all types of filter combinations for querying the Firestore DB
+- [ ] Error messaging for failed queries
 - [ ] Add support for pagination
 - [ ] Inject search filters as query params
 
