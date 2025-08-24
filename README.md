@@ -17,7 +17,7 @@ This project is my first full-stack application, allowing me to learn new tools 
   - Researching different solutions for **free-tier DB solutions** for storing and querying data. The 2 options I looked at were **MongoDB Atlas Community Edition** and **Google Firestore DB** (a no-SQL cloud database). The first option still requires self-hosting, so I went with the Firesore DB option since it is quick to implement and has an easy-to-use SDK. However, the consequence of choosing the no-SQL Firestore DB where:
       - These queries must not be complex (whatever methods are provided in the Firestore library are what you get for query building)
       - No support for pagination/offset
-      - No support for full-text search. This requires integrating a 3rd part text search service, which led me to investigate 2 options: **Elastic Search** and **Algolia**. I went with **Algolia** because it did not require a billing account, and the index size limits would be more than enough for this project
+      - No support for full-text search. This requires integrating a **3rd party text search service**, which led me to investigate 2 options: **Elastic Search** and **Algolia**. I went with **Algolia** because it did not require a billing account, and the index size limits would be more than enough for this project
       - Another consequence of using both Firestore DB and Algolia is that since Algolia does not support SQl-like querying and only text search, I need to maintain 2 copies of the same data in two DBs, across multiple search indices
 
 
