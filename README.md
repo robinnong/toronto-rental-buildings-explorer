@@ -12,6 +12,9 @@ Live project at [toronto-rental-buildings-explorer.vercel.app](https://toronto-r
 - [ ] Error messaging for failed queries
 - [ ] Add support for pagination
 - [ ] Inject search filters as query params
+- [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
+- [ ] Fix issue with initializing the dual range slider value
+- [ ] Fix issue with dual range slider not clickable on mobile
 
 ## Data Sources
 
