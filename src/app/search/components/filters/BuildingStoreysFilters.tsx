@@ -7,8 +7,8 @@ import { AppliedFilterMap, FilterType } from "@/app/types/global";
 import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
-  appliedFilters: AppliedFilterMap;
-  setAppliedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  currentSelectedFilters: AppliedFilterMap;
+  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
@@ -16,13 +16,13 @@ type Props = {
  * Options: "Low rise", "Mid rise", and "High rise".
  */
 export default function BuildingStoreysFilters({
-  appliedFilters,
-  setAppliedFilters,
+  currentSelectedFilters,
+  setCurrentSelectedFilters,
 }: Props): ReactElement {
   const handleToggle = (key: FilterType) => {
-    if (appliedFilters[key]?.length > 0) {
+    if (currentSelectedFilters[key]?.length > 0) {
       // Remove the filter
-      setAppliedFilters((prev) => {
+      setCurrentSelectedFilters((prev) => {
         const { [key]: removed, ...rest } = prev;
         return rest;
       });
@@ -33,14 +33,15 @@ export default function BuildingStoreysFilters({
         MID_RISE: key === "MID_RISE" ? searchQueryBuilder(key) : [],
         HIGH_RISE: key === "HIGH_RISE" ? searchQueryBuilder(key) : [],
       };
-      setAppliedFilters((prev) => ({
+      setCurrentSelectedFilters((prev) => ({
         ...prev,
         ...updatedFilters,
       }));
     }
   };
 
-  const checkIsActive = (key: FilterType) => appliedFilters[key]?.length > 0;
+  const checkIsActive = (key: FilterType) =>
+    currentSelectedFilters[key]?.length > 0;
 
   return (
     <div>

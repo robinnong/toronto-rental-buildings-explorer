@@ -7,8 +7,8 @@ import { AppliedFilterMap, FilterType } from "@/app/types/global";
 import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
 
 type Props = {
-  appliedFilters: AppliedFilterMap;
-  setAppliedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  currentSelectedFilters: AppliedFilterMap;
+  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
 };
 
 /**
@@ -16,26 +16,27 @@ type Props = {
  * Provides filters such as "Pets allowed", "Non-smoking building", etc.
  */
 export default function BuildingFeatureFilters({
-  appliedFilters,
-  setAppliedFilters,
+  currentSelectedFilters,
+  setCurrentSelectedFilters,
 }: Props): ReactElement {
   const setFilter = (key: FilterType) => {
-    if (appliedFilters[key]?.length > 0) {
+    if (currentSelectedFilters[key]?.length > 0) {
       // Remove the filter
-      setAppliedFilters((prev) => {
+      setCurrentSelectedFilters((prev) => {
         const { [key]: removed, ...rest } = prev;
         return rest;
       });
     } else {
       // Apply the filter
-      setAppliedFilters((prev) => ({
+      setCurrentSelectedFilters((prev) => ({
         ...prev,
         [key]: searchQueryBuilder(key),
       }));
     }
   };
 
-  const checkIsActive = (key: FilterType) => appliedFilters[key]?.length > 0;
+  const checkIsActive = (key: FilterType) =>
+    currentSelectedFilters[key]?.length > 0;
 
   return (
     <div>

@@ -12,7 +12,7 @@ import {
 
 type Props = {
   appliedFilters: AppliedFilterMap;
-  setAppliedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
   setIsValid: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -21,7 +21,7 @@ type Props = {
  */
 export default function BuildingAgeRangeFilters({
   appliedFilters,
-  setAppliedFilters,
+  setCurrentSelectedFilters,
   setIsValid,
 }: Props): ReactElement {
   const startYear = 1800;
@@ -32,12 +32,12 @@ export default function BuildingAgeRangeFilters({
 
   const handleChange = (range: { min: number; max: number }) => {
     if (range.min === startYear && range.max === currentYear) {
-      setAppliedFilters((prev) => {
+      setCurrentSelectedFilters((prev) => {
         const { YEAR_BUILT: removed, ...rest } = prev;
         return rest;
       });
     } else {
-      setAppliedFilters((prev) => ({
+      setCurrentSelectedFilters((prev) => ({
         ...prev,
         YEAR_BUILT:
           range.min !== startYear || range.max !== currentYear
@@ -50,16 +50,12 @@ export default function BuildingAgeRangeFilters({
     }
   };
 
-  // Initialize range inputs
   useEffect(() => {
+    // Initialize range inputs from applied filters
     if (appliedFilters?.YEAR_BUILT?.length > 0) {
       setRangeStartValue(appliedFilters?.YEAR_BUILT?.[0]?.value as number);
       setRangeEndValue(appliedFilters?.YEAR_BUILT?.[1]?.value as number);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (appliedFilters?.YEAR_BUILT?.length === 0) {
+    } else {
       setRangeStartValue(startYear);
       setRangeEndValue(currentYear);
     }
