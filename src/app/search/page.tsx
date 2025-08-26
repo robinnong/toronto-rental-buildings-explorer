@@ -6,6 +6,7 @@ import SearchBody from "./components/SearchBody";
 export default function SearchPage(props: {
   searchParams?: Promise<{
     sort?: string;
+    q?: string;
   }>;
 }): ReactElement {
   return (

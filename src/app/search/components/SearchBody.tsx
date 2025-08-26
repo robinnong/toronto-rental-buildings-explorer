@@ -11,6 +11,7 @@ import useSearchContext, { SearchContext } from "@/app/hooks/useSearchContext";
 type Props = {
   searchParams: Promise<{
     sort?: string;
+    q?: string;
   }>;
 };
 
@@ -23,8 +24,15 @@ export default function SearchBody({ searchParams }: Props): ReactElement {
   const searchContext = useSearchContext();
 
   const getSearchParams = async () => {
-    const { sort } = await searchParams;
+    const { sort, q } = await searchParams;
     searchContext.setCurrentSort((sort as Sort) || "ward_number");
+    searchContext.setCurrentSearchString(q || "");
+
+    // Initial data fetch on load
+    searchContext.fetchAlgoliaData({
+      sort: (sort as Sort) || "ward_number",
+      query: q || "",
+    });
   };
 
   useEffect(() => {

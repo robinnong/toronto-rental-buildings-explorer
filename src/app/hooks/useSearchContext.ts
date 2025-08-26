@@ -87,6 +87,16 @@ export default function useSearchContext(): SearchContextModel {
     replace(`${pathname}?${params.toString()}`);
   };
 
+  const setSearchParams = (query: string) => {
+    if (query == null || query === "") {
+      params.delete("q");
+    } else {
+      params.set("q", `${query}`);
+    }
+
+    replace(`${pathname}?${params.toString()}`);
+  };
+
   // Queries the Firestore database for apartments based on the applied filters
   const fetchFirestoreData = async ({
     filters,
@@ -216,6 +226,7 @@ export default function useSearchContext(): SearchContextModel {
       console.error("Error searching:", error);
     } finally {
       setSortParams(sort);
+      setSearchParams(query);
       setCurrentPage(page);
       setIsLoading(false);
     }
@@ -252,11 +263,6 @@ export default function useSearchContext(): SearchContextModel {
       ids,
     });
   };
-
-  // Initial data fetch on load
-  useEffect(() => {
-    fetchAlgoliaData({});
-  }, []);
 
   return {
     currentAppliedFilters,
