@@ -73,6 +73,7 @@ export default function DualRangeSlider({
     )`;
   }, [rangeStartValue, rangeEndValue]);
 
+  // The range min must be less than the range max and greater or equal to the default min value
   const isMinValid = useMemo(
     () =>
       !!(
@@ -81,6 +82,7 @@ export default function DualRangeSlider({
     [rangeStartValue, rangeEndValue]
   );
 
+  // The range max must be greater than the range min and less or equal to the default max value
   const isMaxValid = useMemo(
     () =>
       !!(rangeEndValue > rangeStartValue && rangeEndValue <= defaultSliderMax),
@@ -156,12 +158,7 @@ export default function DualRangeSlider({
             value={rangeStartValue}
             disabled={disabled}
             onChange={(e) => {
-              // Ensure that rangeStartValue does not exceed rangeEndValue
-              if (e.target.valueAsNumber > rangeEndValue) {
-                setRangeStartValue(rangeEndValue);
-              } else {
-                setRangeStartValue(e.target.valueAsNumber);
-              }
+              setRangeStartValue(e.target.valueAsNumber);
             }}
           />
         </div>
@@ -179,12 +176,7 @@ export default function DualRangeSlider({
             value={rangeEndValue}
             disabled={disabled}
             onChange={(e) => {
-              // Ensure that rangeEndValue is always greater than rangeStartValue
-              if (rangeStartValue <= e.target.valueAsNumber) {
-                setRangeEndValue(e.target.valueAsNumber);
-              } else {
-                setRangeEndValue(rangeStartValue);
-              }
+              setRangeEndValue(e.target.valueAsNumber);
             }}
           />
         </div>

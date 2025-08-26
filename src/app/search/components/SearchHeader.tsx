@@ -56,10 +56,10 @@ export default function SearchHeader({
           handleSubmit();
         }}
       >
-        <label htmlFor="search" className="sr-only">
-          Search
-        </label>
         <div className="relative w-full">
+          <label htmlFor="search" className="sr-only">
+            Search
+          </label>
           <input
             className="w-full rounded-full py-2 px-4 border border-solid border-gray-300 focus:border-cyan-700 pr-8"
             type="text"
