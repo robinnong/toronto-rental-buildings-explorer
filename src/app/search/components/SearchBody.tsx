@@ -27,11 +27,15 @@ export default function SearchBody({ searchParams }: Props): ReactElement {
     const { sort, q } = await searchParams;
     searchContext.setCurrentSort((sort as Sort) || "ward_number");
     searchContext.setCurrentSearchString(q || "");
+    // TODO: Parse filters --> initialize appliedFilters
 
     // Initial data fetch on load
     searchContext.fetchAlgoliaData({
       sort: (sort as Sort) || "ward_number",
       query: q || "",
+      // TODO: year_built_start
+      // TODO: year_built_end
+      // TODO: features
     });
   };
 

@@ -54,6 +54,23 @@ export enum FilterIcons {
   YEAR_BUILT = "fa-hammer",
 }
 
+export const booleanFilterQueryKeys: Record<string, string> = {
+  AIR_CONDITIONING_TYPE: "air_conditioning",
+  BARRIER_FREE_ACCESSIBILTY_ENTR: "barrier_free_entrance",
+  BALCONIES: "balconies",
+  BIKE_PARKING: "bike_parking",
+  NO_OF_ELEVATORS: "elevators",
+  DESCRIPTION_OF_INDOOR_EXERCISE_ROOM: "gym",
+  HIGH_RISE: "high_rise",
+  LAUNDRY_ROOM: "laundry_room",
+  LOCKER_OR_STORAGE_ROOM: "locker_or_storage_room",
+  LOW_RISE: "low_rise",
+  MID_RISE: "mid_rise",
+  NON_SMOKING_BUILDING: "non_smoking_building",
+  PARKING_TYPE: "parking",
+  PETS_ALLOWED: "pets_allowed",
+};
+
 const filterKeys: FilterType[] = [
   "AIR_CONDITIONING_TYPE",
   "BARRIER_FREE_ACCESSIBILTY_ENTR",

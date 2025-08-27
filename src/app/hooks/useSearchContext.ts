@@ -16,9 +16,17 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { AppliedFilterMap, FetchDataResponse, Sort } from "@/app/types/global";
+import {
+  AppliedFilterMap,
+  FetchDataResponse,
+  FilterType,
+  Sort,
+} from "@/app/types/global";
 import { db } from "../firebase.config";
-import { fsDbSubCollection } from "../constants/general";
+import {
+  booleanFilterQueryKeys,
+  fsDbSubCollection,
+} from "../constants/general";
 import generateOrderBySearchClauses from "../lib/generateOrderBySearchClauses";
 import generateWhereSearchClauses from "../lib/generateWhereSearchClauses";
 import generateLimitSearchClause from "../lib/generateLimitSearchClause";
@@ -87,13 +95,51 @@ export default function useSearchContext(): SearchContextModel {
     replace(`${pathname}?${params.toString()}`);
   };
 
-  const setSearchParams = (query: string) => {
+  const setSearchParams = (query?: string) => {
     if (query == null || query === "") {
       params.delete("q");
     } else {
       params.set("q", `${query}`);
     }
 
+    replace(`${pathname}?${params.toString()}`);
+  };
+
+  const setFilterParams = (filters?: AppliedFilterMap) => {
+    const appliedFilterKeys = Object.keys(filters);
+
+    params.keys().forEach((key) => {
+      // Ignore "sort" and "q"
+      if (key === "sort" || key === "q") {
+        // Do nothing
+      } else if (!appliedFilterKeys.includes(key)) {
+        // Clear the filter from query params
+        params.delete(key);
+      }
+    });
+
+    const booleanFiltersList: string[] = [];
+    let yearBuiltStart: number;
+    let yearBuiltEnd: number;
+
+    appliedFilterKeys.forEach((key) => {
+      if (key === "YEAR_BUILT") {
+        yearBuiltStart = filters[key][0].value as number;
+        yearBuiltEnd = filters[key][1].value as number;
+      } else if (!!booleanFilterQueryKeys[key]) {
+        booleanFiltersList.push(booleanFilterQueryKeys[key]);
+      }
+    });
+
+    if (booleanFiltersList.length > 0) {
+      params.set("features", booleanFiltersList.join(","));
+    }
+    if (yearBuiltStart) {
+      params.set("year_built_start", `${yearBuiltStart}`);
+    }
+    if (yearBuiltEnd) {
+      params.set("year_built_end", `${yearBuiltEnd}`);
+    }
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -170,6 +216,7 @@ export default function useSearchContext(): SearchContextModel {
       console.error("Error fetching data:", error);
     } finally {
       setSortParams(sort);
+      setFilterParams(filters);
       setCurrentPage(page);
       setIsLoading(false);
     }
