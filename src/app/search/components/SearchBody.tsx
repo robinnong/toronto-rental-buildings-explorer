@@ -26,9 +26,8 @@ export default function SearchBody({ searchParams }: Props): ReactElement {
     searchContext.setCurrentSort((sort as Sort) || "ward_number");
     searchContext.setCurrentSearchString(q || "");
     // TODO: Parse filters --> initialize appliedFilters
-
     // Initial data fetch on load
-    if (features?.length === 0 && !year_built_start && !year_built_end) {
+    if (!features && !year_built_start && !year_built_end) {
       searchContext.fetchAlgoliaData({
         sort: (sort as Sort) || "ward_number",
         query: q,
