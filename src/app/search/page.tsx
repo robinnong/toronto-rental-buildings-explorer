@@ -2,12 +2,10 @@
 
 import { ReactElement, Suspense } from "react";
 import SearchBody from "./components/SearchBody";
+import { AppSearchParams } from "../types/global";
 
 export default function SearchPage(props: {
-  searchParams?: Promise<{
-    sort?: string;
-    q?: string;
-  }>;
+  searchParams?: Promise<AppSearchParams>;
 }): ReactElement {
   return (
     <div className="min-h-screen flex flex-col min-w-xs">

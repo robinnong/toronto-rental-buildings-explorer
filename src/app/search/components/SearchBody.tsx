@@ -1,6 +1,6 @@
 "use client";
 
-import { FetchDataResponse, Sort } from "@/app/types/global";
+import { AppSearchParams, FetchDataResponse, Sort } from "@/app/types/global";
 import { ReactElement, useEffect, useState } from "react";
 import SearchResults from "./results/SearchResultsList";
 import MapModal from "./modals/MapModal";
@@ -9,10 +9,7 @@ import SearchHeader from "./SearchHeader";
 import useSearchContext, { SearchContext } from "@/app/hooks/useSearchContext";
 
 type Props = {
-  searchParams: Promise<{
-    sort?: string;
-    q?: string;
-  }>;
+  searchParams: Promise<AppSearchParams>;
 };
 
 export default function SearchBody({ searchParams }: Props): ReactElement {
@@ -24,19 +21,22 @@ export default function SearchBody({ searchParams }: Props): ReactElement {
   const searchContext = useSearchContext();
 
   const getSearchParams = async () => {
-    const { sort, q } = await searchParams;
+    const { sort, q, year_built_start, year_built_end, features } =
+      await searchParams;
     searchContext.setCurrentSort((sort as Sort) || "ward_number");
     searchContext.setCurrentSearchString(q || "");
     // TODO: Parse filters --> initialize appliedFilters
 
     // Initial data fetch on load
-    searchContext.fetchAlgoliaData({
-      sort: (sort as Sort) || "ward_number",
-      query: q || "",
-      // TODO: year_built_start
-      // TODO: year_built_end
-      // TODO: features
-    });
+    if (features?.length === 0 && !year_built_start && !year_built_end) {
+      searchContext.fetchAlgoliaData({
+        sort: (sort as Sort) || "ward_number",
+        query: q,
+      });
+    } else {
+      // TODO: Implement
+      // searchContext.fetchTextAndFilterData({});
+    }
   };
 
   useEffect(() => {
