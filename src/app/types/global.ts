@@ -30,6 +30,7 @@ export type YearBuiltFilter = {
 
 export type AppSearchParams = {
   sort?: Sort;
+  page?: string;
   q?: string;
   year_built_start?: string;
   year_built_end?: string;

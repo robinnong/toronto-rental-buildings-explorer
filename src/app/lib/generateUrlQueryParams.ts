@@ -7,6 +7,7 @@ const generateUrlQueryParams = ({
   pathname,
   replace,
   sort,
+  page,
   query,
   filters,
   yearBuiltFilter,
@@ -15,10 +16,19 @@ const generateUrlQueryParams = ({
   pathname: string;
   replace: (href: string, options?: NavigateOptions) => void;
   sort: Sort;
+  page?: number;
   query?: string;
   filters: string[];
   yearBuiltFilter: YearBuiltFilter;
 }) => {
+  const setPageParams = (p: number) => {
+    if (p == null || p === 0) {
+      params.delete("page");
+    } else {
+      params.set("page", `${p + 1}`);
+    }
+  };
+
   const setSortParams = (s: Sort) => {
     if (s === "ward_number") {
       params.delete("sort");
@@ -67,6 +77,7 @@ const generateUrlQueryParams = ({
   };
 
   setSortParams(sort);
+  setPageParams(page);
   setSearchParams(query);
   setFilterParams(filters);
   setYearBuiltParams(yearBuiltFilter);

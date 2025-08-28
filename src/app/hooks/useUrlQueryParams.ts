@@ -15,12 +15,15 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
 } {
   const getSearchParams = async ({
     sort,
+    page,
     q,
     year_built_start,
     year_built_end,
     features,
   }: AppSearchParams) => {
     const sortFilter = (sort as Sort) || "ward_number";
+    const pageFilter = parseInt(page, 10) - 1 || 0;
+
     // Parse 'feature' filters as FilterType[]
     const featuresFilters: FilterType[] = [];
     const featureKeys = decodeURIComponent(features)?.split(",") || [];
@@ -44,10 +47,12 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
     searchContext.setCurrentSearchString(q || "");
     searchContext.setCurrentBuildingFeatureFilters(featuresFilters);
     searchContext.setCurrentYearBuiltFilter(yearBuiltFilter);
+    searchContext.setCurrentPage(pageFilter);
 
     // Initial data fetch on load
     searchContext.fetchAlgoliaData({
       sort: sortFilter,
+      page: pageFilter,
       query: q,
       filters: featuresFilters,
       yearBuiltFilter,

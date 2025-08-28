@@ -24,16 +24,16 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [ ] Clean and upload the remaining records (currently uploaded 1100 of 3500 in the search index)
 - [x] Migrate queries from Firestore to Algolia
 - [x] Remove all Firestore DB implementation code
-- [ ] Error messaging for failed queries
+- [x] Add pagination using react-paginate
 - [x] Inject filters as URL query param
 - [x] Inject text search as URL query param
 - [x] Inject sort as URL query param
-- [ ] Inject page as URL query param
-- [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
+- [x] Inject page as URL query param
 - [x] Fix issue with initializing the dual range slider value
+- [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [ ] Fix issue with dual range slider not clickable on mobile
+- [ ] Error messaging for failed queries
 - [ ] Enhancement - use Redux state management to store data which has already been fetched
-- [x] Add pagination using react-paginate
 
 ## Data Sources
 

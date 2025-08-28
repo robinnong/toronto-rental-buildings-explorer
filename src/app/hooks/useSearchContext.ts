@@ -37,6 +37,7 @@ export type SearchContextModel = {
   currentSearchString: string;
   setCurrentSearchString: Dispatch<SetStateAction<string>>;
   currentPage: number;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
   currentSort: Sort;
   setCurrentSort: Dispatch<SetStateAction<Sort>>;
   fetchAlgoliaData: (q: FetchAlgoliaDataParams) => Promise<FetchDataResponse[]>;
@@ -128,6 +129,7 @@ export default function useSearchContext(): SearchContextModel {
           pathname,
           replace,
           sort,
+          page,
           query,
           filters,
           yearBuiltFilter,
@@ -155,6 +157,7 @@ export default function useSearchContext(): SearchContextModel {
     currentSearchString,
     setCurrentSearchString,
     currentPage,
+    setCurrentPage,
     currentSort,
     setCurrentSort,
     fetchAlgoliaData,

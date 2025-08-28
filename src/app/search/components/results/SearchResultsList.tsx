@@ -75,6 +75,7 @@ export default function SearchResultsList({
         previousClassName="cursor-pointer"
         nextClassName="cursor-pointer"
         disabledClassName="text-gray-400 cursor-not-allowed"
+        forcePage={currentPage}
         onClick={({ isPrevious, isNext }) => {
           if (isPrevious && currentPage > 0) {
             fetchAlgoliaData({ page: currentPage - 1 });
