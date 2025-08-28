@@ -3,12 +3,11 @@
 import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
-import { AppliedFilterMap, FilterType } from "@/app/types/global";
-import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
+import { FilterType } from "@/app/types/global";
 
 type Props = {
-  currentSelectedFilters: AppliedFilterMap;
-  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  currentSelectedFilters: FilterType[];
+  setCurrentSelectedFilters: Dispatch<SetStateAction<FilterType[]>>;
 };
 
 /**
@@ -19,24 +18,18 @@ export default function BuildingFeatureFilters({
   currentSelectedFilters,
   setCurrentSelectedFilters,
 }: Props): ReactElement {
-  const setFilter = (key: FilterType) => {
-    if (currentSelectedFilters[key]?.length > 0) {
+  const handleToggle = (key: FilterType) => {
+    if (currentSelectedFilters.includes(key)) {
       // Remove the filter
-      setCurrentSelectedFilters((prev) => {
-        const { [key]: removed, ...rest } = prev;
-        return rest;
-      });
+      setCurrentSelectedFilters((prev) => prev.filter((item) => item !== key));
     } else {
       // Apply the filter
-      setCurrentSelectedFilters((prev) => ({
-        ...prev,
-        [key]: searchQueryBuilder(key),
-      }));
+      setCurrentSelectedFilters((prev) => [...prev, key]);
     }
   };
 
   const checkIsActive = (key: FilterType) =>
-    currentSelectedFilters[key]?.length > 0;
+    currentSelectedFilters.includes(key);
 
   return (
     <div>
@@ -48,7 +41,7 @@ export default function BuildingFeatureFilters({
             label={label}
             iconClass={iconClass}
             isActive={checkIsActive(key)}
-            onClick={() => setFilter(key)}
+            onClick={() => handleToggle(key)}
           />
         ))}
       </div>

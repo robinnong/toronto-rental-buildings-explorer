@@ -4,7 +4,13 @@ import { ReactElement, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 
 export default function NoResults(): ReactElement {
-  const { fetchAlgoliaData } = useContext(SearchContext);
+  const {
+    setCurrentSearchString,
+    setCurrentBuildingFeatureFilters,
+    setCurrentYearBuiltFilter,
+    setCurrentSort,
+    fetchAlgoliaData,
+  } = useContext(SearchContext);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-2 rounded-sm border border-solid border-gray-200 py-10 px-4 h-full">
@@ -14,7 +20,14 @@ export default function NoResults(): ReactElement {
       <button
         type="button"
         className="text-cyan-700 mt-2"
-        onClick={() => fetchAlgoliaData({})}
+        onClick={() => {
+          // Clear all sort and search fields
+          setCurrentSearchString("");
+          setCurrentBuildingFeatureFilters([]);
+          setCurrentYearBuiltFilter({});
+          setCurrentSort("ward_number");
+          fetchAlgoliaData({ query: "", filters: [], yearBuiltFilter: {} });
+        }}
       >
         Clear filters
       </button>

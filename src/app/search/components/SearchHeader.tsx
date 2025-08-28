@@ -11,39 +11,14 @@ export default function SearchHeader({
 }: Props): ReactElement {
   const {
     isLoading,
-    currentAppliedFilters,
     currentSearchString,
-    currentSort,
     setCurrentSearchString,
     fetchAlgoliaData,
-    fetchFirestoreData,
-    fetchTextAndFilterData,
   } = useContext(SearchContext);
 
   const handleSubmit = () => {
-    // Setting query with search string and filters applied
-    if (
-      currentSearchString?.length > 0 &&
-      Object.keys(currentAppliedFilters).length > 0
-    ) {
-      fetchTextAndFilterData({
-        query: currentSearchString,
-        filters: currentAppliedFilters,
-        sort: currentSort,
-      });
-    }
-    // Setting query  with no search string and no filters applied
-    // OR
-    // Setting query with search string and no filters applied
-    else if (Object.keys(currentAppliedFilters).length === 0) {
-      fetchAlgoliaData({ query: currentSearchString, sort: currentSort });
-    } else {
-      // Setting query with no search string and with filters applied
-      fetchFirestoreData({
-        filters: currentAppliedFilters,
-        sort: currentSort,
-      });
-    }
+    // Fetch data with text string and filters applied
+    fetchAlgoliaData({});
   };
 
   return (

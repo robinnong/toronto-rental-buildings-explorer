@@ -3,12 +3,11 @@
 import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingStoreysFilters } from "@/app/constants/general";
 import MultiStateToggle from "@/app/components/utils/MultiStateToggle";
-import { AppliedFilterMap, FilterType } from "@/app/types/global";
-import searchQueryBuilder from "@/app/lib/searchQueryBuilder";
+import { FilterType } from "@/app/types/global";
 
 type Props = {
-  currentSelectedFilters: AppliedFilterMap;
-  setCurrentSelectedFilters: Dispatch<SetStateAction<AppliedFilterMap>>;
+  currentSelectedFilters: FilterType[];
+  setCurrentSelectedFilters: Dispatch<SetStateAction<FilterType[]>>;
 };
 
 /**
@@ -20,28 +19,37 @@ export default function BuildingStoreysFilters({
   setCurrentSelectedFilters,
 }: Props): ReactElement {
   const handleToggle = (key: FilterType) => {
-    if (currentSelectedFilters[key]?.length > 0) {
-      // Remove the filter
-      setCurrentSelectedFilters((prev) => {
-        const { [key]: removed, ...rest } = prev;
-        return rest;
-      });
+    if (currentSelectedFilters.includes(key)) {
+      // Remove the selected building storey filter
+      setCurrentSelectedFilters((prev) => prev.filter((item) => item !== key));
     } else {
-      // Apply the filter as the active state and clear the rest
-      const updatedFilters = {
-        LOW_RISE: key === "LOW_RISE" ? searchQueryBuilder(key) : [],
-        MID_RISE: key === "MID_RISE" ? searchQueryBuilder(key) : [],
-        HIGH_RISE: key === "HIGH_RISE" ? searchQueryBuilder(key) : [],
-      };
-      setCurrentSelectedFilters((prev) => ({
-        ...prev,
-        ...updatedFilters,
-      }));
+      // First, clear all other applied building storey filters
+      if (key === "LOW_RISE") {
+        // Remove "MID_RISE" and "HIGH_RISE"
+        setCurrentSelectedFilters((prev) =>
+          prev.filter((item) => item !== "MID_RISE" && item !== "HIGH_RISE")
+        );
+      }
+      if (key === "MID_RISE") {
+        // Remove "LOW_RISE" and "HIGH_RISE"
+        setCurrentSelectedFilters((prev) =>
+          prev.filter((item) => item !== "LOW_RISE" && item !== "HIGH_RISE")
+        );
+      }
+      if (key === "HIGH_RISE") {
+        // Remove "LOW_RISE" and "MID_RISE"
+        setCurrentSelectedFilters((prev) =>
+          prev.filter((item) => item !== "LOW_RISE" && item !== "MID_RISE")
+        );
+      }
+
+      // Finally, apply the selected building storey filter
+      setCurrentSelectedFilters((prev) => [...prev, key]);
     }
   };
 
   const checkIsActive = (key: FilterType) =>
-    currentSelectedFilters[key]?.length > 0;
+    currentSelectedFilters.includes(key);
 
   return (
     <div>

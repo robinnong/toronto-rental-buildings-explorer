@@ -1,144 +1,45 @@
 import { FilterType } from "./../types/global";
-import { FirestoreWhereClause } from "../types/global";
 
 /**
- * Builds a Firestore query where clause based on the filter key and a defined condition
- * See: https://firebase.google.com/docs/firestore/query-data/queries
+ * Builds an Algolia-compatible query for the 'filter' parameter
+ * See: https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/
  *
  * @param {string} key The filter key
- * @returns {FirestoreWhereClause[]} The Firestore where clause(s)
+ * @returns {string} The Algolia filter clause
  */
-export default function searchQueryBuilder(
-  key: FilterType
-): FirestoreWhereClause[] {
+function searchQueryBuilder(key: FilterType): string {
   switch (key) {
-    case "BALCONIES":
-      return [
-        {
-          fieldPath: "BALCONIES",
-          opStr: "==",
-          value: true,
-        },
-      ];
-    case "LOCKER_OR_STORAGE_ROOM":
-      return [
-        {
-          fieldPath: "LOCKER_OR_STORAGE_ROOM",
-          opStr: "==",
-          value: true,
-        },
-      ];
-    case "NON_SMOKING_BUILDING":
-      return [
-        {
-          fieldPath: "NON_SMOKING_BUILDING",
-          opStr: "==",
-          value: true,
-        },
-      ];
-    case "PETS_ALLOWED":
-      return [
-        {
-          fieldPath: "PETS_ALLOWED",
-          opStr: "==",
-          value: true,
-        },
-      ];
-    case "LAUNDRY_ROOM":
-      return [
-        {
-          fieldPath: "LAUNDRY_ROOM",
-          opStr: "==",
-          value: true,
-        },
-      ];
     case "LOW_RISE":
-      return [
-        {
-          fieldPath: "CONFIRMED_STOREYS",
-          opStr: "<",
-          value: 5,
-        },
-      ];
+      return "CONFIRMED_STOREYS < 5";
     case "MID_RISE":
-      // Range query requires 2 separate where clauses
-      return [
-        {
-          fieldPath: "CONFIRMED_STOREYS",
-          opStr: ">=",
-          value: 5,
-        },
-        {
-          fieldPath: "CONFIRMED_STOREYS",
-          opStr: "<=",
-          value: 14,
-        },
-      ];
+      return "CONFIRMED_STOREYS: 5 TO 14";
     case "HIGH_RISE":
-      return [
-        {
-          fieldPath: "CONFIRMED_STOREYS",
-          opStr: ">",
-          value: 14,
-        },
-      ];
+      return "CONFIRMED_STOREYS > 14";
+    case "BALCONIES":
+      return "BALCONIES:true";
+    case "LOCKER_OR_STORAGE_ROOM":
+      return "LOCKER_OR_STORAGE_ROOM:true";
+    case "NON_SMOKING_BUILDING":
+      return "NON_SMOKING_BUILDING:true";
+    case "PETS_ALLOWED":
+      return "PETS_ALLOWED:true";
+    case "LAUNDRY_ROOM":
+      return "LAUNDRY_ROOM:true";
     case "AIR_CONDITIONING_TYPE":
-      return [
-        {
-          fieldPath: "AIR_CONDITIONING_TYPE",
-          opStr: "in",
-          value: ["CENTRAL AIR", "INDIVIDUAL UNITS"],
-        },
-      ];
+      return `NOT AIR_CONDITIONING_TYPE:"NONE"`;
     case "NO_OF_ELEVATORS":
-      return [
-        {
-          fieldPath: "NO_OF_ELEVATORS",
-          opStr: ">",
-          value: 0,
-        },
-      ];
+      return "NO_OF_ELEVATORS > 0";
     case "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM":
-      return [
-        {
-          fieldPath: "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM",
-          opStr: "!=",
-          value: null,
-        },
-      ];
+      return "NOT DESCRIPTION_OF_INDOOR_EXERCISE_ROOM:null";
     case "PARKING_TYPE":
-      return [
-        {
-          fieldPath: "PARKING_TYPE",
-          opStr: "array-contains-any",
-          value: [
-            "Ground Level Garage",
-            "Underground Garage",
-            "Carport",
-            "Garage accessible thru building",
-            "Surface Parking",
-            "Parking Deck",
-          ],
-        },
-      ];
+      return "NOT PARKING_TYPE:null";
     case "BIKE_PARKING":
-      return [
-        {
-          fieldPath: "BIKE_PARKING",
-          opStr: "==",
-          value: true,
-        },
-      ];
+      return "BIKE_PARKING:true";
     case "BARRIER_FREE_ACCESSIBILTY_ENTR":
-      return [
-        {
-          fieldPath: "BARRIER_FREE_ACCESSIBILTY_ENTR",
-          opStr: "==",
-          value: true,
-        },
-      ];
-
+      return "BARRIER_FREE_ACCESSIBILTY_ENTR:true";
     default:
       return null;
   }
 }
+
+export default searchQueryBuilder;

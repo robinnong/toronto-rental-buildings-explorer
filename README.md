@@ -22,14 +22,14 @@ This project is my first full-stack application, allowing me to learn new tools 
 ## TODO
 
 - [ ] Clean and load the remaining records (currently loaded 1100 of 3500 in both Firestore DB and Algolia search index)
-- [ ] Build the indices to support all types of filter combinations for querying the Firestore DB
 - [ ] Error messaging for failed queries
-- [ ] Inject filters as URL query params
+- [x] Inject filters as URL query params
 - [x] Inject text search as URL query params
 - [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [x] Fix issue with initializing the dual range slider value
 - [ ] Fix issue with dual range slider not clickable on mobile
 - [ ] Enhancement - use Redux state management to store data which has already been fetched
+- [ ] Add pagination using react-paginate
 
 ## Data Sources
 
@@ -47,5 +47,4 @@ Maps Embed API:
 - Languages: TypeScript, JavaScript, CSS
 - Frameworks: React, [Tailwind CSS](https://tailwindcss.com), [Next.js](https://nextjs.org/docs)
 - Bundler: Turbopack
-- Cloud DB: [Firestore Database](https://firebase.google.com/docs/firestore)
 - Text search service: [Algolia](https://www.algolia.com/doc/api-client/javascript/getting-started/#install)

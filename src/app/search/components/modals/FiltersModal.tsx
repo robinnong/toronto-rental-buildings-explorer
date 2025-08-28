@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  ReactElement,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import Modal from "@/app/components/utils/Modal";
-import { AppliedFilterMap } from "@/app/types/global";
+import { FilterType, YearBuiltFilter } from "@/app/types/global";
 import BuildingAgeRangeFilters from "../filters/BuildingAgeRangeFilters";
 import BuildingFeatureFilters from "../filters/BuildingFeatureFilters";
 import BuildingStoreysFilters from "../filters/BuildingStoreysFilters";
@@ -26,41 +20,41 @@ type Props = {
 export default function FiltersModal({ onClose }: Props): ReactElement {
   const {
     isLoading,
-    currentAppliedFilters,
-    setCurrentAppliedFilters,
-    fetchFirestoreData,
-    currentSearchString,
-    currentSort,
-    fetchTextAndFilterData,
+    currentBuildingFeatureFilters,
+    setCurrentBuildingFeatureFilters,
+    currentYearBuiltFilter,
+    setCurrentYearBuiltFilter,
+    fetchAlgoliaData,
   } = useContext(SearchContext);
 
-  const [currentSelectedFilters, setCurrentSelectedFilters] =
-    useState<AppliedFilterMap>({} as AppliedFilterMap);
+  const [currentSelectedFilters, setCurrentSelectedFilters] = useState<
+    FilterType[]
+  >([]);
+  const [currentSelectedYearBuiltFilter, setCurrentSelectedYearBuiltFilter] =
+    useState<YearBuiltFilter>({} as YearBuiltFilter);
   const [isValid, setIsValid] = useState<boolean>(true);
 
+  // Initialize state - building feature filters
   useEffect(() => {
-    setCurrentSelectedFilters(currentAppliedFilters);
-  }, [currentAppliedFilters]);
+    setCurrentSelectedFilters(currentBuildingFeatureFilters);
+  }, [currentBuildingFeatureFilters]);
 
-  // TODO: Inject filters into the url query params
-  const handleSubmit = useCallback(() => {
-    setCurrentAppliedFilters(currentSelectedFilters);
+  // Initialize state - year built range filter
+  useEffect(() => {
+    setCurrentSelectedYearBuiltFilter(currentYearBuiltFilter);
+  }, [currentYearBuiltFilter]);
 
-    if (currentSearchString?.length === 0) {
-      fetchFirestoreData({
-        filters: currentSelectedFilters,
-        sort: currentSort, // Keep existing sort
-      });
-    } else if (currentSearchString?.length > 0) {
-      fetchTextAndFilterData({
-        query: currentSearchString,
-        filters: currentSelectedFilters,
-        sort: currentSort,
-      });
-    }
+  const handleSubmit = () => {
+    setCurrentBuildingFeatureFilters(currentSelectedFilters);
+    setCurrentYearBuiltFilter(currentSelectedYearBuiltFilter);
+
+    fetchAlgoliaData({
+      filters: currentSelectedFilters,
+      yearBuiltFilter: currentSelectedYearBuiltFilter,
+    });
 
     onClose();
-  }, [currentSelectedFilters, currentSearchString, currentSort]);
+  };
 
   return (
     <Modal onClickOutside={onClose}>
@@ -86,9 +80,11 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         {/* Modal body - filters */}
         <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
           <BuildingAgeRangeFilters
-            appliedFilters={currentAppliedFilters}
-            setCurrentSelectedFilters={setCurrentSelectedFilters}
             setIsValid={setIsValid}
+            appliedYearBuiltFilter={currentYearBuiltFilter}
+            setCurrentSelectedYearBuiltFilter={
+              setCurrentSelectedYearBuiltFilter
+            }
           />
           <BuildingStoreysFilters
             currentSelectedFilters={currentSelectedFilters}
@@ -106,7 +102,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
             type="button"
             className="text-cyan-700"
             disabled={isLoading}
-            onClick={() => setCurrentSelectedFilters({} as AppliedFilterMap)}
+            onClick={() => setCurrentSelectedFilters([])}
           >
             Clear all
           </button>

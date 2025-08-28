@@ -11,41 +11,14 @@ type Props = {
 };
 
 export default function SortByDropdown({ onClose }: Props): ReactElement {
-  const {
-    currentSearchString,
-    currentSort,
-    setCurrentSort,
-    currentAppliedFilters,
-    fetchAlgoliaData,
-    fetchFirestoreData,
-    fetchTextAndFilterData,
-  } = useContext(SearchContext);
+  const { currentSort, setCurrentSort, fetchAlgoliaData } =
+    useContext(SearchContext);
   const ref = useOnClickOutside(onClose);
 
   // Query with new sort option, reset to first page and close the dropdown after applying a sort
   const onSelect = (key: Sort) => {
     setCurrentSort(key);
-
-    // Changing sort with search string and filters applied
-    if (
-      currentSearchString?.length > 0 &&
-      Object.keys(currentAppliedFilters).length > 0
-    ) {
-      fetchTextAndFilterData({
-        query: currentSearchString,
-        filters: currentAppliedFilters,
-        sort: key,
-      });
-    }
-    // Changing sort with no search string and no filters applied
-    // OR
-    // Changing sort with search string and no filters applied
-    else if (Object.keys(currentAppliedFilters).length === 0) {
-      fetchAlgoliaData({ query: currentSearchString, sort: key });
-    } else {
-      // Changing sort with no search string and with filters applied
-      fetchFirestoreData({ filters: currentAppliedFilters, sort: key });
-    }
+    fetchAlgoliaData({ sort: key });
     onClose();
   };
 

@@ -17,16 +17,11 @@ export default function SearchResultsList({
   setShowMapModal,
 }: Props): ReactElement {
   const {
-    currentAppliedFilters,
+    isLoading,
+    currentPage,
     searchCount,
     searchResults,
-    currentSearchString,
-    currentSort,
-    currentPage,
-    isLoading,
     fetchAlgoliaData,
-    fetchFirestoreData,
-    fetchTextAndFilterData,
   } = useContext(SearchContext);
 
   const handlePageChange = (key: "prev" | "next") => {
@@ -36,33 +31,7 @@ export default function SearchResultsList({
       (key === "prev" && currentPage > 1) ||
       (key === "next" && currentPage * 25 < searchCount)
     ) {
-      if (
-        currentSearchString?.length > 0 &&
-        Object.keys(currentAppliedFilters).length > 0
-      ) {
-        // Changing page with search string and filters applied
-        fetchTextAndFilterData({
-          query: currentSearchString,
-          filters: currentAppliedFilters,
-          sort: currentSort,
-          page: newPage,
-        });
-      } else if (Object.keys(currentAppliedFilters).length === 0) {
-        // Changing page with no search string and no filters applied
-        // OR
-        // Changing page with search string and no filters applied
-        fetchAlgoliaData({
-          query: currentSearchString,
-          sort: currentSort,
-          page: newPage,
-        });
-      } else {
-        fetchFirestoreData({
-          filters: currentAppliedFilters,
-          page: newPage,
-          sort: currentSort,
-        });
-      }
+      fetchAlgoliaData({ page: newPage });
     }
   };
 
@@ -76,7 +45,7 @@ export default function SearchResultsList({
         <SearchSortBy />
       </div>
 
-      {Object.keys(currentAppliedFilters).length > 0 && <AppliedFilters />}
+      <AppliedFilters />
 
       {isLoading && <LoadingSkeleton />}
       {searchCount > 0 && !isLoading && (

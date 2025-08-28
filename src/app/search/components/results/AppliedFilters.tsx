@@ -2,63 +2,78 @@
 
 import { ReactElement, ReactNode, useContext, useMemo } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { FilterType, FirestoreWhereClause } from "@/app/types/global";
+import { FilterType } from "@/app/types/global";
 import { FilterIcons, FilterLabels } from "@/app/constants/general";
 import AppliedFilterPill from "./AppliedFilterPill";
 
 export default function AppliedFilters(): ReactElement {
   const {
-    currentAppliedFilters,
-    setCurrentAppliedFilters,
-    fetchTextAndFilterData,
-    fetchFirestoreData,
     isLoading,
-    currentSort,
-    currentSearchString,
+    currentBuildingFeatureFilters,
+    setCurrentBuildingFeatureFilters,
+    currentYearBuiltFilter,
+    setCurrentYearBuiltFilter,
+    fetchAlgoliaData,
   } = useContext(SearchContext);
 
-  const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(() => {
-    const clauses = Object.entries(currentAppliedFilters) as [
-      FilterType,
-      FirestoreWhereClause[]
-    ][];
+  const appliedYearBuiltFilter: { k: FilterType; v: ReactNode } =
+    useMemo(() => {
+      if (!currentYearBuiltFilter?.end && !currentYearBuiltFilter?.start) {
+        return null;
+      }
 
-    if (clauses.length === 0) return [];
-
-    return clauses
-      .filter((c) => c[1].length > 0)
-      .map((c) => ({
-        k: c[0],
+      return {
+        k: "YEAR_BUILT",
         v: (
           <>
-            <i className={`fas ${FilterIcons[c[0]]} mr-1`} />
-            {FilterLabels[c[0]]}
+            <i className={`fas ${FilterIcons.YEAR_BUILT} mr-1`} />
+            {FilterLabels.YEAR_BUILT}&nbsp;
             {/* Display the range for YEAR_BUILT filter */}
-            {c[0] === "YEAR_BUILT" &&
-              ` (${c[1].map((clause) => clause.value).join(" to ")})`}
+            {/* Example: Year after (1900 to 2018) */}
+            {currentYearBuiltFilter.start != null &&
+              currentYearBuiltFilter.end != null &&
+              `(${currentYearBuiltFilter.start} to ${currentYearBuiltFilter.end})`}
+            {/* Example: Year after (before 2000) */}
+            {currentYearBuiltFilter.start != null &&
+              currentYearBuiltFilter.end == null &&
+              `(after ${currentYearBuiltFilter.start})`}
+            {/* Example: Year built (before 2000) */}
+            {currentYearBuiltFilter.start == null &&
+              currentYearBuiltFilter.end != null &&
+              `(before ${currentYearBuiltFilter.end})`}
           </>
         ),
-      }));
-  }, [currentAppliedFilters]);
+      };
+    }, [currentYearBuiltFilter]);
 
-  const handleClick = (k: FilterType) => {
+  const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(
+    () =>
+      currentBuildingFeatureFilters.length > 0
+        ? currentBuildingFeatureFilters.map((filter) => ({
+            k: filter,
+            v: (
+              <>
+                <i className={`fas ${FilterIcons[filter]} mr-1`} />
+                {FilterLabels[filter]}
+              </>
+            ),
+          }))
+        : [],
+    [currentBuildingFeatureFilters]
+  );
+
+  const removeFeatureFilter = (k: FilterType) => {
     // Remove applied filter and re-run the query
-    const { [k as FilterType]: removed, ...rest } = currentAppliedFilters;
-    const updatedFiltersMap = rest;
-    setCurrentAppliedFilters(updatedFiltersMap);
+    const updatedFilters = currentBuildingFeatureFilters.filter(
+      (key) => key !== k
+    );
+    setCurrentBuildingFeatureFilters(updatedFilters);
+    fetchAlgoliaData({ filters: updatedFilters });
+  };
 
-    if (currentSearchString?.length === 0) {
-      fetchFirestoreData({
-        filters: updatedFiltersMap,
-        sort: currentSort, // Keep existing sort
-      });
-    } else if (currentSearchString?.length > 0) {
-      fetchTextAndFilterData({
-        query: currentSearchString,
-        filters: updatedFiltersMap,
-        sort: currentSort,
-      });
-    }
+  const removeYearBuiltFilter = () => {
+    setCurrentYearBuiltFilter({});
+    fetchAlgoliaData({ yearBuiltFilter: {} });
   };
 
   return (
@@ -68,9 +83,17 @@ export default function AppliedFilters(): ReactElement {
           key={k}
           label={v}
           disabled={isLoading}
-          onClick={() => handleClick(k)}
+          onClick={() => removeFeatureFilter(k)}
         />
       ))}
+      {appliedYearBuiltFilter && (
+        <AppliedFilterPill
+          key={appliedYearBuiltFilter.k}
+          label={appliedYearBuiltFilter.v}
+          disabled={isLoading}
+          onClick={() => removeYearBuiltFilter()}
+        />
+      )}
     </div>
   );
 }

@@ -1,5 +1,3 @@
-import { FieldPath, WhereFilterOp } from "firebase/firestore";
-
 export type FilterType =
   | "AIR_CONDITIONING_TYPE"
   | "BARRIER_FREE_ACCESSIBILTY_ENTR"
@@ -19,28 +17,23 @@ export type FilterType =
 
 export type Sort = "ward_number" | "year_built_asc" | "year_built_desc";
 
-export type FirestoreWhereClause = {
-  fieldPath: string | FieldPath;
-  opStr: WhereFilterOp;
-  value: unknown;
-};
-
 export type FilterOption = {
   key: FilterType;
   label: string;
   iconClass: string;
 };
 
-export type AppliedFilterMap = {
-  [key in FilterType]?: FirestoreWhereClause[];
+export type YearBuiltFilter = {
+  start?: number;
+  end?: number;
 };
 
 export type AppSearchParams = {
   sort?: Sort;
   q?: string;
-  year_built_start?: number;
-  year_built_end?: number;
-  features?: string[];
+  year_built_start?: string;
+  year_built_end?: string;
+  features?: string;
 };
 
 export type FetchDataResponse = {

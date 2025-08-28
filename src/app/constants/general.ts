@@ -2,10 +2,6 @@ import { FilterOption, FilterType, Sort } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
-// Firestore Database paths
-export const fsDbSubCollection = "records";
-export const firestoreQueryLimit = 25;
-
 export const sortLabels: Record<Sort, string> = {
   ward_number: "Ward number",
   year_built_asc: "Year built (ascending)",
@@ -54,7 +50,7 @@ export enum FilterIcons {
   YEAR_BUILT = "fa-hammer",
 }
 
-export const booleanFilterQueryKeys: Record<string, string> = {
+export const filterQueryKeys: Record<string, string> = {
   AIR_CONDITIONING_TYPE: "air_conditioning",
   BARRIER_FREE_ACCESSIBILTY_ENTR: "barrier_free_entrance",
   BALCONIES: "balconies",
@@ -69,6 +65,23 @@ export const booleanFilterQueryKeys: Record<string, string> = {
   NON_SMOKING_BUILDING: "non_smoking_building",
   PARKING_TYPE: "parking",
   PETS_ALLOWED: "pets_allowed",
+};
+
+export const queryKeyToFilter: Record<string, string> = {
+  air_conditioning: "AIR_CONDITIONING_TYPE",
+  barrier_free_entrance: "BARRIER_FREE_ACCESSIBILTY_ENTR",
+  balconies: "BALCONIES",
+  bike_parking: "BIKE_PARKING",
+  elevators: "NO_OF_ELEVATORS",
+  gym: "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM",
+  high_rise: "HIGH_RISE",
+  laundry_room: "LAUNDRY_ROOM",
+  locker_or_storage_room: "LOCKER_OR_STORAGE_ROOM",
+  low_rise: "LOW_RISE",
+  mid_rise: "MID_RISE",
+  non_smoking_building: "NON_SMOKING_BUILDING",
+  parking: "PARKING_TYPE",
+  pets_allowed: "PETS_ALLOWED",
 };
 
 const filterKeys: FilterType[] = [

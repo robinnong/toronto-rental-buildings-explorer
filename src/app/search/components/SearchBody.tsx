@@ -1,12 +1,13 @@
 "use client";
 
-import { AppSearchParams, FetchDataResponse, Sort } from "@/app/types/global";
-import { ReactElement, useEffect, useState } from "react";
+import { AppSearchParams, FetchDataResponse } from "@/app/types/global";
+import { ReactElement, useCallback, useEffect, useState } from "react";
 import SearchResults from "./results/SearchResultsList";
 import MapModal from "./modals/MapModal";
 import FiltersModal from "./modals/FiltersModal";
 import SearchHeader from "./SearchHeader";
 import useSearchContext, { SearchContext } from "@/app/hooks/useSearchContext";
+import useUrlQueryParams from "@/app/hooks/useUrlQueryParams";
 
 type Props = {
   searchParams: Promise<AppSearchParams>;
@@ -20,26 +21,16 @@ export default function SearchBody({ searchParams }: Props): ReactElement {
 
   const searchContext = useSearchContext();
 
-  const getSearchParams = async () => {
-    const { sort, q, year_built_start, year_built_end, features } =
-      await searchParams;
-    searchContext.setCurrentSort((sort as Sort) || "ward_number");
-    searchContext.setCurrentSearchString(q || "");
-    // TODO: Parse filters --> initialize appliedFilters
-    // Initial data fetch on load
-    if (!features && !year_built_start && !year_built_end) {
-      searchContext.fetchAlgoliaData({
-        sort: (sort as Sort) || "ward_number",
-        query: q,
-      });
-    } else {
-      // TODO: Implement
-      // searchContext.fetchTextAndFilterData({});
-    }
-  };
+  const { getSearchParams } = useUrlQueryParams(searchContext);
 
+  const fetchData = useCallback(async () => {
+    const params = await searchParams;
+    getSearchParams(params);
+  }, []);
+
+  // Initial data fetching on search page load
   useEffect(() => {
-    getSearchParams();
+    fetchData();
   }, []);
 
   return (
