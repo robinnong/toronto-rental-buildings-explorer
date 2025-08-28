@@ -28,6 +28,7 @@ type FetchAlgoliaDataParams = {
 export type SearchContextModel = {
   isLoading: boolean;
   searchCount: number;
+  searchPagesTotal: number;
   searchResults: FetchDataResponse[];
   currentBuildingFeatureFilters: FilterType[];
   setCurrentBuildingFeatureFilters: Dispatch<SetStateAction<FilterType[]>>;
@@ -54,11 +55,12 @@ export default function useSearchContext(): SearchContextModel {
     useState<FilterType[]>([]);
   const [currentYearBuiltFilter, setCurrentYearBuiltFilter] =
     useState<YearBuiltFilter>({} as YearBuiltFilter);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentSearchString, setCurrentSearchString] = useState("");
   const [currentSort, setCurrentSort] = useState<Sort>("ward_number");
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
   const [searchCount, setSearchCount] = useState<number>(0);
+  const [searchPagesTotal, setSearchPagesTotal] = useState<number>(0);
 
   const setSortParams = (s: Sort) => {
     if (s === "ward_number") {
@@ -118,7 +120,7 @@ export default function useSearchContext(): SearchContextModel {
       query = currentSearchString,
       filters = currentBuildingFeatureFilters,
       yearBuiltFilter = currentYearBuiltFilter,
-      page = 1,
+      page = 0, // Algolia uses 0-based pagination
       sort = currentSort,
     }: FetchAlgoliaDataParams): Promise<FetchDataResponse[]> => {
       const client = algoliasearch(
@@ -160,12 +162,14 @@ export default function useSearchContext(): SearchContextModel {
           searchParams: {
             query, // The search service will query the fields 'SITE_ADDRESS' and 'PROP_MANAGEMENT_COMPANY_NAME' based on the user's text input
             filters: compositeFilter,
-            page: page - 1, // Algolia uses 0-based pagination
+            page,
           },
         });
 
+        setSearchPagesTotal(results?.nbPages);
         setSearchCount(results?.nbHits);
         setSearchResults(results?.hits as FetchDataResponse[]);
+        setCurrentPage(results.page);
 
         return results?.hits as FetchDataResponse[];
       } catch (error) {
@@ -176,7 +180,6 @@ export default function useSearchContext(): SearchContextModel {
         setSearchParams(query);
         setFilterParams(filters);
         setYearBuiltParams(yearBuiltFilter);
-        setCurrentPage(page);
         setIsLoading(false);
       }
     },
@@ -191,6 +194,7 @@ export default function useSearchContext(): SearchContextModel {
   return {
     isLoading,
     searchCount,
+    searchPagesTotal,
     searchResults,
     currentBuildingFeatureFilters,
     setCurrentBuildingFeatureFilters,

@@ -8,6 +8,7 @@ import AppliedFilters from "./AppliedFilters";
 import LoadingSkeleton from "../loading/LoadingSkeleton";
 import SearchSortBy from "../sort/SearchSortBy";
 import NoResults from "./NoResults";
+import ReactPaginate from "react-paginate";
 
 type Props = {
   setShowMapModal: Dispatch<SetStateAction<FetchDataResponse>>;
@@ -20,20 +21,10 @@ export default function SearchResultsList({
     isLoading,
     currentPage,
     searchCount,
+    searchPagesTotal,
     searchResults,
     fetchAlgoliaData,
   } = useContext(SearchContext);
-
-  const handlePageChange = (key: "prev" | "next") => {
-    const newPage = key === "next" ? currentPage + 1 : currentPage - 1;
-
-    if (
-      (key === "prev" && currentPage > 1) ||
-      (key === "next" && currentPage * 25 < searchCount)
-    ) {
-      fetchAlgoliaData({ page: newPage });
-    }
-  };
 
   return (
     <div className="flex flex-col gap-1 h-full w-full mb-4">
@@ -62,28 +53,40 @@ export default function SearchResultsList({
 
       {!isLoading && searchCount === 0 && <NoResults />}
 
-      {searchCount > 0 && (
-        <div className="flex gap-4 w-full justify-center mt-2">
-          <button
-            type="button"
-            className="disabled:text-gray-400"
-            onClick={() => handlePageChange("prev")}
-            disabled={currentPage == 1}
-          >
+      <ReactPaginate
+        className={`flex justify-center gap-4 mt-4 ${
+          searchCount === 0 ? "hidden" : ""
+        }`}
+        pageCount={searchPagesTotal}
+        previousLabel={
+          <span>
             <i className="fas fa-chevron-left mr-1" />
             Previous
-          </button>
-          <button
-            type="button"
-            className="disabled:text-gray-400"
-            onClick={() => handlePageChange("next")}
-            disabled={currentPage >= Math.round(searchCount / 25)}
-          >
+          </span>
+        }
+        nextLabel={
+          <span>
             Next
             <i className="fas fa-chevron-right ml-1" />
-          </button>
-        </div>
-      )}
+          </span>
+        }
+        activeLinkClassName="font-bold bg-cyan-600 px-2 py-1 rounded-sm text-white"
+        pageClassName="cursor-pointer"
+        previousClassName="cursor-pointer"
+        nextClassName="cursor-pointer"
+        disabledClassName="text-gray-400 cursor-not-allowed"
+        onClick={({ isPrevious, isNext }) => {
+          if (isPrevious && currentPage > 0) {
+            fetchAlgoliaData({ page: currentPage - 1 });
+          } else if (isNext && currentPage < searchPagesTotal - 1) {
+            fetchAlgoliaData({ page: currentPage + 1 });
+          }
+        }}
+        onPageChange={({ selected }) => {
+          if (selected === currentPage) return;
+          fetchAlgoliaData({ page: selected });
+        }}
+      />
     </div>
   );
 }
