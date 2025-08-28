@@ -34,6 +34,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [ ] Fix issue with dual range slider not clickable on mobile
 - [ ] Error messaging for failed queries
 - [ ] Enhancement - use Redux state management to store data which has already been fetched
+- [ ] Add more comments and general refactoring (search 'TODO')
 
 ## Data Sources
 

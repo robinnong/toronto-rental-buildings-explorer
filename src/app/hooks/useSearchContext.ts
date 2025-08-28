@@ -4,6 +4,7 @@ import {
   Dispatch,
   SetStateAction,
   useCallback,
+  useMemo,
   useState,
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -63,6 +64,47 @@ export default function useSearchContext(): SearchContextModel {
   const [searchCount, setSearchCount] = useState<number>(0);
   const [searchPagesTotal, setSearchPagesTotal] = useState<number>(0);
 
+  // Determine which configured Algolia index to search based on the current sort option
+  const generateIndexName = (sort: Sort) => {
+    const primaryIdx = process.env.ALGOLIA_INDEX_NAME; // Default index
+    let idxName = primaryIdx;
+
+    if (sort === "ward_number") {
+      idxName = `${primaryIdx}_ward_asc`;
+    }
+    if (sort === "year_built_asc") {
+      idxName = `${primaryIdx}_year_built_asc`;
+    }
+    if (sort === "year_built_desc") {
+      idxName = `${primaryIdx}_year_built_dsc`;
+    }
+
+    return idxName;
+  };
+
+  const generateCompositeFilter = ({
+    filters,
+    yearBuiltFilter,
+  }: {
+    filters: FilterType[];
+    yearBuiltFilter: YearBuiltFilter;
+  }): string => {
+    const yearFilter = generateYearBuiltSearchClause(yearBuiltFilter);
+    const filterClauses = generateSearchClauses(filters)?.join(" AND ");
+
+    const yearFilterClause = yearFilter
+      ? filterClauses
+        ? ` AND ${yearFilter}`
+        : yearFilter
+      : "";
+
+    const compositeFilter = filterClauses
+      ? filterClauses + yearFilterClause
+      : yearFilterClause;
+
+    return compositeFilter;
+  };
+
   const fetchAlgoliaData = useCallback(
     async ({
       query = currentSearchString,
@@ -79,37 +121,13 @@ export default function useSearchContext(): SearchContextModel {
       try {
         setIsLoading(true);
 
-        // TODO: Move this to a helper function
-        const primaryIdx = process.env.ALGOLIA_INDEX_NAME; // Default index
-        let indexName = primaryIdx; // Default index
-
-        if (sort === "ward_number") {
-          indexName = `${primaryIdx}_ward_asc`;
-        }
-        if (sort === "year_built_asc") {
-          indexName = `${primaryIdx}_year_built_asc`;
-        }
-        if (sort === "year_built_desc") {
-          indexName = `${primaryIdx}_year_built_dsc`;
-        }
-
-        // TODO: Move this to a helper function
-        const yearFilter = generateYearBuiltSearchClause(yearBuiltFilter);
-        const filterClauses = generateSearchClauses(filters)?.join(" AND ");
-        const yearFilterClause = yearFilter
-          ? filterClauses
-            ? ` AND ${yearFilter}`
-            : yearFilter
-          : "";
-        const compositeFilter = filterClauses
-          ? filterClauses + yearFilterClause
-          : yearFilterClause;
-
+        // The search service will query the fields 'SITE_ADDRESS' and 'PROP_MANAGEMENT_COMPANY_NAME'
+        // based on the user's text input
         const results = await client.searchSingleIndex({
-          indexName,
+          indexName: generateIndexName(sort),
           searchParams: {
-            query, // The search service will query the fields 'SITE_ADDRESS' and 'PROP_MANAGEMENT_COMPANY_NAME' based on the user's text input
-            filters: compositeFilter,
+            query,
+            filters: generateCompositeFilter({ filters, yearBuiltFilter }),
             page,
           },
         });
