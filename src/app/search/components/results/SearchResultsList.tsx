@@ -1,6 +1,7 @@
 "use client";
 
 import { Dispatch, ReactElement, SetStateAction, useContext } from "react";
+import ReactPaginate from "react-paginate";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FetchDataResponse } from "@/app/types/global";
 import SearchResultCard from "./SearchResultCard";
@@ -8,7 +9,6 @@ import AppliedFilters from "./AppliedFilters";
 import LoadingSkeleton from "../loading/LoadingSkeleton";
 import SearchSortBy from "../sort/SearchSortBy";
 import NoResults from "./NoResults";
-import ReactPaginate from "react-paginate";
 
 type Props = {
   setShowMapModal: Dispatch<SetStateAction<FetchDataResponse>>;
