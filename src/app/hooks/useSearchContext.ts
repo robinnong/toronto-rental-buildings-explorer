@@ -13,9 +13,9 @@ import {
   Sort,
   YearBuiltFilter,
 } from "@/app/types/global";
-import { filterQueryKeys } from "../constants/general";
 import generateYearBuiltSearchClause from "../lib/generateYearBuiltSearchClause";
 import generateSearchClauses from "../lib/generateSearchClauses";
+import generateUrlQueryParams from "../lib/generateUrlQueryParams";
 
 type FetchAlgoliaDataParams = {
   query?: string;
@@ -61,59 +61,6 @@ export default function useSearchContext(): SearchContextModel {
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
   const [searchCount, setSearchCount] = useState<number>(0);
   const [searchPagesTotal, setSearchPagesTotal] = useState<number>(0);
-
-  const setSortParams = (s: Sort) => {
-    if (s === "ward_number") {
-      params.delete("sort");
-    } else if (s != null) {
-      params.set("sort", `${s}`);
-    }
-
-    replace(`${pathname}?${params.toString()}`);
-  };
-
-  const setSearchParams = (query?: string) => {
-    if (query == null || query === "") {
-      params.delete("q");
-    } else {
-      params.set("q", `${query}`);
-    }
-
-    replace(`${pathname}?${params.toString()}`);
-  };
-
-  const setYearBuiltParams = ({ start, end }: YearBuiltFilter) => {
-    if (start) {
-      params.set("year_built_start", `${start}`);
-    } else {
-      params.delete("year_built_start");
-    }
-    if (end) {
-      params.set("year_built_end", `${end}`);
-    } else {
-      params.delete("year_built_end");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  };
-
-  const setFilterParams = (filters: string[]) => {
-    if (filters.length === 0) {
-      // Clear the "features" from query params if there are no filters applied
-      params.delete("features");
-    }
-
-    const filtersList: string[] = [];
-
-    filters.forEach((key) => {
-      if (!!filterQueryKeys[key]) {
-        filtersList.push(filterQueryKeys[key]);
-      }
-    });
-    if (filtersList.length > 0) {
-      params.set("features", filtersList.join(","));
-    }
-    replace(`${pathname}?${params.toString()}`);
-  };
 
   const fetchAlgoliaData = useCallback(
     async ({
@@ -176,10 +123,15 @@ export default function useSearchContext(): SearchContextModel {
         // TODO: Display error to the user
         console.error("Error searching:", error);
       } finally {
-        setSortParams(sort);
-        setSearchParams(query);
-        setFilterParams(filters);
-        setYearBuiltParams(yearBuiltFilter);
+        generateUrlQueryParams({
+          params,
+          pathname,
+          replace,
+          sort,
+          query,
+          filters,
+          yearBuiltFilter,
+        });
         setIsLoading(false);
       }
     },
