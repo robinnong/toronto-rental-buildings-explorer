@@ -17,12 +17,13 @@ This project is my first full-stack application, allowing me to learn new tools 
 - Researching different solutions for **free-tier DB solutions** for storing and querying data. The 2 options I considered were **MongoDB Atlas Community Edition** and **Google Firestore DB** (a no-SQL cloud database). The first option still requires self-hosting, so I chose the Firesore DB option since it is quick to implement and has an easy-to-use SDK. However, the consequence of choosing the no-SQL Firestore DB where:
   - These queries must not be complex (whatever methods are provided in the Firestore library are what you get for query building)
   - No support for pagination/offset
-  - No support for full-text search, so I integrated **Algolia** (chosen over Elastic Search for its free tier and sufficient index limits). As Algolia only supports text search, I need to maintain duplicate data in both Firestore and Algolia across multiple indices, so this is another downside of choosing a database that does not support both complex querying and text search.
+  - No support for full-text search, so I integrated **Algolia** (chosen over Elastic Search for its free tier and sufficient index limits). As Algolia supports text search as well as SQL-like queries, I plan to slowly migrate some filters from Firestore to Algolia, but I currently maintain duplicate data in both Firestore and Algolia across multiple indices (another downside of choosing a database that does not support both complex querying and text search)
 
 ## TODO
 
 - [ ] Clean and load the remaining records (currently loaded 1100 of 3500 in both Firestore DB and Algolia search index)
-- [ ] Build the indices to support all types of filter combinations for querying the Firestore DB
+- [ ] Migrate queries from Firestore to Algolia
+- [ ] Build the indices to support all types of filter combinations for querying (not all combos are working)
 - [ ] Error messaging for failed queries
 - [ ] Inject filters as URL query params
 - [x] Inject text search as URL query params
