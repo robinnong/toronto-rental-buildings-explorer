@@ -143,6 +143,7 @@ export default function useSearchContext(): SearchContextModel {
           indexName = `${primaryIdx}_year_built_dsc`;
         }
 
+        // TODO: Move this to a helper function
         const yearFilter = generateYearBuiltSearchClause(yearBuiltFilter);
         const filterClauses = generateSearchClauses(filters)?.join(" AND ");
         const yearFilterClause = yearFilter
@@ -153,8 +154,6 @@ export default function useSearchContext(): SearchContextModel {
         const compositeFilter = filterClauses
           ? filterClauses + yearFilterClause
           : yearFilterClause;
-
-        console.log(compositeFilter);
 
         const results = await client.searchSingleIndex({
           indexName,
