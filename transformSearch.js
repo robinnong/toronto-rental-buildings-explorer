@@ -1,6 +1,6 @@
-const data = require("./db-upload/datastore_search_7.json"); // change the path to the file you want to upload
+const data = require("./db-upload/datastore_search_11.json"); // change the path to the file you want to upload
 
-let newRecords = { ...data };
+let newRecords = [...data];
 
 const propsToKeep = [
   "_id",
@@ -37,8 +37,13 @@ const propsToKeep = [
   "YEAR_BUILT",
 ];
 
-newRecords.records.forEach((obj) => {
+newRecords.forEach((obj) => {
   for (const key in obj) {
+    // Remove unwanted properties
+    if (!propsToKeep.includes(key)) {
+      delete obj[key];
+    }
+
     // Convert BIKE_PARKING to boolean
     if (key === "BIKE_PARKING") {
       if (obj[key] !== false) {
@@ -46,7 +51,14 @@ newRecords.records.forEach((obj) => {
       }
     }
 
-    // Transform to integer
+    // Conver PARKING_TYPE to array of strings
+    if (key === "PARKING_TYPE") {
+      if (obj[key] != null) {
+        obj[key] = [obj[key]];
+      }
+    }
+
+    // Transform these fields to integer
     if (
       key === "NO_BARRIER_FREE_ACCESSBLE_UNITS" ||
       key === "NO_OF_ACCESSIBLE_PARKING_SPACES" ||
@@ -58,9 +70,11 @@ newRecords.records.forEach((obj) => {
       obj[key] = parseInt(obj[key], 10);
     }
 
-    // Remove unwanted properties
-    if (!propsToKeep.includes(key)) {
-      delete obj[key];
+    // Convert any remaining fields with "NO" or "YES" to boolean
+    if (obj[key] === "NO") {
+      obj[key] = false;
+    } else if (obj[key] === "YES") {
+      obj[key] = true;
     }
   }
 });
