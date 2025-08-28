@@ -21,8 +21,9 @@ This project is my first full-stack application, allowing me to learn new tools 
 
 ## TODO
 
-- [ ] Clean and load the remaining records (currently loaded 1100 of 3500 in both Firestore DB and Algolia search index)
+- [ ] Clean and upload the remaining records (currently uploaded 1100 of 3500 in the search index)
 - [x] Migrate queries from Firestore to Algolia
+- [x] Remove all Firestore DB implementation code
 - [ ] Error messaging for failed queries
 - [x] Inject filters as URL query params
 - [x] Inject text search as URL query params
