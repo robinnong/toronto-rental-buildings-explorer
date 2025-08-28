@@ -50,7 +50,7 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
     searchContext.setCurrentPage(pageFilter);
 
     // Initial data fetch on load
-    searchContext.fetchAlgoliaData({
+    searchContext.fetchData({
       sort: sortFilter,
       page: pageFilter,
       query: q,

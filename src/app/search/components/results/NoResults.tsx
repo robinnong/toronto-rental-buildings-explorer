@@ -9,7 +9,7 @@ export default function NoResults(): ReactElement {
     setCurrentBuildingFeatureFilters,
     setCurrentYearBuiltFilter,
     setCurrentSort,
-    fetchAlgoliaData,
+    fetchData,
   } = useContext(SearchContext);
 
   return (
@@ -26,7 +26,7 @@ export default function NoResults(): ReactElement {
           setCurrentBuildingFeatureFilters([]);
           setCurrentYearBuiltFilter({});
           setCurrentSort("ward_number");
-          fetchAlgoliaData({ query: "", filters: [], yearBuiltFilter: {} });
+          fetchData({ query: "", filters: [], yearBuiltFilter: {} });
         }}
       >
         Clear filters

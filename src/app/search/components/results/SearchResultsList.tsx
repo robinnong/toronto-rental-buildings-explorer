@@ -23,7 +23,7 @@ export default function SearchResultsList({
     searchCount,
     searchPagesTotal,
     searchResults,
-    fetchAlgoliaData,
+    fetchData,
   } = useContext(SearchContext);
 
   return (
@@ -78,14 +78,14 @@ export default function SearchResultsList({
         forcePage={currentPage}
         onClick={({ isPrevious, isNext }) => {
           if (isPrevious && currentPage > 0) {
-            fetchAlgoliaData({ page: currentPage - 1 });
+            fetchData({ page: currentPage - 1 });
           } else if (isNext && currentPage < searchPagesTotal - 1) {
-            fetchAlgoliaData({ page: currentPage + 1 });
+            fetchData({ page: currentPage + 1 });
           }
         }}
         onPageChange={({ selected }) => {
           if (selected === currentPage) return;
-          fetchAlgoliaData({ page: selected });
+          fetchData({ page: selected });
         }}
       />
     </div>

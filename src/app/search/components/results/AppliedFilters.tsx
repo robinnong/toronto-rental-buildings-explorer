@@ -13,7 +13,7 @@ export default function AppliedFilters(): ReactElement {
     setCurrentBuildingFeatureFilters,
     currentYearBuiltFilter,
     setCurrentYearBuiltFilter,
-    fetchAlgoliaData,
+    fetchData,
   } = useContext(SearchContext);
 
   const appliedYearBuiltFilter: { k: FilterType; v: ReactNode } =
@@ -68,12 +68,12 @@ export default function AppliedFilters(): ReactElement {
       (key) => key !== k
     );
     setCurrentBuildingFeatureFilters(updatedFilters);
-    fetchAlgoliaData({ filters: updatedFilters });
+    fetchData({ filters: updatedFilters });
   };
 
   const removeYearBuiltFilter = () => {
     setCurrentYearBuiltFilter({});
-    fetchAlgoliaData({ yearBuiltFilter: {} });
+    fetchData({ yearBuiltFilter: {} });
   };
 
   return (

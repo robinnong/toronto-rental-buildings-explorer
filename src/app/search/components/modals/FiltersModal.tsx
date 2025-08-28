@@ -24,7 +24,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     setCurrentBuildingFeatureFilters,
     currentYearBuiltFilter,
     setCurrentYearBuiltFilter,
-    fetchAlgoliaData,
+    fetchData,
   } = useContext(SearchContext);
 
   const [currentSelectedFilters, setCurrentSelectedFilters] = useState<
@@ -48,7 +48,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     setCurrentBuildingFeatureFilters(currentSelectedFilters);
     setCurrentYearBuiltFilter(currentSelectedYearBuiltFilter);
 
-    fetchAlgoliaData({
+    fetchData({
       filters: currentSelectedFilters,
       yearBuiltFilter: currentSelectedYearBuiltFilter,
     });
@@ -82,9 +82,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           <BuildingAgeRangeFilters
             setIsValid={setIsValid}
             appliedYearBuiltFilter={currentYearBuiltFilter}
-            setCurrentSelectedYearBuiltFilter={
-              setCurrentSelectedYearBuiltFilter
-            }
+            setSelectedYearBuiltFilter={setCurrentSelectedYearBuiltFilter}
           />
           <BuildingStoreysFilters
             currentSelectedFilters={currentSelectedFilters}
@@ -102,7 +100,10 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
             type="button"
             className="text-cyan-700"
             disabled={isLoading}
-            onClick={() => setCurrentSelectedFilters([])}
+            onClick={() => {
+              setCurrentSelectedFilters([]);
+              setCurrentSelectedYearBuiltFilter({});
+            }}
           >
             Clear all
           </button>

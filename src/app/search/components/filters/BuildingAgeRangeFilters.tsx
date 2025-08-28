@@ -10,9 +10,12 @@ import {
   useState,
 } from "react";
 
+const defaultMin = 1800;
+const defaultMax = new Date().getFullYear();
+
 type Props = {
   appliedYearBuiltFilter: YearBuiltFilter;
-  setCurrentSelectedYearBuiltFilter: Dispatch<SetStateAction<YearBuiltFilter>>;
+  setSelectedYearBuiltFilter: Dispatch<SetStateAction<YearBuiltFilter>>;
   setIsValid: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -21,29 +24,26 @@ type Props = {
  */
 export default function BuildingAgeRangeFilters({
   appliedYearBuiltFilter,
-  setCurrentSelectedYearBuiltFilter,
+  setSelectedYearBuiltFilter,
   setIsValid,
 }: Props): ReactElement {
-  const startYear = 1800;
-  const currentYear = new Date().getFullYear();
-
-  const [rangeStartValue, setRangeStartValue] = useState<number>(startYear);
-  const [rangeEndValue, setRangeEndValue] = useState<number>(currentYear);
+  const [rangeStartValue, setRangeStartValue] = useState<number>(defaultMin);
+  const [rangeEndValue, setRangeEndValue] = useState<number>(defaultMax);
 
   // Initialize range inputs from applied filters
   useEffect(() => {
-    setRangeStartValue(appliedYearBuiltFilter?.start || startYear);
-    setRangeEndValue(appliedYearBuiltFilter?.end || currentYear);
+    setRangeStartValue(appliedYearBuiltFilter?.start || defaultMin);
+    setRangeEndValue(appliedYearBuiltFilter?.end || defaultMax);
   }, []);
 
   // Update the current year built filters when range inputs change
   useEffect(() => {
-    if (rangeStartValue === startYear && rangeEndValue === currentYear) {
-      setCurrentSelectedYearBuiltFilter({});
+    if (rangeStartValue === defaultMin && rangeEndValue === defaultMax) {
+      setSelectedYearBuiltFilter({});
     } else {
-      setCurrentSelectedYearBuiltFilter({
-        start: rangeStartValue !== startYear ? rangeStartValue : undefined,
-        end: rangeEndValue !== currentYear ? rangeEndValue : undefined,
+      setSelectedYearBuiltFilter({
+        start: rangeStartValue !== defaultMin ? rangeStartValue : undefined,
+        end: rangeEndValue !== defaultMax ? rangeEndValue : undefined,
       });
     }
   }, [rangeStartValue, rangeEndValue]);
@@ -51,8 +51,8 @@ export default function BuildingAgeRangeFilters({
   return (
     <DualRangeSlider
       title="Year built between"
-      defaultSliderMin={startYear}
-      defaultSliderMax={currentYear}
+      defaultSliderMin={defaultMin}
+      defaultSliderMax={defaultMax}
       rangeStartValue={rangeStartValue}
       setRangeStartValue={setRangeStartValue}
       rangeEndValue={rangeEndValue}

@@ -11,14 +11,13 @@ type Props = {
 };
 
 export default function SortByDropdown({ onClose }: Props): ReactElement {
-  const { currentSort, setCurrentSort, fetchAlgoliaData } =
-    useContext(SearchContext);
+  const { currentSort, setCurrentSort, fetchData } = useContext(SearchContext);
   const ref = useOnClickOutside(onClose);
 
   // Query with new sort option, reset to first page and close the dropdown after applying a sort
   const onSelect = (key: Sort) => {
     setCurrentSort(key);
-    fetchAlgoliaData({ sort: key });
+    fetchData({ sort: key });
     onClose();
   };
 

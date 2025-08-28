@@ -21,7 +21,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 
 ## TODO
 
-- [ ] Clean and upload the remaining records (currently uploaded 1200 of 3500 in the search index)
+- [x] Clean and upload the remaining records (currently uploaded 1200 of 3600 in the search index)
 - [x] Migrate queries from Firestore to Algolia
 - [x] Remove all Firestore DB implementation code
 - [x] Add pagination using react-paginate
@@ -30,11 +30,12 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [x] Inject sort as URL query param
 - [x] Inject page as URL query param
 - [x] Fix issue with initializing the dual range slider value
+- [ ] Fix issue with 'Clear All' button in fitlers modal not resetting the range filter
 - [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [ ] Fix issue with dual range slider not clickable on mobile
 - [ ] Error messaging for failed queries
-- [ ] Enhancement - use Redux state management to store data which has already been fetched
-- [ ] Add more comments and general refactoring (search 'TODO')
+- [ ] Error handling for invalid queries in URl query params
+- [ ] Add filters for 'NO_OF_ACCESSIBLE_PARKING_SPACES' and 'VISITOR_PARKING'
 
 ## Data Sources
 

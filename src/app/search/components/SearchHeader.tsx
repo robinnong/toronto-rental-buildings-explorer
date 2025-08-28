@@ -9,16 +9,12 @@ type Props = {
 export default function SearchHeader({
   setShowFiltersModal,
 }: Props): ReactElement {
-  const {
-    isLoading,
-    currentSearchString,
-    setCurrentSearchString,
-    fetchAlgoliaData,
-  } = useContext(SearchContext);
+  const { isLoading, currentSearchString, setCurrentSearchString, fetchData } =
+    useContext(SearchContext);
 
   const handleSubmit = () => {
     // Fetch data with text string and filters applied
-    fetchAlgoliaData({});
+    fetchData({});
   };
 
   return (

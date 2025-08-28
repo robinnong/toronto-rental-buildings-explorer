@@ -157,9 +157,7 @@ export default function DualRangeSlider({
             max={rangeEndValue}
             value={rangeStartValue}
             disabled={disabled}
-            onChange={(e) => {
-              setRangeStartValue(e.target.valueAsNumber);
-            }}
+            onChange={(e) => setRangeStartValue(e.target.valueAsNumber)}
           />
         </div>
         <div>
@@ -175,9 +173,7 @@ export default function DualRangeSlider({
             max={defaultSliderMax}
             value={rangeEndValue}
             disabled={disabled}
-            onChange={(e) => {
-              setRangeEndValue(e.target.valueAsNumber);
-            }}
+            onChange={(e) => setRangeEndValue(e.target.valueAsNumber)}
           />
         </div>
       </div>

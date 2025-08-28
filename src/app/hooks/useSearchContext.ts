@@ -40,7 +40,7 @@ export type SearchContextModel = {
   setCurrentPage: Dispatch<SetStateAction<number>>;
   currentSort: Sort;
   setCurrentSort: Dispatch<SetStateAction<Sort>>;
-  fetchAlgoliaData: (q: FetchAlgoliaDataParams) => Promise<FetchDataResponse[]>;
+  fetchData: (q: FetchAlgoliaDataParams) => Promise<FetchDataResponse[]>;
 };
 
 export const SearchContext = createContext<SearchContextModel>(null);
@@ -104,7 +104,7 @@ export default function useSearchContext(): SearchContextModel {
     return compositeFilter;
   };
 
-  const fetchAlgoliaData = useCallback(
+  const fetchData = useCallback(
     async ({
       query = currentSearchString,
       filters = currentBuildingFeatureFilters,
@@ -177,6 +177,6 @@ export default function useSearchContext(): SearchContextModel {
     setCurrentPage,
     currentSort,
     setCurrentSort,
-    fetchAlgoliaData,
+    fetchData,
   };
 }
