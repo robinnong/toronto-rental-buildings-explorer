@@ -21,7 +21,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 
 ## TODO
 
-- [ ] Clean and upload the remaining records (currently uploaded 1100 of 3500 in the search index)
+- [ ] Clean and upload the remaining records (currently uploaded 1200 of 3500 in the search index)
 - [x] Migrate queries from Firestore to Algolia
 - [x] Remove all Firestore DB implementation code
 - [x] Add pagination using react-paginate
