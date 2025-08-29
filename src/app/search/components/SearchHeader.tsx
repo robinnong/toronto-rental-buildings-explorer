@@ -12,9 +12,9 @@ export default function SearchHeader({
   const { isLoading, currentSearchString, setCurrentSearchString, fetchData } =
     useContext(SearchContext);
 
+  // Fetch data with text string and filters applied
   const handleSubmit = () => {
-    // Fetch data with text string and filters applied
-    fetchData({});
+    fetchData({ query: currentSearchString });
   };
 
   return (

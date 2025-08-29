@@ -9,8 +9,24 @@ export default function NoResults(): ReactElement {
     setCurrentBuildingFeatureFilters,
     setCurrentYearBuiltFilter,
     setCurrentSort,
+    setCurrentPage,
     fetchData,
   } = useContext(SearchContext);
+
+  // Clear all sort and search fields
+  const clearSearch = () => {
+    setCurrentSearchString("");
+    setCurrentBuildingFeatureFilters([]);
+    setCurrentYearBuiltFilter({});
+    setCurrentSort("ward_number");
+    setCurrentPage(0);
+    fetchData({
+      query: "",
+      filters: [],
+      yearBuiltFilter: {},
+      sort: "ward_number",
+    });
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-2 rounded-sm border border-solid border-gray-200 py-10 px-4 h-full">
@@ -20,14 +36,7 @@ export default function NoResults(): ReactElement {
       <button
         type="button"
         className="text-cyan-700 mt-2"
-        onClick={() => {
-          // Clear all sort and search fields
-          setCurrentSearchString("");
-          setCurrentBuildingFeatureFilters([]);
-          setCurrentYearBuiltFilter({});
-          setCurrentSort("ward_number");
-          fetchData({ query: "", filters: [], yearBuiltFilter: {} });
-        }}
+        onClick={() => clearSearch()}
       >
         Clear filters
       </button>

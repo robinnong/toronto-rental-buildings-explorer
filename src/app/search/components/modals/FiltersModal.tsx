@@ -20,7 +20,6 @@ type Props = {
  */
 export default function FiltersModal({ onClose }: Props): ReactElement {
   const {
-    isLoading,
     currentBuildingFeatureFilters,
     setCurrentBuildingFeatureFilters,
     currentYearBuiltFilter,
@@ -71,6 +70,11 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     onClose();
   };
 
+  const handleReset = () => {
+    setCurrentSelectedFilters([]);
+    setCurrentSelectedYearBuiltFilter({});
+  };
+
   return (
     <Modal onClickOutside={onClose}>
       {/* Modal header */}
@@ -114,18 +118,14 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
           <button
             type="button"
             className="text-cyan-700"
-            disabled={isLoading}
-            onClick={() => {
-              setCurrentSelectedFilters([]);
-              setCurrentSelectedYearBuiltFilter({});
-            }}
+            onClick={() => handleReset()}
           >
             Clear all
           </button>
           <button
             type="submit"
             className="bg-cyan-600 text-white py-2 px-4 rounded disabled:opacity-50"
-            disabled={isLoading || !isValid}
+            disabled={!isValid}
           >
             Apply filters
           </button>

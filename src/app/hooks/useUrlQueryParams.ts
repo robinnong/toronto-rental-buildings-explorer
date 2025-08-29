@@ -1,10 +1,5 @@
 import { queryKeyToFilter } from "../constants/general";
-import {
-  AppSearchParams,
-  FilterType,
-  Sort,
-  YearBuiltFilter,
-} from "../types/global";
+import { AppSearchParams, FilterType, YearBuiltFilter } from "../types/global";
 import { SearchContextModel } from "./useSearchContext";
 
 /**
@@ -14,23 +9,20 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
   getSearchParams: (q: AppSearchParams) => void;
 } {
   const getSearchParams = async ({
-    sort,
+    sort = "ward_number",
     page,
     q,
     year_built_start,
     year_built_end,
     features,
   }: AppSearchParams) => {
-    const sortFilter = (sort as Sort) || "ward_number";
-    const pageFilter = parseInt(page, 10) - 1 || 0;
-
     // Parse 'feature' filters as FilterType[]
-    const featuresFilters: FilterType[] = [];
+    const filters: FilterType[] = [];
     const featureKeys = decodeURIComponent(features)?.split(",") || [];
     featureKeys.forEach((feature) => {
       // Validate the key as a FilterType before adding it to featureFilters
       if (queryKeyToFilter[feature]) {
-        featuresFilters.push(queryKeyToFilter[feature] as FilterType);
+        filters.push(queryKeyToFilter[feature] as FilterType);
       }
     });
 
@@ -43,20 +35,22 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
       yearBuiltFilter.end = parseInt(year_built_end, 10);
     }
 
-    searchContext.setCurrentSort(sortFilter);
-    searchContext.setCurrentSearchString(q || "");
-    searchContext.setCurrentBuildingFeatureFilters(featuresFilters);
-    searchContext.setCurrentYearBuiltFilter(yearBuiltFilter);
-    searchContext.setCurrentPage(pageFilter);
+    const newSearchParams = {
+      sort,
+      page: parseInt(page, 10) - 1 || 0,
+      query: q,
+      filters,
+      yearBuiltFilter,
+    };
+
+    searchContext.setCurrentSort(newSearchParams.sort);
+    searchContext.setCurrentSearchString(newSearchParams.query);
+    searchContext.setCurrentBuildingFeatureFilters(newSearchParams.filters);
+    searchContext.setCurrentYearBuiltFilter(newSearchParams.yearBuiltFilter);
+    searchContext.setCurrentPage(newSearchParams.page);
 
     // Initial data fetch on load
-    searchContext.fetchData({
-      sort: sortFilter,
-      page: pageFilter,
-      query: q,
-      filters: featuresFilters,
-      yearBuiltFilter,
-    });
+    searchContext.fetchData(newSearchParams);
   };
 
   return { getSearchParams };

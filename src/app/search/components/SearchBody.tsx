@@ -15,12 +15,9 @@ type Props = {
 
 export default function SearchBody({ searchParams }: Props): ReactElement {
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
-  const [showMapModal, setShowMapModal] = useState<FetchDataResponse | null>(
-    null
-  );
+  const [showMapModal, setShowMapModal] = useState<FetchDataResponse>(null);
 
   const searchContext = useSearchContext();
-
   const { getSearchParams } = useUrlQueryParams(searchContext);
 
   const fetchData = useCallback(async () => {
