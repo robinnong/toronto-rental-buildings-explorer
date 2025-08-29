@@ -21,21 +21,29 @@ This project is my first full-stack application, allowing me to learn new tools 
 
 ## TODO
 
+### Tasks:
 - [x] Clean and upload the remaining records (currently uploaded 1200 of 3600 in the search index)
-- [x] Migrate queries from Firestore to Algolia
+- [x] Migrate queries from Firestore DB to Algolia
 - [x] Remove all Firestore DB implementation code
-- [x] Add pagination using react-paginate
+- [x] Add pagination with react-paginate
 - [x] Inject filters as URL query param
 - [x] Inject text search as URL query param
 - [x] Inject sort as URL query param
 - [x] Inject page as URL query param
+
+### Bugs:
 - [x] Fix issue with initializing the dual range slider value
 - [x] Fix issue with 'Clear All' button in fitlers modal not resetting the range filter
 - [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [ ] Fix issue with dual range slider not clickable on mobile
+- [ ] Fix modal sizes on mobile
+
+### Enhancements:
 - [ ] Error messaging for failed queries
 - [ ] Error handling for invalid queries in URl query params
-- [ ] Add filters for 'NO_OF_ACCESSIBLE_PARKING_SPACES' and 'VISITOR_PARKING'
+- [ ] Feature: Add filters for 'NO_OF_ACCESSIBLE_PARKING_SPACES' and 'VISITOR_PARKING'
+- [ ] Feature: Hover or click the ward number on a card for latest census data
+- [ ] Feature: Filter apartments by 25-ward model in a map
 
 ## Data Sources
 
