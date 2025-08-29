@@ -52,13 +52,15 @@ export default function useSearchContext(): SearchContextModel {
   const params = new URLSearchParams(searchParams);
 
   const [isLoading, setIsLoading] = useState(false);
+  // Current filter states
   const [currentBuildingFeatureFilters, setCurrentBuildingFeatureFilters] =
     useState<FilterType[]>([]);
   const [currentYearBuiltFilter, setCurrentYearBuiltFilter] =
-    useState<YearBuiltFilter>({} as YearBuiltFilter);
+    useState<YearBuiltFilter>({});
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentSearchString, setCurrentSearchString] = useState("");
   const [currentSort, setCurrentSort] = useState<Sort>("ward_number");
+  // Search result states
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
   const [searchCount, setSearchCount] = useState<number>(0);
   const [searchPagesTotal, setSearchPagesTotal] = useState<number>(0);

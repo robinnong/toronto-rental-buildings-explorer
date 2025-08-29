@@ -2,6 +2,9 @@ import { FilterOption, FilterType, Sort } from "../types/global";
 
 export const EMBEDDED_MAP_URL = "https://www.google.com/maps/embed/v1/place";
 
+export const defaultMinYear = 1800;
+export const defaultMaxYear = new Date().getFullYear();
+
 export const sortLabels: Record<Sort, string> = {
   ward_number: "Ward number",
   year_built_asc: "Year built (ascending)",

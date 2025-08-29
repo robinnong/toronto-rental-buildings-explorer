@@ -13,9 +13,9 @@ type Props = {
   defaultSliderMin: number;
   defaultSliderMax: number;
   rangeStartValue: number;
-  setRangeStartValue: Dispatch<SetStateAction<number>>;
+  setRangeStartValue: (value: number) => void;
   rangeEndValue: number;
-  setRangeEndValue: Dispatch<SetStateAction<number>>;
+  setRangeEndValue: (value: number) => void;
   setIsValid: Dispatch<SetStateAction<boolean>>;
   disabled?: boolean;
 };
@@ -38,9 +38,9 @@ export default function DualRangeSlider({
   title,
   defaultSliderMin = 0,
   defaultSliderMax = 100,
-  rangeStartValue,
+  rangeStartValue = defaultSliderMin,
   setRangeStartValue,
-  rangeEndValue,
+  rangeEndValue = defaultSliderMax,
   setRangeEndValue,
   setIsValid,
   disabled,

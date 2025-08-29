@@ -1,20 +1,12 @@
 "use client";
 
 import DualRangeSlider from "@/app/components/utils/DualRangeSlider";
+import { defaultMinYear, defaultMaxYear } from "@/app/constants/general";
 import { YearBuiltFilter } from "@/app/types/global";
-import {
-  Dispatch,
-  ReactElement,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-
-const defaultMin = 1800;
-const defaultMax = new Date().getFullYear();
+import { Dispatch, ReactElement, SetStateAction } from "react";
 
 type Props = {
-  appliedYearBuiltFilter: YearBuiltFilter;
+  selectedYearBuiltFilter: YearBuiltFilter;
   setSelectedYearBuiltFilter: Dispatch<SetStateAction<YearBuiltFilter>>;
   setIsValid: Dispatch<SetStateAction<boolean>>;
 };
@@ -23,40 +15,23 @@ type Props = {
  * Renders a dual range slider for filtering buildings by age, ranging between a 1800 and the current year.
  */
 export default function BuildingAgeRangeFilters({
-  appliedYearBuiltFilter,
+  selectedYearBuiltFilter,
   setSelectedYearBuiltFilter,
   setIsValid,
 }: Props): ReactElement {
-  const [rangeStartValue, setRangeStartValue] = useState<number>(defaultMin);
-  const [rangeEndValue, setRangeEndValue] = useState<number>(defaultMax);
-
-  // Initialize range inputs from applied filters
-  useEffect(() => {
-    setRangeStartValue(appliedYearBuiltFilter?.start || defaultMin);
-    setRangeEndValue(appliedYearBuiltFilter?.end || defaultMax);
-  }, []);
-
-  // Update the current year built filters when range inputs change
-  useEffect(() => {
-    if (rangeStartValue === defaultMin && rangeEndValue === defaultMax) {
-      setSelectedYearBuiltFilter({});
-    } else {
-      setSelectedYearBuiltFilter({
-        start: rangeStartValue !== defaultMin ? rangeStartValue : undefined,
-        end: rangeEndValue !== defaultMax ? rangeEndValue : undefined,
-      });
-    }
-  }, [rangeStartValue, rangeEndValue]);
-
   return (
     <DualRangeSlider
       title="Year built between"
-      defaultSliderMin={defaultMin}
-      defaultSliderMax={defaultMax}
-      rangeStartValue={rangeStartValue}
-      setRangeStartValue={setRangeStartValue}
-      rangeEndValue={rangeEndValue}
-      setRangeEndValue={setRangeEndValue}
+      defaultSliderMin={defaultMinYear}
+      defaultSliderMax={defaultMaxYear}
+      rangeStartValue={selectedYearBuiltFilter.start}
+      setRangeStartValue={(value) =>
+        setSelectedYearBuiltFilter((prev) => ({ ...prev, start: value }))
+      }
+      rangeEndValue={selectedYearBuiltFilter.end}
+      setRangeEndValue={(value) =>
+        setSelectedYearBuiltFilter((prev) => ({ ...prev, end: value }))
+      }
       setIsValid={setIsValid}
     />
   );

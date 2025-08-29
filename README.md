@@ -30,7 +30,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [x] Inject sort as URL query param
 - [x] Inject page as URL query param
 - [x] Fix issue with initializing the dual range slider value
-- [ ] Fix issue with 'Clear All' button in fitlers modal not resetting the range filter
+- [x] Fix issue with 'Clear All' button in fitlers modal not resetting the range filter
 - [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [ ] Fix issue with dual range slider not clickable on mobile
 - [ ] Error messaging for failed queries

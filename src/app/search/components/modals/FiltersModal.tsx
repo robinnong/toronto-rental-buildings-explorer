@@ -7,6 +7,7 @@ import { FilterType, YearBuiltFilter } from "@/app/types/global";
 import BuildingAgeRangeFilters from "../filters/BuildingAgeRangeFilters";
 import BuildingFeatureFilters from "../filters/BuildingFeatureFilters";
 import BuildingStoreysFilters from "../filters/BuildingStoreysFilters";
+import { defaultMaxYear, defaultMinYear } from "@/app/constants/general";
 
 type Props = {
   onClose: () => void;
@@ -31,7 +32,10 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     FilterType[]
   >([]);
   const [currentSelectedYearBuiltFilter, setCurrentSelectedYearBuiltFilter] =
-    useState<YearBuiltFilter>({} as YearBuiltFilter);
+    useState<YearBuiltFilter>({
+      start: defaultMinYear,
+      end: defaultMaxYear,
+    });
   const [isValid, setIsValid] = useState<boolean>(true);
 
   // Initialize state - building feature filters
@@ -41,16 +45,27 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
 
   // Initialize state - year built range filter
   useEffect(() => {
-    setCurrentSelectedYearBuiltFilter(currentYearBuiltFilter);
+    if (Object.keys(currentYearBuiltFilter).length > 0) {
+      setCurrentSelectedYearBuiltFilter(currentYearBuiltFilter);
+    }
   }, [currentYearBuiltFilter]);
 
   const handleSubmit = () => {
+    let updatedYearBuiltFilter = {} as YearBuiltFilter;
+
+    if (currentSelectedYearBuiltFilter.start !== defaultMinYear) {
+      updatedYearBuiltFilter.start = currentSelectedYearBuiltFilter.start;
+    }
+    if (currentSelectedYearBuiltFilter.end !== defaultMaxYear) {
+      updatedYearBuiltFilter.end = currentSelectedYearBuiltFilter.end;
+    }
+
+    setCurrentYearBuiltFilter(updatedYearBuiltFilter);
     setCurrentBuildingFeatureFilters(currentSelectedFilters);
-    setCurrentYearBuiltFilter(currentSelectedYearBuiltFilter);
 
     fetchData({
       filters: currentSelectedFilters,
-      yearBuiltFilter: currentSelectedYearBuiltFilter,
+      yearBuiltFilter: updatedYearBuiltFilter,
     });
 
     onClose();
@@ -81,7 +96,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
           <BuildingAgeRangeFilters
             setIsValid={setIsValid}
-            appliedYearBuiltFilter={currentYearBuiltFilter}
+            selectedYearBuiltFilter={currentSelectedYearBuiltFilter}
             setSelectedYearBuiltFilter={setCurrentSelectedYearBuiltFilter}
           />
           <BuildingStoreysFilters
