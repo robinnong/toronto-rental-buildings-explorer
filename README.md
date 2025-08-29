@@ -1,10 +1,10 @@
-# 🏙️Toronto Rental Buildings Explorer
+# 🏙️ Toronto Rental Buildings Explorer
 
 ![Landing page](./public/home-page-screenshot.jpg)
 
 **Toronto Rental Buildings Explorer** is a **Next.js** web application that allows users to sort and filter an index of registered rental buildings in Toronto.
 
-💻Live project deployed with Vercel at [toronto-rental-buildings-explorer.vercel.app](https://toronto-rental-buildings-explorer.vercel.app/)
+💻 Live project deployed with Vercel at [toronto-rental-buildings-explorer.vercel.app](https://toronto-rental-buildings-explorer.vercel.app/)
 
 This project is my first full-stack application, allowing me to learn new tools and showcase my coding style. Currently a work-in-progress.
 
@@ -19,7 +19,7 @@ This project is my first full-stack application, allowing me to learn new tools 
   - No support for pagination/offset
   - No support for full-text search, so I integrated **Algolia** (chosen over Elastic Search for its free tier and sufficient index limits). As Algolia supports text search as well as SQL-like queries, I migrated all storage and filtering from Firestore DB to Algolia.
 
-## 📝TODO
+## 📝 TODO
 
 ### Tasks:
 - [x] Clean and upload the remaining records (currently uploaded `1200` of `3600` in the search index)
@@ -45,7 +45,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [ ] Feature: Hover or click the ward number on a card for latest census data
 - [ ] Feature: Filter apartments by 25-ward model in a map
 
-## 🔍Data Sources
+## 🔍 Data Sources
 
 This project pulls data from the following City of Toronto's Open Data Portal datasets:
 
@@ -56,7 +56,7 @@ Maps Embed API:
 
 - [Google Maps Embed](https://developers.google.com/maps/documentation/embed/get-started)
 
-## 🧰Tools
+## 🧰 Tools
 
 - Languages: TypeScript, JavaScript, CSS
 - Frameworks: React, [Tailwind CSS](https://tailwindcss.com), [Next.js](https://nextjs.org/docs)
