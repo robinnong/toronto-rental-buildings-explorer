@@ -29,6 +29,8 @@ function searchQueryBuilder(key: FilterType): string {
       return `NOT AIR_CONDITIONING_TYPE:"NONE"`;
     case "NO_OF_ELEVATORS":
       return "NO_OF_ELEVATORS > 0";
+    case "NO_BARRIER_FREE_ACCESSBLE_UNITS":
+      return "NO_BARRIER_FREE_ACCESSBLE_UNITS > 0";
     case "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM":
       return "NOT DESCRIPTION_OF_INDOOR_EXERCISE_ROOM:null";
     case "PARKING_TYPE":
@@ -37,6 +39,8 @@ function searchQueryBuilder(key: FilterType): string {
       return "BIKE_PARKING:true";
     case "BARRIER_FREE_ACCESSIBILTY_ENTR":
       return "BARRIER_FREE_ACCESSIBILTY_ENTR:true";
+    case "VISITOR_PARKING":
+      return `NOT VISITOR_PARKING:"UNAVAILABLE"`;
     default:
       return null;
   }

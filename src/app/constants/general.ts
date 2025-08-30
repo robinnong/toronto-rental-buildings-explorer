@@ -22,6 +22,7 @@ export enum FilterLabels {
   BARRIER_FREE_ACCESSIBILTY_ENTR = "Barrier-free entrance",
   BALCONIES = "Balconies",
   BIKE_PARKING = "Bike parking",
+  NO_BARRIER_FREE_ACCESSBLE_UNITS = "Barrier-free units",
   NO_OF_ELEVATORS = "Elevators",
   DESCRIPTION_OF_INDOOR_EXERCISE_ROOM = "Gym",
   HIGH_RISE = "High rise",
@@ -32,6 +33,7 @@ export enum FilterLabels {
   NON_SMOKING_BUILDING = "Non-smoking building",
   PARKING_TYPE = "Parking",
   PETS_ALLOWED = "Pets allowed",
+  VISITOR_PARKING = "Visitor parking",
   YEAR_BUILT = "Year built",
 }
 
@@ -40,6 +42,7 @@ export enum FilterIcons {
   BARRIER_FREE_ACCESSIBILTY_ENTR = "fa-wheelchair",
   BALCONIES = "fa-door-open",
   BIKE_PARKING = "fa-bicycle",
+  NO_BARRIER_FREE_ACCESSBLE_UNITS = "fa-universal-access",
   NO_OF_ELEVATORS = "fa-elevator",
   DESCRIPTION_OF_INDOOR_EXERCISE_ROOM = "fa-dumbbell",
   HIGH_RISE = "fa-cubes-stacked",
@@ -50,6 +53,7 @@ export enum FilterIcons {
   NON_SMOKING_BUILDING = "fa-ban-smoking",
   PARKING_TYPE = "fa-car",
   PETS_ALLOWED = "fa-paw",
+  VISITOR_PARKING = "fa-user-friends",
   YEAR_BUILT = "fa-hammer",
 }
 
@@ -58,6 +62,7 @@ export const filterQueryKeys: Record<string, string> = {
   BARRIER_FREE_ACCESSIBILTY_ENTR: "barrier_free_entrance",
   BALCONIES: "balconies",
   BIKE_PARKING: "bike_parking",
+  NO_BARRIER_FREE_ACCESSBLE_UNITS: "barrier_free_units",
   NO_OF_ELEVATORS: "elevators",
   DESCRIPTION_OF_INDOOR_EXERCISE_ROOM: "gym",
   HIGH_RISE: "high_rise",
@@ -68,11 +73,13 @@ export const filterQueryKeys: Record<string, string> = {
   NON_SMOKING_BUILDING: "non_smoking_building",
   PARKING_TYPE: "parking",
   PETS_ALLOWED: "pets_allowed",
+  VISITOR_PARKING: "visitor_parking",
 };
 
 export const queryKeyToFilter: Record<string, string> = {
   air_conditioning: "AIR_CONDITIONING_TYPE",
   barrier_free_entrance: "BARRIER_FREE_ACCESSIBILTY_ENTR",
+  barrier_free_units: "NO_BARRIER_FREE_ACCESSBLE_UNITS",
   balconies: "BALCONIES",
   bike_parking: "BIKE_PARKING",
   elevators: "NO_OF_ELEVATORS",
@@ -85,12 +92,14 @@ export const queryKeyToFilter: Record<string, string> = {
   non_smoking_building: "NON_SMOKING_BUILDING",
   parking: "PARKING_TYPE",
   pets_allowed: "PETS_ALLOWED",
+  visitor_parking: "VISITOR_PARKING",
 };
 
 const filterKeys: FilterType[] = [
   "AIR_CONDITIONING_TYPE",
-  "BARRIER_FREE_ACCESSIBILTY_ENTR",
   "BALCONIES",
+  "BARRIER_FREE_ACCESSIBILTY_ENTR",
+  "NO_BARRIER_FREE_ACCESSBLE_UNITS",
   "BIKE_PARKING",
   "NO_OF_ELEVATORS",
   "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM",
@@ -99,6 +108,7 @@ const filterKeys: FilterType[] = [
   "NON_SMOKING_BUILDING",
   "PARKING_TYPE",
   "PETS_ALLOWED",
+  "VISITOR_PARKING",
 ];
 
 export const buildingFeatureFilters: FilterOption[] = filterKeys.map((key) => ({

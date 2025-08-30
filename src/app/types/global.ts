@@ -3,6 +3,7 @@ export type FilterType =
   | "BARRIER_FREE_ACCESSIBILTY_ENTR"
   | "BALCONIES"
   | "BIKE_PARKING"
+  | "NO_BARRIER_FREE_ACCESSBLE_UNITS"
   | "NO_OF_ELEVATORS"
   | "DESCRIPTION_OF_INDOOR_EXERCISE_ROOM"
   | "HIGH_RISE"
@@ -13,6 +14,7 @@ export type FilterType =
   | "NON_SMOKING_BUILDING"
   | "PARKING_TYPE"
   | "PETS_ALLOWED"
+  | "VISITOR_PARKING"
   | "YEAR_BUILT";
 
 export type Sort = "ward_number" | "year_built_asc" | "year_built_desc";

@@ -35,6 +35,7 @@ export default function SearchResultCard({
     HEATING_TYPE,
     LAUNDRY_ROOM,
     LOCKER_OR_STORAGE_ROOM,
+    NO_BARRIER_FREE_ACCESSBLE_UNITS,
     NO_OF_ELEVATORS,
     NON_SMOKING_BUILDING,
     PARKING_TYPE,
@@ -183,6 +184,18 @@ export default function SearchResultCard({
                 className={`fas ${FilterIcons.BARRIER_FREE_ACCESSIBILTY_ENTR} mr-1`}
               />
               {FilterLabels.BARRIER_FREE_ACCESSIBILTY_ENTR}
+            </p>{" "}
+            <p
+              className={
+                NO_BARRIER_FREE_ACCESSBLE_UNITS > 0
+                  ? ""
+                  : "line-through text-gray-400"
+              }
+            >
+              <i
+                className={`fas ${FilterIcons.NO_BARRIER_FREE_ACCESSBLE_UNITS} mr-1`}
+              />
+              {FilterLabels.NO_BARRIER_FREE_ACCESSBLE_UNITS}
             </p>
             <p
               className={
