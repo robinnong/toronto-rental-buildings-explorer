@@ -11,6 +11,7 @@ const generateUrlQueryParams = ({
   query,
   filters,
   yearBuiltFilter,
+  wardFilter,
 }: {
   params: URLSearchParams;
   pathname: string;
@@ -20,6 +21,7 @@ const generateUrlQueryParams = ({
   query?: string;
   filters: string[];
   yearBuiltFilter: YearBuiltFilter;
+  wardFilter: number;
 }) => {
   const setPageParams = (p: number) => {
     if (p == null || p === 0) {
@@ -58,6 +60,14 @@ const generateUrlQueryParams = ({
     }
   };
 
+  const setWardParams = (ward?: number) => {
+    if (ward) {
+      params.set("ward", `${ward}`);
+    } else {
+      params.delete("ward");
+    }
+  };
+
   const setFilterParams = (filters: string[]) => {
     if (filters.length === 0) {
       // Clear the "features" from query params if there are no filters applied
@@ -81,6 +91,7 @@ const generateUrlQueryParams = ({
   setSearchParams(query);
   setFilterParams(filters);
   setYearBuiltParams(yearBuiltFilter);
+  setWardParams(wardFilter);
 
   replace(`${pathname}?${params.toString()}`);
 };

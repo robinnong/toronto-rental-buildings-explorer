@@ -1,32 +1,33 @@
 "use client";
 
-import { ReactElement, useContext, useState } from "react";
+import { ReactElement, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
-import { sortLabels } from "@/app/constants/general";
-import SortByDropdown from "./SortByDropdown";
+import { sortLabels, sortOptions } from "@/app/constants/general";
+import Dropdown from "@/app/components/utils/Dropdown";
+import { Sort } from "@/app/types/global";
 
 export default function SearchSortBy(): ReactElement {
-  const { currentSort, isLoading, searchCount } = useContext(SearchContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const { currentSort, isLoading, searchCount, setCurrentSort, fetchData } =
+    useContext(SearchContext);
+
+  // Query with new sort option, reset to first page and close the dropdown after applying a sort
+  const onSelect = (key: Sort) => {
+    if (key === currentSort) return;
+
+    setCurrentSort(key);
+    fetchData({ sort: key });
+  };
 
   return (
-    <div className="flex gap-2 items-center relative">
+    <div className="flex gap-2 items-center">
       <span className="text-nowrap">Sort by:</span>
-      <button
-        type="button"
-        className="flex cursor-pointer border border-gray-300 hover:border-cyan-600 hover:bg-sky-50 hover:text-cyan-700 py-1 rounded-full px-3 w-50 disabled:border-gray-300 disabled:text-gray-400 disabled:bg-white disabled:cursor-default"
-        onClick={() => setIsOpen(!isOpen)}
-        disabled={isLoading || searchCount === 0}
-      >
-        <span className="mr-1 grow-1">{sortLabels[currentSort]}</span>
-        {isOpen ? (
-          <i className="fas fa-times" />
-        ) : (
-          <i className="fas fa-chevron-down" />
-        )}
-      </button>
 
-      {isOpen && <SortByDropdown onClose={() => setIsOpen(false)} />}
+      <Dropdown<Sort>
+        selectedOption={{ key: currentSort, label: sortLabels[currentSort] }}
+        disabled={isLoading || searchCount === 0}
+        options={sortOptions}
+        onSelect={onSelect}
+      />
     </div>
   );
 }

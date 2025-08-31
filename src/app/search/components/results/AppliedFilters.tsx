@@ -5,6 +5,7 @@ import { SearchContext } from "@/app/hooks/useSearchContext";
 import { FilterType } from "@/app/types/global";
 import { FilterIcons, FilterLabels } from "@/app/constants/general";
 import AppliedFilterPill from "./AppliedFilterPill";
+import ward25NamesNumbers from "@/app/constants/ward25NamesNumbers";
 
 export default function AppliedFilters(): ReactElement {
   const {
@@ -13,8 +14,25 @@ export default function AppliedFilters(): ReactElement {
     setCurrentBuildingFeatureFilters,
     currentYearBuiltFilter,
     setCurrentYearBuiltFilter,
+    currentWardFilter,
+    setCurrentWardFilter,
     fetchData,
   } = useContext(SearchContext);
+
+  const appliedWardFilter: { k: FilterType; v: ReactNode } = useMemo(() => {
+    if (!currentWardFilter) return null;
+
+    return {
+      k: "WARD",
+      v: (
+        <>
+          <i className={`fas ${FilterIcons.WARD} mr-1`} />
+          {FilterLabels.WARD}&nbsp;
+          {`(${ward25NamesNumbers[currentWardFilter]})`}
+        </>
+      ),
+    };
+  }, [currentWardFilter]);
 
   const appliedYearBuiltFilter: { k: FilterType; v: ReactNode } =
     useMemo(() => {
@@ -76,6 +94,11 @@ export default function AppliedFilters(): ReactElement {
     fetchData({ yearBuiltFilter: {} });
   };
 
+  const removeWardFilter = () => {
+    setCurrentWardFilter(0);
+    fetchData({ wardFilter: 0 });
+  };
+
   return (
     <div className="flex flex-wrap gap-1">
       {appliedFiltersList.map(({ k, v }) => (
@@ -92,6 +115,14 @@ export default function AppliedFilters(): ReactElement {
           label={appliedYearBuiltFilter.v}
           disabled={isLoading}
           onClick={() => removeYearBuiltFilter()}
+        />
+      )}
+      {appliedWardFilter && (
+        <AppliedFilterPill
+          key={appliedWardFilter.k}
+          label={appliedWardFilter.v}
+          disabled={isLoading}
+          onClick={() => removeWardFilter()}
         />
       )}
     </div>

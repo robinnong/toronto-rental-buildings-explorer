@@ -3,7 +3,7 @@
 import { ReactElement, ReactNode } from "react";
 import useOnClickOutside from "@/app/hooks/useOnClickOutside";
 
-type Props = { onClickOutside: () => void; children: ReactNode };
+type Props = { onClose: () => void; children: ReactNode };
 
 /**
  * A reusable modal wrapper component with a transparent background overlay
@@ -13,11 +13,8 @@ type Props = { onClickOutside: () => void; children: ReactNode };
  * @param {function} onClickOutside - Function to call when clicking outside the modal
  * @param {ReactNode} children - The content to display inside the modal
  */
-export default function Modal({
-  onClickOutside,
-  children,
-}: Props): ReactElement {
-  const ref = useOnClickOutside(onClickOutside);
+export default function Modal({ onClose, children }: Props): ReactElement {
+  const ref = useOnClickOutside({ onClick: onClose });
 
   return (
     // Transparent background overlay

@@ -16,11 +16,13 @@ import {
 import generateYearBuiltSearchClause from "../lib/generateYearBuiltSearchClause";
 import generateSearchClauses from "../lib/generateSearchClauses";
 import generateUrlQueryParams from "../lib/generateUrlQueryParams";
+import generateWardSearchClause from "../lib/generateWardSearchClause";
 
 type FetchAlgoliaDataParams = {
   query?: string;
   filters?: FilterType[];
   yearBuiltFilter?: YearBuiltFilter;
+  wardFilter?: number;
   page?: number;
   sort?: Sort;
 };
@@ -34,6 +36,8 @@ export type SearchContextModel = {
   setCurrentBuildingFeatureFilters: Dispatch<SetStateAction<FilterType[]>>;
   currentYearBuiltFilter: YearBuiltFilter;
   setCurrentYearBuiltFilter: Dispatch<SetStateAction<YearBuiltFilter>>;
+  currentWardFilter: number;
+  setCurrentWardFilter: Dispatch<SetStateAction<number>>;
   currentSearchString: string;
   setCurrentSearchString: Dispatch<SetStateAction<string>>;
   currentPage: number;
@@ -57,6 +61,7 @@ export default function useSearchContext(): SearchContextModel {
     useState<FilterType[]>([]);
   const [currentYearBuiltFilter, setCurrentYearBuiltFilter] =
     useState<YearBuiltFilter>({});
+  const [currentWardFilter, setCurrentWardFilter] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentSearchString, setCurrentSearchString] = useState("");
   const [currentSort, setCurrentSort] = useState<Sort>("ward_number");
@@ -86,11 +91,14 @@ export default function useSearchContext(): SearchContextModel {
   const generateCompositeFilter = ({
     filters,
     yearBuiltFilter,
+    wardFilter,
   }: {
     filters: FilterType[];
     yearBuiltFilter: YearBuiltFilter;
+    wardFilter: number;
   }): string => {
     const yearFilter = generateYearBuiltSearchClause(yearBuiltFilter);
+    const wardFilterClause = generateWardSearchClause(wardFilter);
     const filterClauses = generateSearchClauses(filters)?.join(" AND ");
 
     const yearFilterClause = yearFilter
@@ -99,9 +107,19 @@ export default function useSearchContext(): SearchContextModel {
         : yearFilter
       : "";
 
-    const compositeFilter = filterClauses
-      ? filterClauses + yearFilterClause
-      : yearFilterClause;
+    const wardFilterClauseStr = wardFilterClause
+      ? filterClauses || yearFilterClause
+        ? ` AND ${wardFilterClause}`
+        : wardFilterClause
+      : "";
+
+    const compositeFilter = [
+      filterClauses,
+      yearFilterClause,
+      wardFilterClauseStr,
+    ]
+      .filter(Boolean)
+      .join("");
 
     return compositeFilter;
   };
@@ -111,6 +129,7 @@ export default function useSearchContext(): SearchContextModel {
       query = currentSearchString,
       filters = currentBuildingFeatureFilters,
       yearBuiltFilter = currentYearBuiltFilter,
+      wardFilter = currentWardFilter,
       page = 0, // Algolia uses 0-based pagination
       sort = currentSort,
     }: FetchAlgoliaDataParams): Promise<FetchDataResponse[]> => {
@@ -128,7 +147,11 @@ export default function useSearchContext(): SearchContextModel {
           indexName: generateIndexName(sort),
           searchParams: {
             query,
-            filters: generateCompositeFilter({ filters, yearBuiltFilter }),
+            filters: generateCompositeFilter({
+              filters,
+              yearBuiltFilter,
+              wardFilter,
+            }),
             page,
           },
         });
@@ -152,6 +175,7 @@ export default function useSearchContext(): SearchContextModel {
           query,
           filters,
           yearBuiltFilter,
+          wardFilter,
         });
         setIsLoading(false);
       }
@@ -173,6 +197,8 @@ export default function useSearchContext(): SearchContextModel {
     setCurrentBuildingFeatureFilters,
     currentYearBuiltFilter,
     setCurrentYearBuiltFilter,
+    currentWardFilter,
+    setCurrentWardFilter,
     currentSearchString,
     setCurrentSearchString,
     currentPage,

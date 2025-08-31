@@ -6,8 +6,8 @@ import FilterPill from "@/app/components/utils/FilterPill";
 import { FilterType } from "@/app/types/global";
 
 type Props = {
-  currentSelectedFilters: FilterType[];
-  setCurrentSelectedFilters: Dispatch<SetStateAction<FilterType[]>>;
+  selectedFilters: FilterType[];
+  setSelectedFilters: Dispatch<SetStateAction<FilterType[]>>;
 };
 
 /**
@@ -15,21 +15,20 @@ type Props = {
  * Provides filters such as "Pets allowed", "Non-smoking building", etc.
  */
 export default function BuildingFeatureFilters({
-  currentSelectedFilters,
-  setCurrentSelectedFilters,
+  selectedFilters,
+  setSelectedFilters,
 }: Props): ReactElement {
   const handleToggle = (key: FilterType) => {
-    if (currentSelectedFilters.includes(key)) {
+    if (selectedFilters.includes(key)) {
       // Remove the filter
-      setCurrentSelectedFilters((prev) => prev.filter((item) => item !== key));
+      setSelectedFilters((prev) => prev.filter((item) => item !== key));
     } else {
       // Apply the filter
-      setCurrentSelectedFilters((prev) => [...prev, key]);
+      setSelectedFilters((prev) => [...prev, key]);
     }
   };
 
-  const checkIsActive = (key: FilterType) =>
-    currentSelectedFilters.includes(key);
+  const checkIsActive = (key: FilterType) => selectedFilters.includes(key);
 
   return (
     <div>

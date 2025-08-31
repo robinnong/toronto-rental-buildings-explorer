@@ -34,6 +34,7 @@ export enum FilterLabels {
   PARKING_TYPE = "Parking",
   PETS_ALLOWED = "Pets allowed",
   VISITOR_PARKING = "Visitor parking",
+  WARD = "Ward",
   YEAR_BUILT = "Year built",
 }
 
@@ -54,6 +55,7 @@ export enum FilterIcons {
   PARKING_TYPE = "fa-car",
   PETS_ALLOWED = "fa-paw",
   VISITOR_PARKING = "fa-user-friends",
+  WARD = "fa-map-marker-alt",
   YEAR_BUILT = "fa-hammer",
 }
 

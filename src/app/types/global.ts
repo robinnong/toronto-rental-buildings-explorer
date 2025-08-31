@@ -15,6 +15,7 @@ export type FilterType =
   | "PARKING_TYPE"
   | "PETS_ALLOWED"
   | "VISITOR_PARKING"
+  | "WARD"
   | "YEAR_BUILT";
 
 export type Sort = "ward_number" | "year_built_asc" | "year_built_desc";
@@ -37,6 +38,7 @@ export type AppSearchParams = {
   year_built_start?: string;
   year_built_end?: string;
   features?: string;
+  ward?: string;
 };
 
 export type FetchDataResponse = {

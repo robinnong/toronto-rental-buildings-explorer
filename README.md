@@ -46,6 +46,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [ ] Error handling for invalid queries in URl query params
 - [x] Feature: Add filter for `NO_BARRIER_FREE_ACCESSBLE_UNITS`
 - [x] Feature: Add filter for `VISITOR_PARKING`
+- [x] Feature: Add filter for `WARD`
 - [ ] Feature: Hover or click the ward number on a card for latest census data
 - [ ] Feature: Filter apartments by 25-ward model in a map
 

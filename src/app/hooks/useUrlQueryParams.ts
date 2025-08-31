@@ -15,6 +15,7 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
     year_built_start,
     year_built_end,
     features,
+    ward,
   }: AppSearchParams) => {
     // Parse 'feature' filters as FilterType[]
     const filters: FilterType[] = [];
@@ -38,15 +39,17 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
     const newSearchParams = {
       sort,
       page: parseInt(page, 10) - 1 || 0,
-      query: q,
+      query: q ?? "",
       filters,
       yearBuiltFilter,
+      wardFilter: parseInt(ward, 10) || 0,
     };
 
     searchContext.setCurrentSort(newSearchParams.sort);
     searchContext.setCurrentSearchString(newSearchParams.query);
     searchContext.setCurrentBuildingFeatureFilters(newSearchParams.filters);
     searchContext.setCurrentYearBuiltFilter(newSearchParams.yearBuiltFilter);
+    searchContext.setCurrentWardFilter(newSearchParams.wardFilter);
     searchContext.setCurrentPage(newSearchParams.page);
 
     // Initial data fetch on load

@@ -57,7 +57,7 @@ export default function SearchResultsList({
         className={`flex justify-center gap-4 mt-4 ${
           searchCount === 0 ? "hidden" : ""
         }`}
-        pageCount={searchPagesTotal}
+        pageCount={searchPagesTotal || 1}
         previousLabel={
           <span>
             <i className="fas fa-chevron-left mr-1" />

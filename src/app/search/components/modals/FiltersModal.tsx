@@ -8,6 +8,7 @@ import BuildingAgeRangeFilters from "../filters/BuildingAgeRangeFilters";
 import BuildingFeatureFilters from "../filters/BuildingFeatureFilters";
 import BuildingStoreysFilters from "../filters/BuildingStoreysFilters";
 import { defaultMaxYear, defaultMinYear } from "@/app/constants/general";
+import BuildingWardFilter from "../filters/BuildingWardFilter";
 
 type Props = {
   onClose: () => void;
@@ -24,59 +25,68 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     setCurrentBuildingFeatureFilters,
     currentYearBuiltFilter,
     setCurrentYearBuiltFilter,
+    currentWardFilter,
+    setCurrentWardFilter,
     fetchData,
   } = useContext(SearchContext);
 
-  const [currentSelectedFilters, setCurrentSelectedFilters] = useState<
-    FilterType[]
-  >([]);
-  const [currentSelectedYearBuiltFilter, setCurrentSelectedYearBuiltFilter] =
+  const [selectedFilters, setSelectedFilters] = useState<FilterType[]>([]);
+  const [selectedYearBuiltFilter, setSelectedYearBuiltFilter] =
     useState<YearBuiltFilter>({
       start: defaultMinYear,
       end: defaultMaxYear,
     });
+  const [selectedWardFilter, setSelectedWardFilter] = useState<number>(0);
   const [isValid, setIsValid] = useState<boolean>(true);
 
   // Initialize state - building feature filters
   useEffect(() => {
-    setCurrentSelectedFilters(currentBuildingFeatureFilters);
+    setSelectedFilters(currentBuildingFeatureFilters);
   }, [currentBuildingFeatureFilters]);
 
   // Initialize state - year built range filter
   useEffect(() => {
     if (Object.keys(currentYearBuiltFilter).length > 0) {
-      setCurrentSelectedYearBuiltFilter(currentYearBuiltFilter);
+      setSelectedYearBuiltFilter(currentYearBuiltFilter);
     }
   }, [currentYearBuiltFilter]);
+
+  // Initialize state - ward filter
+  useEffect(() => {
+    setSelectedWardFilter(currentWardFilter);
+  }, [currentWardFilter]);
 
   const handleSubmit = () => {
     let updatedYearBuiltFilter = {} as YearBuiltFilter;
 
-    if (currentSelectedYearBuiltFilter.start !== defaultMinYear) {
-      updatedYearBuiltFilter.start = currentSelectedYearBuiltFilter.start;
+    if (selectedYearBuiltFilter.start !== defaultMinYear) {
+      updatedYearBuiltFilter.start = selectedYearBuiltFilter.start;
     }
-    if (currentSelectedYearBuiltFilter.end !== defaultMaxYear) {
-      updatedYearBuiltFilter.end = currentSelectedYearBuiltFilter.end;
+    if (selectedYearBuiltFilter.end !== defaultMaxYear) {
+      updatedYearBuiltFilter.end = selectedYearBuiltFilter.end;
     }
 
     setCurrentYearBuiltFilter(updatedYearBuiltFilter);
-    setCurrentBuildingFeatureFilters(currentSelectedFilters);
+    setCurrentBuildingFeatureFilters(selectedFilters);
+    setCurrentWardFilter(selectedWardFilter);
 
     fetchData({
-      filters: currentSelectedFilters,
+      filters: selectedFilters,
       yearBuiltFilter: updatedYearBuiltFilter,
+      wardFilter: selectedWardFilter,
     });
 
     onClose();
   };
 
   const handleReset = () => {
-    setCurrentSelectedFilters([]);
-    setCurrentSelectedYearBuiltFilter({});
+    setSelectedFilters([]);
+    setSelectedYearBuiltFilter({});
+    setSelectedWardFilter(0);
   };
 
   return (
-    <Modal onClickOutside={onClose}>
+    <Modal onClose={onClose}>
       {/* Modal header */}
       <form
         action=""
@@ -100,16 +110,20 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
           <BuildingAgeRangeFilters
             setIsValid={setIsValid}
-            selectedYearBuiltFilter={currentSelectedYearBuiltFilter}
-            setSelectedYearBuiltFilter={setCurrentSelectedYearBuiltFilter}
+            selectedYearBuiltFilter={selectedYearBuiltFilter}
+            setSelectedYearBuiltFilter={setSelectedYearBuiltFilter}
           />
           <BuildingStoreysFilters
-            currentSelectedFilters={currentSelectedFilters}
-            setCurrentSelectedFilters={setCurrentSelectedFilters}
+            selectedFilters={selectedFilters}
+            setSelectedFilters={setSelectedFilters}
+          />
+          <BuildingWardFilter
+            selectedWardFilter={selectedWardFilter}
+            setSelectedWardFilter={setSelectedWardFilter}
           />
           <BuildingFeatureFilters
-            currentSelectedFilters={currentSelectedFilters}
-            setCurrentSelectedFilters={setCurrentSelectedFilters}
+            selectedFilters={selectedFilters}
+            setSelectedFilters={setSelectedFilters}
           />
         </div>
 

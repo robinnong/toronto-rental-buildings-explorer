@@ -29,7 +29,7 @@ export default function MapModal({
   const googleMapSrc = `${EMBEDDED_MAP_URL}?key=${process.env.GOOGLE_API_KEY}&q=${mapQuery}`;
 
   return (
-    <Modal onClickOutside={onClose}>
+    <Modal onClose={onClose}>
       {/* Modal header */}
       <div className="p-3 flex justify-between">
         <h4 className="text-md font-semibold">Map</h4>
