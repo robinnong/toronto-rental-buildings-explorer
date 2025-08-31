@@ -8,6 +8,7 @@ export default function NoResults(): ReactElement {
     setCurrentSearchString,
     setCurrentBuildingFeatureFilters,
     setCurrentYearBuiltFilter,
+    setCurrentWardFilter,
     setCurrentSort,
     setCurrentPage,
     fetchData,
@@ -18,12 +19,15 @@ export default function NoResults(): ReactElement {
     setCurrentSearchString("");
     setCurrentBuildingFeatureFilters([]);
     setCurrentYearBuiltFilter({});
+    setCurrentWardFilter(0);
     setCurrentSort("ward_number");
     setCurrentPage(0);
+
     fetchData({
       query: "",
       filters: [],
       yearBuiltFilter: {},
+      wardFilter: 0,
       sort: "ward_number",
     });
   };
