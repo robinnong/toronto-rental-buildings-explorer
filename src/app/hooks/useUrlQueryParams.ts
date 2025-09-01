@@ -1,5 +1,10 @@
 import { queryKeyToFilter } from "../constants/general";
-import { AppSearchParams, FilterType, YearBuiltFilter } from "../types/global";
+import {
+  AppSearchParams,
+  FetchAlgoliaDataParams,
+  FilterType,
+  YearBuiltFilter,
+} from "../types/global";
 import { SearchContextModel } from "./useSearchContext";
 
 /**
@@ -18,12 +23,12 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
     ward,
   }: AppSearchParams) => {
     // Parse 'feature' filters as FilterType[]
-    const filters: FilterType[] = [];
+    const buildingFeatureFilters: FilterType[] = [];
     const featureKeys = decodeURIComponent(features)?.split(",") || [];
     featureKeys.forEach((feature) => {
-      // Validate the key as a FilterType before adding it to featureFilters
+      // Validate the key as a FilterType before adding it to buildingFeatureFilters
       if (queryKeyToFilter[feature]) {
-        filters.push(queryKeyToFilter[feature] as FilterType);
+        buildingFeatureFilters.push(queryKeyToFilter[feature] as FilterType);
       }
     });
 
@@ -36,18 +41,20 @@ export default function useUrlQueryParams(searchContext: SearchContextModel): {
       yearBuiltFilter.end = parseInt(year_built_end, 10);
     }
 
-    const newSearchParams = {
+    const newSearchParams: FetchAlgoliaDataParams = {
       sort,
       page: parseInt(page, 10) - 1 || 0,
       query: q ?? "",
-      filters,
+      buildingFeatureFilters,
       yearBuiltFilter,
       wardFilter: parseInt(ward, 10) || 0,
     };
 
     searchContext.setCurrentSort(newSearchParams.sort);
     searchContext.setCurrentSearchString(newSearchParams.query);
-    searchContext.setCurrentBuildingFeatureFilters(newSearchParams.filters);
+    searchContext.setCurrentBuildingFeatureFilters(
+      newSearchParams.buildingFeatureFilters
+    );
     searchContext.setCurrentYearBuiltFilter(newSearchParams.yearBuiltFilter);
     searchContext.setCurrentWardFilter(newSearchParams.wardFilter);
     searchContext.setCurrentPage(newSearchParams.page);

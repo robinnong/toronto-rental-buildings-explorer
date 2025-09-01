@@ -71,7 +71,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     setCurrentWardFilter(selectedWardFilter);
 
     fetchData({
-      filters: selectedFilters,
+      buildingFeatureFilters: selectedFilters,
       yearBuiltFilter: updatedYearBuiltFilter,
       wardFilter: selectedWardFilter,
     });

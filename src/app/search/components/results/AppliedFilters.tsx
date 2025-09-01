@@ -86,7 +86,7 @@ export default function AppliedFilters(): ReactElement {
       (key) => key !== k
     );
     setCurrentBuildingFeatureFilters(updatedFilters);
-    fetchData({ filters: updatedFilters });
+    fetchData({ buildingFeatureFilters: updatedFilters });
   };
 
   const removeYearBuiltFilter = () => {

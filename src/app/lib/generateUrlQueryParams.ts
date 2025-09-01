@@ -15,7 +15,7 @@ const generateUrlQueryParams = ({
   sort,
   page,
   query,
-  filters,
+  buildingFeatureFilters,
   yearBuiltFilter,
   wardFilter,
 }: GenerateUrlQueryParams) => {
@@ -70,7 +70,7 @@ const generateUrlQueryParams = ({
   };
 
   // Example output: 'features=barrier_free_entrance%2Cmid_rise'
-  const setFilterParams = (filters: string[]) => {
+  const setFeatureFilterParams = (filters: string[]) => {
     if (filters.length === 0) {
       // Clear the "features" from query params if there are no filters applied
       params.delete("features");
@@ -91,7 +91,7 @@ const generateUrlQueryParams = ({
   setSortParams(sort);
   setPageParams(page);
   setSearchParams(query);
-  setFilterParams(filters);
+  setFeatureFilterParams(buildingFeatureFilters);
   setYearBuiltParams(yearBuiltFilter);
   setWardParams(wardFilter);
 

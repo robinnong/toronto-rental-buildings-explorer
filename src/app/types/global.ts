@@ -1,6 +1,6 @@
 export type FetchAlgoliaDataParams = {
   query?: string;
-  filters?: FilterType[];
+  buildingFeatureFilters?: FilterType[];
   yearBuiltFilter?: YearBuiltFilter;
   wardFilter?: number;
   page?: number;

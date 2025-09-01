@@ -14,10 +14,8 @@ import {
   Sort,
   YearBuiltFilter,
 } from "@/app/types/global";
-import generateYearBuiltSearchClause from "../lib/generateYearBuiltSearchClause";
-import generateSearchClauses from "../lib/generateSearchClauses";
 import generateUrlQueryParams from "../lib/generateUrlQueryParams";
-import generateWardSearchClause from "../lib/generateWardSearchClause";
+import generateCompositeFilter from "../lib/generateCompositeFilter";
 
 export type SearchContextModel = {
   isLoading: boolean;
@@ -81,40 +79,10 @@ export default function useSearchContext(): SearchContextModel {
     return idxName;
   };
 
-  // Combine all filter clauses into a single string for Algolia search filter param
-  // Example output: 'YEAR_BUILT >= 1996 AND WARD = 6 AND BARRIER_FREE_ACCESSIBILTY_ENTR:true AND CONFIRMED_STOREYS: 5 TO 14'
-  const generateCompositeFilter = ({
-    filters,
-    yearBuiltFilter,
-    wardFilter,
-  }: {
-    filters: FilterType[];
-    yearBuiltFilter: YearBuiltFilter;
-    wardFilter: number;
-  }): string => {
-    const yearFilterClause = generateYearBuiltSearchClause(yearBuiltFilter);
-    const wardFilterClause = generateWardSearchClause(wardFilter);
-    const filterClauses = generateSearchClauses(filters);
-
-    const compositeFilters = [];
-
-    if (yearFilterClause) {
-      compositeFilters.push(yearFilterClause);
-    }
-    if (wardFilterClause) {
-      compositeFilters.push(wardFilterClause);
-    }
-    if (filterClauses) {
-      compositeFilters.push(filterClauses);
-    }
-
-    return compositeFilters.join(" AND ");
-  };
-
   const fetchData = useCallback(
     async ({
       query = currentSearchString,
-      filters = currentBuildingFeatureFilters,
+      buildingFeatureFilters = currentBuildingFeatureFilters,
       yearBuiltFilter = currentYearBuiltFilter,
       wardFilter = currentWardFilter,
       page = 0, // Algolia uses 0-based pagination
@@ -135,7 +103,7 @@ export default function useSearchContext(): SearchContextModel {
           searchParams: {
             query,
             filters: generateCompositeFilter({
-              filters,
+              buildingFeatureFilters,
               yearBuiltFilter,
               wardFilter,
             }),
@@ -160,7 +128,7 @@ export default function useSearchContext(): SearchContextModel {
           sort,
           page,
           query,
-          filters,
+          buildingFeatureFilters,
           yearBuiltFilter,
           wardFilter,
         });
@@ -177,20 +145,23 @@ export default function useSearchContext(): SearchContextModel {
   );
 
   const resetSearch = () => {
-    setCurrentSearchString("");
-    setCurrentBuildingFeatureFilters([]);
-    setCurrentYearBuiltFilter({});
-    setCurrentWardFilter(0);
-    setCurrentSort("ward_number");
-    setCurrentPage(0);
-
-    fetchData({
+    const defaultFilters: FetchAlgoliaDataParams = {
       query: "",
-      filters: [],
+      buildingFeatureFilters: [],
       yearBuiltFilter: {},
       wardFilter: 0,
       sort: "ward_number",
-    });
+      page: 0,
+    };
+
+    setCurrentSearchString(defaultFilters.query);
+    setCurrentBuildingFeatureFilters(defaultFilters.buildingFeatureFilters);
+    setCurrentYearBuiltFilter(defaultFilters.yearBuiltFilter);
+    setCurrentWardFilter(defaultFilters.wardFilter);
+    setCurrentSort(defaultFilters.sort);
+    setCurrentPage(defaultFilters.page);
+
+    fetchData(defaultFilters);
   };
 
   return {
