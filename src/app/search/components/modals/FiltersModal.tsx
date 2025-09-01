@@ -20,15 +20,8 @@ type Props = {
  * @param {Function} onClose Callback function to close the modal.
  */
 export default function FiltersModal({ onClose }: Props): ReactElement {
-  const {
-    currentBuildingFeatureFilters,
-    setCurrentBuildingFeatureFilters,
-    currentYearBuiltFilter,
-    setCurrentYearBuiltFilter,
-    currentWardFilter,
-    setCurrentWardFilter,
-    fetchData,
-  } = useContext(SearchContext);
+  const { currentFilters, setFilter, fetchData } = useContext(SearchContext);
+  const { buildingFeatures, ward, yearBuilt } = currentFilters;
 
   const [selectedFilters, setSelectedFilters] = useState<FilterType[]>([]);
   const [selectedYearBuiltFilter, setSelectedYearBuiltFilter] =
@@ -41,20 +34,20 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
 
   // Initialize state - building feature filters
   useEffect(() => {
-    setSelectedFilters(currentBuildingFeatureFilters);
-  }, [currentBuildingFeatureFilters]);
+    setSelectedFilters(buildingFeatures);
+  }, [buildingFeatures]);
 
   // Initialize state - year built range filter
   useEffect(() => {
-    if (Object.keys(currentYearBuiltFilter).length > 0) {
-      setSelectedYearBuiltFilter(currentYearBuiltFilter);
+    if (Object.keys(yearBuilt).length > 0) {
+      setSelectedYearBuiltFilter(yearBuilt);
     }
-  }, [currentYearBuiltFilter]);
+  }, [yearBuilt]);
 
   // Initialize state - ward filter
   useEffect(() => {
-    setSelectedWardFilter(currentWardFilter);
-  }, [currentWardFilter]);
+    setSelectedWardFilter(ward);
+  }, [ward]);
 
   const handleSubmit = () => {
     let updatedYearBuiltFilter = {} as YearBuiltFilter;
@@ -66,14 +59,14 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
       updatedYearBuiltFilter.end = selectedYearBuiltFilter.end;
     }
 
-    setCurrentYearBuiltFilter(updatedYearBuiltFilter);
-    setCurrentBuildingFeatureFilters(selectedFilters);
-    setCurrentWardFilter(selectedWardFilter);
+    setFilter("buildingFeatures", selectedFilters);
+    setFilter("yearBuilt", updatedYearBuiltFilter);
+    setFilter("ward", selectedWardFilter);
 
     fetchData({
-      buildingFeatureFilters: selectedFilters,
-      yearBuiltFilter: updatedYearBuiltFilter,
-      wardFilter: selectedWardFilter,
+      buildingFeatures: selectedFilters,
+      yearBuilt: updatedYearBuiltFilter,
+      ward: selectedWardFilter,
     });
 
     onClose();

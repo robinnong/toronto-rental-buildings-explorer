@@ -9,12 +9,13 @@ type Props = {
 export default function SearchHeader({
   setShowFiltersModal,
 }: Props): ReactElement {
-  const { isLoading, currentSearchString, setCurrentSearchString, fetchData } =
+  const { isLoading, currentFilters, setFilter, fetchData } =
     useContext(SearchContext);
+  const { query } = currentFilters;
 
   // Fetch data with text string and filters applied
   const handleSubmit = () => {
-    fetchData({ query: currentSearchString });
+    fetchData({ query });
   };
 
   return (
@@ -37,14 +38,14 @@ export default function SearchHeader({
             id="search"
             placeholder="Search by address or property management name"
             disabled={isLoading}
-            value={currentSearchString}
-            onChange={(e) => setCurrentSearchString(e.target.value)}
+            value={query}
+            onChange={(e) => setFilter("query", e.target.value)}
           />
-          {currentSearchString?.length > 0 && (
+          {query?.length > 0 && (
             <button
               className="absolute top-0 right-3 bottom-0"
               type="button"
-              onClick={() => setCurrentSearchString("")}
+              onClick={() => setFilter("query", "")}
               disabled={isLoading}
             >
               <i className="fas fa-xmark text-gray-500" />

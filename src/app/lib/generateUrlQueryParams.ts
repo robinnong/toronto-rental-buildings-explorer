@@ -15,9 +15,9 @@ const generateUrlQueryParams = ({
   sort,
   page,
   query,
-  buildingFeatureFilters,
-  yearBuiltFilter,
-  wardFilter,
+  buildingFeatures,
+  yearBuilt,
+  ward,
 }: GenerateUrlQueryParams) => {
   // Example output: 'page=10'
   const setPageParams = (p: number) => {
@@ -91,9 +91,9 @@ const generateUrlQueryParams = ({
   setSortParams(sort);
   setPageParams(page);
   setSearchParams(query);
-  setFeatureFilterParams(buildingFeatureFilters);
-  setYearBuiltParams(yearBuiltFilter);
-  setWardParams(wardFilter);
+  setFeatureFilterParams(buildingFeatures);
+  setYearBuiltParams(yearBuilt);
+  setWardParams(ward);
 
   replace(`${pathname}?${params.toString()}`);
 };

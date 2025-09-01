@@ -1,65 +1,67 @@
 import { algoliasearch } from "algoliasearch";
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useState,
-} from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  AppSearchParams,
   FetchAlgoliaDataParams,
   FetchDataResponse,
-  FilterType,
   Sort,
-  YearBuiltFilter,
 } from "@/app/types/global";
 import generateUrlQueryParams from "../lib/generateUrlQueryParams";
 import generateCompositeFilter from "../lib/generateCompositeFilter";
+import urlQueryParamsToCurrentFilters from "./urlQueryParamsToCurrentFilters";
 
 export type SearchContextModel = {
   isLoading: boolean;
   searchCount: number;
   searchPagesTotal: number;
   searchResults: FetchDataResponse[];
-  currentBuildingFeatureFilters: FilterType[];
-  setCurrentBuildingFeatureFilters: Dispatch<SetStateAction<FilterType[]>>;
-  currentYearBuiltFilter: YearBuiltFilter;
-  setCurrentYearBuiltFilter: Dispatch<SetStateAction<YearBuiltFilter>>;
-  currentWardFilter: number;
-  setCurrentWardFilter: Dispatch<SetStateAction<number>>;
-  currentSearchString: string;
-  setCurrentSearchString: Dispatch<SetStateAction<string>>;
-  currentPage: number;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
-  currentSort: Sort;
-  setCurrentSort: Dispatch<SetStateAction<Sort>>;
+  currentFilters: FetchAlgoliaDataParams;
+  setFilter: <T>(fieldName: keyof FetchAlgoliaDataParams, value: T) => void;
   fetchData: (q: FetchAlgoliaDataParams) => Promise<FetchDataResponse[]>;
   resetSearch: () => void;
 };
 
 export const SearchContext = createContext<SearchContextModel>(null);
 
-export default function useSearchContext(): SearchContextModel {
+export default function useSearchContext({
+  initialSearchParams,
+}: {
+  initialSearchParams: Promise<AppSearchParams>;
+}): SearchContextModel {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const params = new URLSearchParams(searchParams);
 
+  const defaultFilters: FetchAlgoliaDataParams = {
+    query: "",
+    buildingFeatures: [],
+    yearBuilt: {},
+    ward: 0,
+    sort: "ward_number",
+    page: 0,
+  };
+
   const [isLoading, setIsLoading] = useState(false);
   // Current filter states
-  const [currentBuildingFeatureFilters, setCurrentBuildingFeatureFilters] =
-    useState<FilterType[]>([]);
-  const [currentYearBuiltFilter, setCurrentYearBuiltFilter] =
-    useState<YearBuiltFilter>({});
-  const [currentWardFilter, setCurrentWardFilter] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [currentSearchString, setCurrentSearchString] = useState("");
-  const [currentSort, setCurrentSort] = useState<Sort>("ward_number");
+  const [currentFilters, setCurrentFilters] =
+    useState<FetchAlgoliaDataParams>(defaultFilters);
   // Search result states
   const [searchResults, setSearchResults] = useState<FetchDataResponse[]>(null);
   const [searchCount, setSearchCount] = useState<number>(0);
   const [searchPagesTotal, setSearchPagesTotal] = useState<number>(0);
+
+  // Sets a value in currentFilters, a map of all applied search filters to be passed into fetchData()
+  function setFilter<T>(
+    fieldName: keyof FetchAlgoliaDataParams,
+    value: T
+  ): void {
+    setCurrentFilters((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+  }
 
   // Determine which configured Algolia index to search based on the current sort option
   const generateIndexName = (sort: Sort) => {
@@ -81,12 +83,12 @@ export default function useSearchContext(): SearchContextModel {
 
   const fetchData = useCallback(
     async ({
-      query = currentSearchString,
-      buildingFeatureFilters = currentBuildingFeatureFilters,
-      yearBuiltFilter = currentYearBuiltFilter,
-      wardFilter = currentWardFilter,
+      query = currentFilters.query,
+      buildingFeatures = currentFilters.buildingFeatures,
+      yearBuilt = currentFilters.yearBuilt,
+      ward = currentFilters.ward,
       page = 0, // Algolia uses 0-based pagination
-      sort = currentSort,
+      sort = currentFilters.sort,
     }: FetchAlgoliaDataParams): Promise<FetchDataResponse[]> => {
       const client = algoliasearch(
         process.env.ALGOLIA_APPLICATION_ID,
@@ -103,9 +105,9 @@ export default function useSearchContext(): SearchContextModel {
           searchParams: {
             query,
             filters: generateCompositeFilter({
-              buildingFeatureFilters,
-              yearBuiltFilter,
-              wardFilter,
+              buildingFeatures,
+              yearBuilt,
+              ward,
             }),
             page,
           },
@@ -114,7 +116,7 @@ export default function useSearchContext(): SearchContextModel {
         setSearchPagesTotal(results?.nbPages);
         setSearchCount(results?.nbHits);
         setSearchResults(results?.hits as FetchDataResponse[]);
-        setCurrentPage(results.page);
+        setFilter("page", results.page);
 
         return results?.hits as FetchDataResponse[];
       } catch (error) {
@@ -128,59 +130,43 @@ export default function useSearchContext(): SearchContextModel {
           sort,
           page,
           query,
-          buildingFeatureFilters,
-          yearBuiltFilter,
-          wardFilter,
+          buildingFeatures,
+          yearBuilt,
+          ward,
         });
         setIsLoading(false);
       }
     },
-    [
-      currentSearchString,
-      currentBuildingFeatureFilters,
-      currentYearBuiltFilter,
-      currentSort,
-      currentWardFilter,
-    ]
+    [currentFilters]
   );
 
   const resetSearch = () => {
-    const defaultFilters: FetchAlgoliaDataParams = {
-      query: "",
-      buildingFeatureFilters: [],
-      yearBuiltFilter: {},
-      wardFilter: 0,
-      sort: "ward_number",
-      page: 0,
-    };
-
-    setCurrentSearchString(defaultFilters.query);
-    setCurrentBuildingFeatureFilters(defaultFilters.buildingFeatureFilters);
-    setCurrentYearBuiltFilter(defaultFilters.yearBuiltFilter);
-    setCurrentWardFilter(defaultFilters.wardFilter);
-    setCurrentSort(defaultFilters.sort);
-    setCurrentPage(defaultFilters.page);
-
+    setCurrentFilters(defaultFilters);
     fetchData(defaultFilters);
   };
+
+  const initSearch = useCallback(async () => {
+    const params = await initialSearchParams;
+    const newSearchParams = urlQueryParamsToCurrentFilters({
+      params,
+    });
+
+    setCurrentFilters(newSearchParams);
+    fetchData(newSearchParams); // Initial data fetch on load
+  }, []);
+
+  // Initial data fetching on search page load
+  useEffect(() => {
+    initSearch();
+  }, []);
 
   return {
     isLoading,
     searchCount,
     searchPagesTotal,
     searchResults,
-    currentBuildingFeatureFilters,
-    setCurrentBuildingFeatureFilters,
-    currentYearBuiltFilter,
-    setCurrentYearBuiltFilter,
-    currentWardFilter,
-    setCurrentWardFilter,
-    currentSearchString,
-    setCurrentSearchString,
-    currentPage,
-    setCurrentPage,
-    currentSort,
-    setCurrentSort,
+    currentFilters,
+    setFilter,
     fetchData,
     resetSearch,
   };

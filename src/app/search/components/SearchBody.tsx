@@ -1,13 +1,12 @@
 "use client";
 
+import { ReactElement, useState } from "react";
 import { AppSearchParams, FetchDataResponse } from "@/app/types/global";
-import { ReactElement, useCallback, useEffect, useState } from "react";
 import SearchResults from "./results/SearchResultsList";
 import MapModal from "./modals/MapModal";
 import FiltersModal from "./modals/FiltersModal";
 import SearchHeader from "./SearchHeader";
 import useSearchContext, { SearchContext } from "@/app/hooks/useSearchContext";
-import useUrlQueryParams from "@/app/hooks/useUrlQueryParams";
 
 type Props = {
   searchParams: Promise<AppSearchParams>;
@@ -17,18 +16,7 @@ export default function SearchBody({ searchParams }: Props): ReactElement {
   const [showFiltersModal, setShowFiltersModal] = useState<boolean>(false);
   const [showMapModal, setShowMapModal] = useState<FetchDataResponse>(null);
 
-  const searchContext = useSearchContext();
-  const { getSearchParams } = useUrlQueryParams(searchContext);
-
-  const fetchData = useCallback(async () => {
-    const params = await searchParams;
-    getSearchParams(params);
-  }, []);
-
-  // Initial data fetching on search page load
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const searchContext = useSearchContext({ initialSearchParams: searchParams });
 
   return (
     <SearchContext.Provider value={searchContext}>

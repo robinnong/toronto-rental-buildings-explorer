@@ -8,19 +8,12 @@ import AppliedFilterPill from "./AppliedFilterPill";
 import ward25NamesNumbers from "@/app/constants/ward25NamesNumbers";
 
 export default function AppliedFilters(): ReactElement {
-  const {
-    isLoading,
-    currentBuildingFeatureFilters,
-    setCurrentBuildingFeatureFilters,
-    currentYearBuiltFilter,
-    setCurrentYearBuiltFilter,
-    currentWardFilter,
-    setCurrentWardFilter,
-    fetchData,
-  } = useContext(SearchContext);
+  const { isLoading, currentFilters, setFilter, fetchData } =
+    useContext(SearchContext);
+  const { buildingFeatures, ward, yearBuilt } = currentFilters;
 
   const appliedWardFilter: { k: FilterType; v: ReactNode } = useMemo(() => {
-    if (!currentWardFilter) return null;
+    if (!ward) return null;
 
     return {
       k: "WARD",
@@ -28,15 +21,15 @@ export default function AppliedFilters(): ReactElement {
         <>
           <i className={`fas ${FilterIcons.WARD} mr-1`} />
           {FilterLabels.WARD}&nbsp;
-          {`(${ward25NamesNumbers[currentWardFilter]})`}
+          {`(${ward25NamesNumbers[ward]})`}
         </>
       ),
     };
-  }, [currentWardFilter]);
+  }, [ward]);
 
   const appliedYearBuiltFilter: { k: FilterType; v: ReactNode } =
     useMemo(() => {
-      if (!currentYearBuiltFilter?.end && !currentYearBuiltFilter?.start) {
+      if (!yearBuilt?.end && !yearBuilt?.start) {
         return null;
       }
 
@@ -48,26 +41,26 @@ export default function AppliedFilters(): ReactElement {
             {FilterLabels.YEAR_BUILT}&nbsp;
             {/* Display the range for YEAR_BUILT filter */}
             {/* Example: Year after (1900 to 2018) */}
-            {currentYearBuiltFilter.start != null &&
-              currentYearBuiltFilter.end != null &&
-              `(${currentYearBuiltFilter.start} to ${currentYearBuiltFilter.end})`}
+            {yearBuilt.start != null &&
+              yearBuilt.end != null &&
+              `(${yearBuilt.start} to ${yearBuilt.end})`}
             {/* Example: Year after (before 2000) */}
-            {currentYearBuiltFilter.start != null &&
-              currentYearBuiltFilter.end == null &&
-              `(after ${currentYearBuiltFilter.start})`}
+            {yearBuilt.start != null &&
+              yearBuilt.end == null &&
+              `(after ${yearBuilt.start})`}
             {/* Example: Year built (before 2000) */}
-            {currentYearBuiltFilter.start == null &&
-              currentYearBuiltFilter.end != null &&
-              `(before ${currentYearBuiltFilter.end})`}
+            {yearBuilt.start == null &&
+              yearBuilt.end != null &&
+              `(before ${yearBuilt.end})`}
           </>
         ),
       };
-    }, [currentYearBuiltFilter]);
+    }, [yearBuilt]);
 
   const appliedFiltersList: { k: FilterType; v: ReactNode }[] = useMemo(
     () =>
-      currentBuildingFeatureFilters.length > 0
-        ? currentBuildingFeatureFilters.map((filter) => ({
+      buildingFeatures.length > 0
+        ? buildingFeatures.map((filter) => ({
             k: filter,
             v: (
               <>
@@ -77,26 +70,24 @@ export default function AppliedFilters(): ReactElement {
             ),
           }))
         : [],
-    [currentBuildingFeatureFilters]
+    [buildingFeatures]
   );
 
   const removeFeatureFilter = (k: FilterType) => {
     // Remove applied filter and re-run the query
-    const updatedFilters = currentBuildingFeatureFilters.filter(
-      (key) => key !== k
-    );
-    setCurrentBuildingFeatureFilters(updatedFilters);
-    fetchData({ buildingFeatureFilters: updatedFilters });
+    const updatedFilters = buildingFeatures.filter((key) => key !== k);
+    setFilter("buildingFeatures", updatedFilters);
+    fetchData({ buildingFeatures: updatedFilters });
   };
 
   const removeYearBuiltFilter = () => {
-    setCurrentYearBuiltFilter({});
-    fetchData({ yearBuiltFilter: {} });
+    setFilter("yearBuilt", {});
+    fetchData({ yearBuilt: {} });
   };
 
   const removeWardFilter = () => {
-    setCurrentWardFilter(0);
-    fetchData({ wardFilter: 0 });
+    setFilter("ward", 0);
+    fetchData({ ward: 0 });
   };
 
   return (

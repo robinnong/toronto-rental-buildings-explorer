@@ -6,17 +6,17 @@ import generateYearBuiltSearchClause from "./generateYearBuiltSearchClause";
 // Combines all filter clauses into a single string for Algolia search filter param
 // Example output: 'YEAR_BUILT >= 1996 AND WARD = 6 AND BARRIER_FREE_ACCESSIBILTY_ENTR:true AND CONFIRMED_STOREYS: 5 TO 14'
 const generateCompositeFilter = ({
-  buildingFeatureFilters,
-  yearBuiltFilter,
-  wardFilter,
+  buildingFeatures,
+  yearBuilt,
+  ward,
 }: {
-  buildingFeatureFilters: FilterType[];
-  yearBuiltFilter: YearBuiltFilter;
-  wardFilter: number;
+  buildingFeatures: FilterType[];
+  yearBuilt: YearBuiltFilter;
+  ward: number;
 }): string => {
-  const yearFilterClause = generateYearBuiltSearchClause(yearBuiltFilter);
-  const wardFilterClause = generateWardSearchClause(wardFilter);
-  const featureFilterClauses = generateSearchClauses(buildingFeatureFilters);
+  const yearFilterClause = generateYearBuiltSearchClause(yearBuilt);
+  const wardFilterClause = generateWardSearchClause(ward);
+  const featureFilterClauses = generateSearchClauses(buildingFeatures);
 
   const compositeFilters = [];
 

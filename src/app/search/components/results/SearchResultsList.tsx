@@ -19,12 +19,13 @@ export default function SearchResultsList({
 }: Props): ReactElement {
   const {
     isLoading,
-    currentPage,
+    currentFilters,
     searchCount,
     searchPagesTotal,
     searchResults,
     fetchData,
   } = useContext(SearchContext);
+  const { page } = currentFilters;
 
   return (
     <div className="flex flex-col gap-1 h-full w-full mb-4">
@@ -75,16 +76,16 @@ export default function SearchResultsList({
         previousClassName="cursor-pointer"
         nextClassName="cursor-pointer"
         disabledClassName="text-gray-400 cursor-not-allowed"
-        forcePage={currentPage}
+        forcePage={page}
         onClick={({ isPrevious, isNext }) => {
-          if (isPrevious && currentPage > 0) {
-            fetchData({ page: currentPage - 1 });
-          } else if (isNext && currentPage < searchPagesTotal - 1) {
-            fetchData({ page: currentPage + 1 });
+          if (isPrevious && page > 0) {
+            fetchData({ page: page - 1 });
+          } else if (isNext && page < searchPagesTotal - 1) {
+            fetchData({ page: page + 1 });
           }
         }}
         onPageChange={({ selected }) => {
-          if (selected === currentPage) return;
+          if (selected === page) return;
           fetchData({ page: selected });
         }}
       />

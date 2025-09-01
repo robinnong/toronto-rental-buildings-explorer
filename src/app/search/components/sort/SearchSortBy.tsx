@@ -7,14 +7,15 @@ import Dropdown from "@/app/components/utils/Dropdown";
 import { Sort } from "@/app/types/global";
 
 export default function SearchSortBy(): ReactElement {
-  const { currentSort, isLoading, searchCount, setCurrentSort, fetchData } =
+  const { isLoading, searchCount, currentFilters, setFilter, fetchData } =
     useContext(SearchContext);
+  const { sort } = currentFilters;
 
   // Query with new sort option, reset to first page and close the dropdown after applying a sort
   const onSelect = (key: Sort) => {
-    if (key === currentSort) return;
+    if (key === sort) return;
 
-    setCurrentSort(key);
+    setFilter("sort", key);
     fetchData({ sort: key });
   };
 
@@ -23,7 +24,10 @@ export default function SearchSortBy(): ReactElement {
       <span className="text-nowrap">Sort by:</span>
 
       <Dropdown<Sort>
-        selectedOption={{ key: currentSort, label: sortLabels[currentSort] }}
+        selectedOption={{
+          key: sort,
+          label: sortLabels[sort],
+        }}
         disabled={isLoading || searchCount === 0}
         options={sortOptions}
         onSelect={onSelect}
