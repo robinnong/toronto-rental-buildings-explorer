@@ -1,6 +1,12 @@
 import { NavigateOptions } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { Sort, YearBuiltFilter } from "../types/global";
+import { FetchAlgoliaDataParams, Sort, YearBuiltFilter } from "../types/global";
 import { filterQueryKeys } from "../constants/general";
+
+type GenerateUrlQueryParams = {
+  params: URLSearchParams;
+  pathname: string;
+  replace: (href: string, options?: NavigateOptions) => void;
+} & FetchAlgoliaDataParams;
 
 const generateUrlQueryParams = ({
   params,
@@ -12,17 +18,8 @@ const generateUrlQueryParams = ({
   filters,
   yearBuiltFilter,
   wardFilter,
-}: {
-  params: URLSearchParams;
-  pathname: string;
-  replace: (href: string, options?: NavigateOptions) => void;
-  sort: Sort;
-  page?: number;
-  query?: string;
-  filters: string[];
-  yearBuiltFilter: YearBuiltFilter;
-  wardFilter: number;
-}) => {
+}: GenerateUrlQueryParams) => {
+  // Example output: 'page=10'
   const setPageParams = (p: number) => {
     if (p == null || p === 0) {
       params.delete("page");
@@ -31,6 +28,7 @@ const generateUrlQueryParams = ({
     }
   };
 
+  // Example output: 'sort=year_built_asc'
   const setSortParams = (s: Sort) => {
     if (s === "ward_number") {
       params.delete("sort");
@@ -39,6 +37,7 @@ const generateUrlQueryParams = ({
     }
   };
 
+  // Example output: 'q=eglinton'
   const setSearchParams = (query?: string) => {
     if (query == null || query === "") {
       params.delete("q");
@@ -47,6 +46,7 @@ const generateUrlQueryParams = ({
     }
   };
 
+  // Example output: 'year_built_start=1999&year_built_end=2005'
   const setYearBuiltParams = ({ start, end }: YearBuiltFilter) => {
     if (start) {
       params.set("year_built_start", `${start}`);
@@ -60,6 +60,7 @@ const generateUrlQueryParams = ({
     }
   };
 
+  // Example output: 'ward=6'
   const setWardParams = (ward?: number) => {
     if (ward) {
       params.set("ward", `${ward}`);
@@ -68,6 +69,7 @@ const generateUrlQueryParams = ({
     }
   };
 
+  // Example output: 'features=barrier_free_entrance%2Cmid_rise'
   const setFilterParams = (filters: string[]) => {
     if (filters.length === 0) {
       // Clear the "features" from query params if there are no filters applied

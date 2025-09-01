@@ -8,6 +8,7 @@ import {
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
+  FetchAlgoliaDataParams,
   FetchDataResponse,
   FilterType,
   Sort,
@@ -17,15 +18,6 @@ import generateYearBuiltSearchClause from "../lib/generateYearBuiltSearchClause"
 import generateSearchClauses from "../lib/generateSearchClauses";
 import generateUrlQueryParams from "../lib/generateUrlQueryParams";
 import generateWardSearchClause from "../lib/generateWardSearchClause";
-
-type FetchAlgoliaDataParams = {
-  query?: string;
-  filters?: FilterType[];
-  yearBuiltFilter?: YearBuiltFilter;
-  wardFilter?: number;
-  page?: number;
-  sort?: Sort;
-};
 
 export type SearchContextModel = {
   isLoading: boolean;
@@ -45,6 +37,7 @@ export type SearchContextModel = {
   currentSort: Sort;
   setCurrentSort: Dispatch<SetStateAction<Sort>>;
   fetchData: (q: FetchAlgoliaDataParams) => Promise<FetchDataResponse[]>;
+  resetSearch: () => void;
 };
 
 export const SearchContext = createContext<SearchContextModel>(null);
@@ -88,6 +81,8 @@ export default function useSearchContext(): SearchContextModel {
     return idxName;
   };
 
+  // Combine all filter clauses into a single string for Algolia search filter param
+  // Example output: 'YEAR_BUILT >= 1996 AND WARD = 6 AND BARRIER_FREE_ACCESSIBILTY_ENTR:true AND CONFIRMED_STOREYS: 5 TO 14'
   const generateCompositeFilter = ({
     filters,
     yearBuiltFilter,
@@ -97,31 +92,23 @@ export default function useSearchContext(): SearchContextModel {
     yearBuiltFilter: YearBuiltFilter;
     wardFilter: number;
   }): string => {
-    const yearFilter = generateYearBuiltSearchClause(yearBuiltFilter);
+    const yearFilterClause = generateYearBuiltSearchClause(yearBuiltFilter);
     const wardFilterClause = generateWardSearchClause(wardFilter);
-    const filterClauses = generateSearchClauses(filters)?.join(" AND ");
+    const filterClauses = generateSearchClauses(filters);
 
-    const yearFilterClause = yearFilter
-      ? filterClauses
-        ? ` AND ${yearFilter}`
-        : yearFilter
-      : "";
+    const compositeFilters = [];
 
-    const wardFilterClauseStr = wardFilterClause
-      ? filterClauses || yearFilterClause
-        ? ` AND ${wardFilterClause}`
-        : wardFilterClause
-      : "";
+    if (yearFilterClause) {
+      compositeFilters.push(yearFilterClause);
+    }
+    if (wardFilterClause) {
+      compositeFilters.push(wardFilterClause);
+    }
+    if (filterClauses) {
+      compositeFilters.push(filterClauses);
+    }
 
-    const compositeFilter = [
-      filterClauses,
-      yearFilterClause,
-      wardFilterClauseStr,
-    ]
-      .filter(Boolean)
-      .join("");
-
-    return compositeFilter;
+    return compositeFilters.join(" AND ");
   };
 
   const fetchData = useCallback(
@@ -188,6 +175,23 @@ export default function useSearchContext(): SearchContextModel {
     ]
   );
 
+  const resetSearch = () => {
+    setCurrentSearchString("");
+    setCurrentBuildingFeatureFilters([]);
+    setCurrentYearBuiltFilter({});
+    setCurrentWardFilter(0);
+    setCurrentSort("ward_number");
+    setCurrentPage(0);
+
+    fetchData({
+      query: "",
+      filters: [],
+      yearBuiltFilter: {},
+      wardFilter: 0,
+      sort: "ward_number",
+    });
+  };
+
   return {
     isLoading,
     searchCount,
@@ -206,5 +210,6 @@ export default function useSearchContext(): SearchContextModel {
     currentSort,
     setCurrentSort,
     fetchData,
+    resetSearch,
   };
 }

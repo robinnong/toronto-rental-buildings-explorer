@@ -4,33 +4,7 @@ import { ReactElement, useContext } from "react";
 import { SearchContext } from "@/app/hooks/useSearchContext";
 
 export default function NoResults(): ReactElement {
-  const {
-    setCurrentSearchString,
-    setCurrentBuildingFeatureFilters,
-    setCurrentYearBuiltFilter,
-    setCurrentWardFilter,
-    setCurrentSort,
-    setCurrentPage,
-    fetchData,
-  } = useContext(SearchContext);
-
-  // Clear all sort and search fields
-  const clearSearch = () => {
-    setCurrentSearchString("");
-    setCurrentBuildingFeatureFilters([]);
-    setCurrentYearBuiltFilter({});
-    setCurrentWardFilter(0);
-    setCurrentSort("ward_number");
-    setCurrentPage(0);
-
-    fetchData({
-      query: "",
-      filters: [],
-      yearBuiltFilter: {},
-      wardFilter: 0,
-      sort: "ward_number",
-    });
-  };
+  const { resetSearch } = useContext(SearchContext);
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-2 rounded-sm border border-solid border-gray-200 py-10 px-4 h-full">
@@ -40,7 +14,7 @@ export default function NoResults(): ReactElement {
       <button
         type="button"
         className="text-cyan-700 mt-2"
-        onClick={() => clearSearch()}
+        onClick={() => resetSearch()}
       >
         Clear filters
       </button>

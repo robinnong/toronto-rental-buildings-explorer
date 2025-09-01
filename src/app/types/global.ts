@@ -1,3 +1,12 @@
+export type FetchAlgoliaDataParams = {
+  query?: string;
+  filters?: FilterType[];
+  yearBuiltFilter?: YearBuiltFilter;
+  wardFilter?: number;
+  page?: number;
+  sort?: Sort;
+};
+
 export type FilterType =
   | "AIR_CONDITIONING_TYPE"
   | "BARRIER_FREE_ACCESSIBILTY_ENTR"
