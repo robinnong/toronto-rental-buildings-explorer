@@ -82,7 +82,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     <Modal onClose={onClose}>
       {/* Modal header */}
       <form
-      className="h-full overflow-hidden flex flex-col"
+      className="overflow-hidden flex flex-col"
         action=""
         onSubmit={(e) => {
           e.preventDefault();
@@ -101,7 +101,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         </div>
 
         {/* Modal body - filters */}
-        <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full">
+        <div className="p-4 flex flex-col gap-6 overflow-y-auto h-full shrink-1 grow-1">
           <BuildingAgeRangeFilters
             setIsValid={setIsValid}
             selectedYearBuiltFilter={selectedYearBuiltFilter}

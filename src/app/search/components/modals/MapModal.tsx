@@ -42,7 +42,7 @@ export default function MapModal({
 
       {/* Embedded Google Map */}
       <iframe
-        className="w-full h-100"
+        className="w-full min-h-100 h-full"
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         allowFullScreen

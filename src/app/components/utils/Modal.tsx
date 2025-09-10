@@ -22,7 +22,7 @@ export default function Modal({ onClose, children }: Props): ReactElement {
       {/* Modal wrapper */}
       <div
         ref={ref}
-        className="flex flex-col overflow-hidden rounded-lg bg-white w-full max-w-100 h-full"
+        className="flex flex-col h-full rounded-lg bg-white w-full max-w-100 max-h-150"
       >
         {children}
       </div>
