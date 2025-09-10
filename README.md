@@ -69,3 +69,4 @@ Maps Embed API:
 - Bundler: Turbopack
 - Text search service: [Algolia](https://www.algolia.com/doc/api-client/javascript/getting-started/#install)
 - Pagination library: [react-paginate](https://www.npmjs.com/package/react-paginate)
+- Testing framework: Jest
