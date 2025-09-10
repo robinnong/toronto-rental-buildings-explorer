@@ -82,6 +82,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     <Modal onClose={onClose}>
       {/* Modal header */}
       <form
+      className="h-full overflow-hidden flex flex-col"
         action=""
         onSubmit={(e) => {
           e.preventDefault();
