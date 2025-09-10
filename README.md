@@ -42,7 +42,8 @@ This project is my first full-stack application, allowing me to learn new tools 
 
 ### Enhancements:
 
-- [ ] Add unit tests (Jest)
+- [x] Add unit tests (Jest)
+- [ ] Add component tests (React Testing Library)
 - [ ] Error messaging for failed queries
 - [ ] Error handling for invalid queries in URL query params
 - [x] Feature: Add filter for `NO_BARRIER_FREE_ACCESSBLE_UNITS`
