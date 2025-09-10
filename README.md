@@ -64,7 +64,7 @@ Maps Embed API:
 
 ## 🧰 Tools
 
-- Languages: TypeScript, JavaScript, CSS
+- Languages: TypeScript, CSS
 - Frameworks: React, [Tailwind CSS](https://tailwindcss.com), [Next.js](https://nextjs.org/docs)
 - Bundler: Turbopack
 - Text search service: [Algolia](https://www.algolia.com/doc/api-client/javascript/getting-started/#install)
