@@ -38,7 +38,7 @@ This project is my first full-stack application, allowing me to learn new tools 
 - [x] Fix issue with `Clear All` button in filters modal not resetting the range filter
 - [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [ ] Fix issue with dual range slider not clickable on mobile
-- [ ] Fix modal sizes on mobile
+- [x] Fix modal sizes on mobile
 
 ### Enhancements:
 
