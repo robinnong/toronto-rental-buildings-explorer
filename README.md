@@ -10,11 +10,11 @@ This project is my first full-stack application, allowing me to learn new tools 
 
 **New skills learned from this project, as well as challenges I encountered:**
 
-- **Data transformation**. I took the public **Apartment Building Registration** dataset from the **City of Toronto's Open Data Portal** to optimized it for querying. This involved writing a script to convert stringified numbers to actual number types and removing unnecessary fields to reduce the record size. I also converted relevant fields from `string` to `boolean` for faster queries. For example, the raw data for `Air Conditioning` specifies the type (e.g., Central Air, Forced, Individual Window Unit, None Available), but my filter only needs a simple `true` or `false` value.
+- **Data transformation**. I took the public **Apartment Building Registration** dataset from the **City of Toronto's Open Data Portal** to optimize it for querying. This involved writing a script to convert stringified numbers to actual number types and removing unnecessary fields to reduce the record size. I also converted relevant fields from `string` to `boolean` for faster queries. For example, the raw data for `Air Conditioning` specifies the type (e.g., Central Air, Forced, Individual Window Unit, None Available), but my filter only needs a simple `true` or `false` value.
 - Learning how to **write to a DB using Node**, to upload JSON data to the Firestore DB using the admin SDK in the command line.
-- Compared deployment options (**GitHub Pages + Github Actions**, **Netlify**, **Vercel**) and chose Vercel for its seamless Next.js integration requiring no configuration.
+- Compared deployment options (**GitHub Pages + Github Actions**, **Netlify**, **Vercel**) and chose Vercel for its seamless Next.js integration, requiring no configuration.
 - Managed environment variables and secrets in production.
-- Researching different solutions for **free-tier DB solutions** for storing and querying data. The 2 options I considered were **MongoDB Atlas Community Edition** and **Google Firestore DB** (a no-SQL cloud database). The first option still requires self-hosting, so I initially chose the Firesore DB option since it is quick to implement and has an easy-to-use SDK. However, the consequence of selecting Firestore DB where:
+- Researching different solutions for **free-tier DB solutions** for storing and querying data. The 2 options I considered were **MongoDB Atlas Community Edition** and **Google Firestore DB** (a no-SQL cloud database). The first option still requires self-hosting, so I initially chose the Firesore DB option since it is quick to implement and has an easy-to-use SDK. However, the consequence of selecting Firestore DB were:
   - These queries must not be complex (whatever methods are provided in the Firestore library are what you get for query building)
   - No support for pagination/offset
   - No support for full-text search, so I ultimately integrated **Algolia** for its sufficient index limits and features within the free tier. As Algolia supports both text search and SQL-like queries, I migrated all storage and filtering from Firestore DB to Algolia.
@@ -35,19 +35,20 @@ This project is my first full-stack application, allowing me to learn new tools 
 ### Bugs:
 
 - [x] Fix issue with initializing the dual range slider value
-- [x] Fix issue with `Clear All` button in fitlers modal not resetting the range filter
+- [x] Fix issue with `Clear All` button in filters modal not resetting the range filter
 - [ ] Fix issue with some event handlers not firing on some touch interactions on mobile devices
 - [ ] Fix issue with dual range slider not clickable on mobile
 - [ ] Fix modal sizes on mobile
 
 ### Enhancements:
 
+- [ ] Add unit tests (Jest)
 - [ ] Error messaging for failed queries
-- [ ] Error handling for invalid queries in URl query params
+- [ ] Error handling for invalid queries in URL query params
 - [x] Feature: Add filter for `NO_BARRIER_FREE_ACCESSBLE_UNITS`
 - [x] Feature: Add filter for `VISITOR_PARKING`
 - [x] Feature: Add filter for `WARD`
-- [ ] Feature: Hover or click the ward number on a card for latest census data
+- [ ] Feature: Hover or click the ward number on a card for the latest census data
 - [ ] Feature: Filter apartments by 25-ward model in a map
 
 ## 🔍 Data Sources
