@@ -112,6 +112,7 @@ export default function DualRangeSlider({
           className="absolute"
           style={{ background: sliderStyle }}
           onChange={(e) => {
+            e.stopPropagation();
             // Ensure that rangeStartValue does not exceed rangeEndValue
             if (e.target.valueAsNumber > rangeEndValue) {
               setRangeStartValue(rangeEndValue);
@@ -134,6 +135,7 @@ export default function DualRangeSlider({
           className="absolute"
           style={{ background: sliderStyle }}
           onChange={(e) => {
+            e.stopPropagation();
             // Ensure that rangeEndValue is always greater than rangeStartValue
             if (rangeStartValue <= e.target.valueAsNumber) {
               setRangeEndValue(e.target.valueAsNumber);
@@ -157,7 +159,10 @@ export default function DualRangeSlider({
             max={rangeEndValue}
             value={rangeStartValue}
             disabled={disabled}
-            onChange={(e) => setRangeStartValue(e.target.valueAsNumber)}
+            onChange={(e) => {
+              e.stopPropagation();
+              setRangeStartValue(e.target.valueAsNumber);
+            }}
           />
         </div>
         <div>
@@ -173,7 +178,10 @@ export default function DualRangeSlider({
             max={defaultSliderMax}
             value={rangeEndValue}
             disabled={disabled}
-            onChange={(e) => setRangeEndValue(e.target.valueAsNumber)}
+            onChange={(e) => {
+              e.stopPropagation();
+              setRangeEndValue(e.target.valueAsNumber);
+            }}
           />
         </div>
       </div>

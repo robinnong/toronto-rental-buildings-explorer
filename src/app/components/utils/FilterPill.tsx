@@ -32,7 +32,10 @@ export default function FilterPill({
           ? "bg-sky-50 border border-solid border-cyan-600 text-cyan-700"
           : "border-gray-200"
       }`}
-      onClick={() => onClick()}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
     >
       <i className={`fas ${iconClass} mr-1`} />
       {label}

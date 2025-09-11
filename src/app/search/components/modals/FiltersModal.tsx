@@ -82,7 +82,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
     <Modal onClose={onClose}>
       {/* Modal header */}
       <form
-      className="overflow-hidden flex flex-col"
+        className="overflow-hidden flex flex-col"
         action=""
         onSubmit={(e) => {
           e.preventDefault();
@@ -94,7 +94,7 @@ export default function FiltersModal({ onClose }: Props): ReactElement {
         <div className="border-b border-gray-200 p-3 flex justify-between">
           <h4 className="font-semibold">Filter by:</h4>
 
-          <button type="button" onClick={onClose}>
+          <button type="button" onClick={() => onClose()}>
             <span className="sr-only">Close</span>
             <i className="fas fa-xmark fa-xl text-cyan-600" />
           </button>
