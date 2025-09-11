@@ -60,7 +60,10 @@ export default function Dropdown<T>({
               className={`rounded-md hover:bg-sky-50 hover:text-cyan-700 pt-2 p-2 ${
                 selectedOption.key === key ? "bg-sky-50 text-cyan-700" : ""
               }`}
-              onClick={() => onSelect(key)}
+              onClick={() => {
+                onSelect(key);
+                setIsOpen(false);
+              }}
             >
               {label}
             </li>

@@ -14,7 +14,7 @@ type Props = { onClose: () => void; children: ReactNode };
  * @param {ReactNode} children - The content to display inside the modal
  */
 export default function Modal({ onClose, children }: Props): ReactElement {
-  const ref = useOnClickOutside({ onClick: onClose });
+  const ref = useOnClickOutside({ onClick: () => onClose() });
 
   return (
     // Transparent background overlay
