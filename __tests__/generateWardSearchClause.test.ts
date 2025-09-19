@@ -1,7 +1,7 @@
 import generateWardSearchClause from "@/app/lib/generateWardSearchClause";
 
 describe("generateWardSearchClause", () => {
-  it("should return an Algolia-compatible numerical search clause to filter for records where WARD is 13", () => {
+  it("should return a search clause to filter for records where WARD is 13", () => {
     expect(generateWardSearchClause(13)).toEqual("WARD = 13");
   });
 

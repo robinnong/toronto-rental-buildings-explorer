@@ -6,7 +6,7 @@ type Props = {
   label: string;
   isActive: boolean;
   iconClass: string;
-  onClick: () => void;
+  handleClick: () => void;
 };
 
 /**
@@ -16,13 +16,13 @@ type Props = {
  * @param {string} label - Pill label
  * @param {boolean} isActive - Pill active state
  * @param {string} iconClass - Pill icon
- * @param {function} onClick - Function to call when clicked
+ * @param {function} handleClick - Function to call when pill is clicked
  */
 export default function FilterPill({
   label,
   isActive,
   iconClass,
-  onClick,
+  handleClick,
 }: Props): ReactElement {
   return (
     <button
@@ -34,7 +34,8 @@ export default function FilterPill({
       }`}
       onClick={(e) => {
         e.stopPropagation();
-        onClick();
+        e.preventDefault();
+        handleClick();
       }}
     >
       <i className={`fas ${iconClass} mr-1`} />

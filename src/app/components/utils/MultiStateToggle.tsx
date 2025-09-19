@@ -32,7 +32,7 @@ export default function MultiStateToggle({
           label={label}
           iconClass={iconClass}
           isActive={checkIsActive(key)}
-          onClick={() => onClick(key)}
+          handleClick={() => onClick(key)}
         />
       ))}
     </div>

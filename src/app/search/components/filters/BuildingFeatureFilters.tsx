@@ -40,7 +40,7 @@ export default function BuildingFeatureFilters({
             label={label}
             iconClass={iconClass}
             isActive={checkIsActive(key)}
-            onClick={() => handleToggle(key)}
+            handleClick={() => handleToggle(key)}
           />
         ))}
       </div>

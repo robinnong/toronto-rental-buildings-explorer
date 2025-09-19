@@ -1,6 +1,7 @@
 import generateCompositeFilter from "@/app/lib/generateCompositeFilter";
 import { FilterType } from "@/app/types/global";
 
+// For query syntax, see:https://www.algolia.com/doc/guides/managing-results/refine-results/filtering/
 describe("generateWardSearchClause", () => {
   it("should return an Algolia-compatible filter searching for apartments that were built on or after 1996, are 5 to 14 storeys tall, have a barrier-free entrance, and are located in Ward 6", () => {
     const input = {
