@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, ReactElement, SetStateAction } from "react";
+import { Dispatch, ReactElement, SetStateAction, useCallback } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
 import { FilterType } from "@/app/types/global";
@@ -28,7 +28,10 @@ export default function BuildingFeatureFilters({
     }
   };
 
-  const checkIsActive = (key: FilterType) => selectedFilters.includes(key);
+  const checkIsActive = useCallback(
+    (key: FilterType) => selectedFilters.includes(key),
+    [selectedFilters]
+  );
 
   return (
     <div>

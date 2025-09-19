@@ -34,7 +34,6 @@ export default function FilterPill({
       }`}
       onClick={(e) => {
         e.stopPropagation();
-        e.preventDefault();
         handleClick();
       }}
     >
