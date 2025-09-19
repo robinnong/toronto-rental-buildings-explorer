@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, ReactElement, SetStateAction, useCallback } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 import { buildingFeatureFilters } from "@/app/constants/general";
 import FilterPill from "@/app/components/utils/FilterPill";
 import { FilterType } from "@/app/types/global";
@@ -28,11 +28,6 @@ export default function BuildingFeatureFilters({
     }
   };
 
-  const checkIsActive = useCallback(
-    (key: FilterType) => selectedFilters.includes(key),
-    [selectedFilters]
-  );
-
   return (
     <div>
       <h4 className="font-bold">Building features</h4>
@@ -40,9 +35,10 @@ export default function BuildingFeatureFilters({
         {buildingFeatureFilters.map(({ key, label, iconClass }) => (
           <FilterPill
             key={key}
+            id={key}
             label={label}
             iconClass={iconClass}
-            isActive={checkIsActive(key)}
+            selectedFilters={selectedFilters}
             handleClick={() => handleToggle(key)}
           />
         ))}

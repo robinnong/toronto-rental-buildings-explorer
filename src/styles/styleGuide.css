@@ -16,7 +16,6 @@ body {
 
 select,
 button:not(:disabled),
-input[type="range"]::-webkit-slider-thumb,
 input[type="checkbox"],
 input[type="radio"] {
   cursor: pointer;

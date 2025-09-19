@@ -1,10 +1,12 @@
 "use client";
 
-import { ReactElement } from "react";
+import { FilterType } from "@/app/types/global";
+import { ReactElement, useMemo } from "react";
 
 type Props = {
+  id: FilterType;
   label: string;
-  isActive: boolean;
+  selectedFilters: FilterType[];
   iconClass: string;
   handleClick: () => void;
 };
@@ -14,16 +16,22 @@ type Props = {
  *
  * Props for FilterPill
  * @param {string} label - Pill label
- * @param {boolean} isActive - Pill active state
+ * @param {boolean} selectedFilters - List to reference for the pill active state
  * @param {string} iconClass - Pill icon
  * @param {function} handleClick - Function to call when pill is clicked
  */
 export default function FilterPill({
+  id,
   label,
-  isActive,
+  selectedFilters,
   iconClass,
   handleClick,
 }: Props): ReactElement {
+  const isActive = useMemo(
+    () => selectedFilters.includes(id),
+    [selectedFilters]
+  );
+
   return (
     <button
       type="button"

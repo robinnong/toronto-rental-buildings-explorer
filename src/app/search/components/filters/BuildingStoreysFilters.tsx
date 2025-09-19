@@ -48,16 +48,14 @@ export default function BuildingStoreysFilters({
     }
   };
 
-  const checkIsActive = (key: FilterType) => selectedFilters.includes(key);
-
   return (
     <div>
       <h4 className="font-bold">Building size</h4>
       <div className="flex gap-1 mt-2 flex-wrap">
         <MultiStateToggle
           states={buildingStoreysFilters}
-          checkIsActive={checkIsActive}
-          onClick={handleToggle}
+          selectedFilters={selectedFilters}
+          handleToggle={handleToggle}
         />
       </div>
     </div>
